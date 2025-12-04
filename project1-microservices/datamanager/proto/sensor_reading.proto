@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/reading";
+
+// Get Reading
+message GetReadingRequest {
+  string id = 1;
+}
+
+message GetReadingResponse {
+  google.protobuf.Timestamp timestamp = 1;
+  double temperature = 2;
+  double humidity = 3;
+  uint32 tvoc = 4;
+  uint32 e_co2 = 5;
+  uint32 raw_hw = 6;
+  uint32 raw_ethanol = 7;
+  double pm_25 = 8;
+  uint32 fire_alarm = 9;
+}
+
+// Get All Readings
+message GetAllReadingsResponse {
+  repeated GetReadingResponse readings = 1;
+}
+
+// Create Reading
+message CreateReadingRequest {
+  google.protobuf.Timestamp timestamp = 1;
+  double temperature = 2;
+  double humidity = 3;
+  uint32 tvoc = 4;
+  uint32 e_co2 = 5;
+  uint32 raw_hw = 6;
+  uint32 raw_ethanol = 7;
+  double pm_wt = 8;
+  uint32 fire_alarm = 9;
+}
+
+message CreateReadingResponse {
+  bool success = 1;
+}
+
+// Update Reading
+message UpdateReadingRequest {
+  string id = 1;
+  double temperature = 2;
+  double humidity = 3;
+  uint32 tvoc = 4;
+  uint32 e_co2 = 5;
+  uint32 raw_hw = 6;
+  uint32 raw_ethanol = 7;
+  double pm_25 = 8;
+  uint32 fire_alarm = 9;
+}
+
+message UpdateReadingResponse {
+  bool success = 1;
+}
+
+// Delete Reading
+message DeleteReadingRequest {
+  string id = 1;
+}
+
+message DeleteReadingResponse {
+  bool success = 1;
+}
+
+service SensorReadingService {
+  rpc GetAllReadings(google.protobuf.Empty) returns(GetAllReadingsResponse);
+  rpc GetReading(GetReadingRequest) returns (GetReadingResponse);
+  rpc CreateReading(CreateReadingRequest) returns (CreateReadingResponse);
+  rpc UpdateReading(UpdateReadingRequest) returns (UpdateReadingResponse);
+  rpc DeleteReading(DeleteReadingRequest) returns (DeleteReadingResponse);
+}
