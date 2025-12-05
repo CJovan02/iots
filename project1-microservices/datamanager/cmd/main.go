@@ -26,9 +26,53 @@ func main() {
 	var sensorRepo sensor.Repository = repository.NewPgRepository(pool)
 
 	ctx := context.Background()
-	reading, err := sensorRepo.GetById(ctx, 1)
+	//err = sensorRepo.Create(ctx, &sensor.SensorReading{
+	//	Timestamp:   time.Now(),
+	//	Temperature: 0,
+	//	Humidity:    0,
+	//	TVOC:        0,
+	//	ECO2:        0,
+	//	RawHw:       0,
+	//	RawEthanol:  0,
+	//	PM25:        0,
+	//	FireAlarm:   0,
+	//})
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+
+	//err = sensorRepo.Update(ctx, 1, &sensor.SensorReading{
+	//	Timestamp:   time.Now(),
+	//	Temperature: 0,
+	//	Humidity:    0,
+	//	TVOC:        0,
+	//	ECO2:        0,
+	//	RawHw:       0,
+	//	RawEthanol:  0,
+	//	PM25:        0,
+	//	FireAlarm:   0,
+	//})
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+
+	err = sensorRepo.Delete(ctx, 5)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v\n", *reading)
+
+	//reading, err := sensorRepo.GetById(ctx, 1)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Printf("%+v\n", *reading)
+
+	readings, err := sensorRepo.List(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, reading := range readings {
+		fmt.Printf("%+v\n", reading)
+	}
 }
