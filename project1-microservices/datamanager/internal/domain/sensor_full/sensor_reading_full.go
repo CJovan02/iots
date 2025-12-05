@@ -1,4 +1,4 @@
-package domain
+package sensor_full
 
 import "time"
 

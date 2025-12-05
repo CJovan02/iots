@@ -1,9 +1,10 @@
-package domain
+package sensor
 
 import "time"
 
 // SensorReading represents necessary columns from the dataset for fire detection
 type SensorReading struct {
+	Id          int32     // Signed four-byte integer in the db
 	Timestamp   time.Time // UTC timestamp
 	Temperature float64   // Air temperature, fires raise temperature
 	Humidity    float64   // Air humidity, very high or low can indicate fire
