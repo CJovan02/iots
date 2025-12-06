@@ -47,3 +47,25 @@ func sensorReadingArgs(r *sensor.Reading) []any {
 		r.FireAlarm,
 	}
 }
+
+func scanSensorStatistics(row pgx.Row) (*sensor.Statistics, error) {
+	var s sensor.Statistics
+
+	err := row.Scan(
+		&s.ReadingsCount,
+		&s.MinTemperature,
+		&s.MaxTemperature,
+		&s.AvgTemperature,
+		&s.MinHumidity,
+		&s.MaxHumidity,
+		&s.AvgHumidity,
+		&s.SumTVOC,
+		&s.FireAlarmCount,
+		&s.NoFireAlarmCount,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &s, nil
+}

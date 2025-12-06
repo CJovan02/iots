@@ -2,6 +2,7 @@ package sensorrepo
 
 import (
 	"context"
+	"time"
 
 	"github.com/CJovan02/iots/project1-microservices/datamanager/internal/domain/sensor"
 	"github.com/jackc/pgx/v5"
@@ -46,6 +47,27 @@ func (r *Repository) List(ctx context.Context) ([]sensor.Reading, error) {
 	}
 
 	return readings, nil
+}
+
+func (r *Repository) GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*sensor.Statistics, error) {
+	const query = `
+		SELECT 
+		    COUNT(*) as readings_count, 
+			MIN(temperature) as min_temp,
+			MAX(temperature) as max_temp,
+			AVG(temperature) as avg_temp,
+			MIN(humidity) as min_humidity,
+			MAX(humidity) as max_humidity,
+			AVG(humidity) as avg_humidity,
+			SUM(tvoc) as sum_tvoc,
+			COUNT(*) FILTER ( WHERE fire_alarm = 1 ) as fire_alarm_count,
+			COUNT(*) FILTER ( WHERE fire_alarm = 0 ) as no_fire_alarm_count
+		FROM sensor_readings
+		where timestamp >= $1 and timestamp <= $2
+	`
+
+	row := r.db.QueryRow(ctx, query, startTime, endTime)
+	return scanSensorStatistics(row)
 }
 
 func (r *Repository) Create(ctx context.Context, reading *sensor.Reading) error {

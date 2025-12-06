@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/CJovan02/iots/project1-microservices/datamanager/internal/config"
 	"github.com/CJovan02/iots/project1-microservices/datamanager/internal/db"
@@ -36,4 +37,12 @@ func main() {
 	for _, reading := range readings {
 		fmt.Printf("%+v\n", reading)
 	}
+
+	date := time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)
+	st, err := service.GetStatistics(ctx, date, time.Now())
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", *st)
+
 }
