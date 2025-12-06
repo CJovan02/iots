@@ -2,8 +2,8 @@ package sensor_full
 
 import "time"
 
-// SensorReadingFull - Model from the dataset, it contains all the columns from .csv file
-type SensorReadingFull struct {
+// Reading - Model from the dataset, it contains all the columns from .csv file
+type Reading struct {
 	Index       uint16    // Dataset has 62.6k rows
 	Timestamp   time.Time // Timestamp in UTC
 	Temperature float64   // Air temperature

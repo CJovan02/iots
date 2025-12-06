@@ -2,8 +2,8 @@ package sensor
 
 import "time"
 
-// SensorReading represents necessary columns from the dataset for fire detection
-type SensorReading struct {
+// Reading represents necessary columns from the dataset for fire detection
+type Reading struct {
 	Id          int32     // Signed four-byte integer in the db
 	Timestamp   time.Time // UTC timestamp
 	Temperature float64   // Air temperature, fires raise temperature

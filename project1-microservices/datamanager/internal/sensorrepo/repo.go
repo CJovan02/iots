@@ -1,4 +1,4 @@
-package repository
+package sensorrepo
 
 import (
 	"context"
@@ -8,15 +8,15 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type PgRepository struct {
+type Repository struct {
 	db *pgxpool.Pool
 }
 
-func NewPgRepository(db *pgxpool.Pool) *PgRepository {
-	return &PgRepository{db: db}
+func New(db *pgxpool.Pool) *Repository {
+	return &Repository{db: db}
 }
 
-func (r *PgRepository) GetById(ctx context.Context, id int32) (*sensor.SensorReading, error) {
+func (r *Repository) GetById(ctx context.Context, id int32) (*sensor.Reading, error) {
 	const query = `
 		SELECT *
 		FROM sensor_readings
@@ -28,7 +28,7 @@ func (r *PgRepository) GetById(ctx context.Context, id int32) (*sensor.SensorRea
 	return scanSensorReading(row)
 }
 
-func (r *PgRepository) List(ctx context.Context) ([]sensor.SensorReading, error) {
+func (r *Repository) List(ctx context.Context) ([]sensor.Reading, error) {
 	const query = `
 		SELECT *
 		FROM sensor_readings
@@ -48,7 +48,7 @@ func (r *PgRepository) List(ctx context.Context) ([]sensor.SensorReading, error)
 	return readings, nil
 }
 
-func (r *PgRepository) Create(ctx context.Context, reading *sensor.SensorReading) error {
+func (r *Repository) Create(ctx context.Context, reading *sensor.Reading) error {
 	const query = `
 		INSERT INTO sensor_readings 
 		(timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
@@ -63,7 +63,7 @@ func (r *PgRepository) Create(ctx context.Context, reading *sensor.SensorReading
 	return nil
 }
 
-func (r *PgRepository) Update(ctx context.Context, id int32, reading *sensor.SensorReading) error {
+func (r *Repository) Update(ctx context.Context, id int32, reading *sensor.Reading) error {
 	const query = `
 		UPDATE sensor_readings
 		SET 
@@ -88,7 +88,7 @@ func (r *PgRepository) Update(ctx context.Context, id int32, reading *sensor.Sen
 	return nil
 }
 
-func (r *PgRepository) Delete(ctx context.Context, id int32) error {
+func (r *Repository) Delete(ctx context.Context, id int32) error {
 	const query = `
 		DELETE FROM sensor_readings
 		WHERE id = $1

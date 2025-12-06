@@ -1,12 +1,12 @@
-package repository
+package sensorrepo
 
 import (
 	"github.com/CJovan02/iots/project1-microservices/datamanager/internal/domain/sensor"
 	"github.com/jackc/pgx/v5"
 )
 
-func scanSensorReading(row pgx.Row) (*sensor.SensorReading, error) {
-	var sr sensor.SensorReading
+func scanSensorReading(row pgx.Row) (*sensor.Reading, error) {
+	var sr sensor.Reading
 
 	err := row.Scan(
 		&sr.Id,
@@ -26,15 +26,15 @@ func scanSensorReading(row pgx.Row) (*sensor.SensorReading, error) {
 	return &sr, nil
 }
 
-func scanSensorReadingValue(row pgx.CollectableRow) (sensor.SensorReading, error) {
+func scanSensorReadingValue(row pgx.CollectableRow) (sensor.Reading, error) {
 	reading, err := scanSensorReading(row)
 	if err != nil {
-		return sensor.SensorReading{}, err
+		return sensor.Reading{}, err
 	}
 	return *reading, err
 }
 
-func sensorReadingArgs(r *sensor.SensorReading) []any {
+func sensorReadingArgs(r *sensor.Reading) []any {
 	return []any{
 		r.Timestamp,
 		r.Temperature,
