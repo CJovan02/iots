@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.10
 // 	protoc        v3.21.12
-// source: sensor_reading.proto
+// source: reading.proto
 
-package reading
+package sensorpg
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -33,7 +33,7 @@ type GetReadingRequest struct {
 
 func (x *GetReadingRequest) Reset() {
 	*x = GetReadingRequest{}
-	mi := &file_sensor_reading_proto_msgTypes[0]
+	mi := &file_reading_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +45,7 @@ func (x *GetReadingRequest) String() string {
 func (*GetReadingRequest) ProtoMessage() {}
 
 func (x *GetReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[0]
+	mi := &file_reading_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *GetReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetReadingRequest.ProtoReflect.Descriptor instead.
 func (*GetReadingRequest) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{0}
+	return file_reading_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GetReadingRequest) GetId() string {
@@ -85,7 +85,7 @@ type GetReadingResponse struct {
 
 func (x *GetReadingResponse) Reset() {
 	*x = GetReadingResponse{}
-	mi := &file_sensor_reading_proto_msgTypes[1]
+	mi := &file_reading_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -97,7 +97,7 @@ func (x *GetReadingResponse) String() string {
 func (*GetReadingResponse) ProtoMessage() {}
 
 func (x *GetReadingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[1]
+	mi := &file_reading_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -110,7 +110,7 @@ func (x *GetReadingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetReadingResponse.ProtoReflect.Descriptor instead.
 func (*GetReadingResponse) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{1}
+	return file_reading_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetReadingResponse) GetTimestamp() *timestamppb.Timestamp {
@@ -176,29 +176,29 @@ func (x *GetReadingResponse) GetFireAlarm() uint32 {
 	return 0
 }
 
-// Get All Readings
-type GetAllReadingsResponse struct {
+// List Readings
+type ListReadingsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Readings      []*GetReadingResponse  `protobuf:"bytes,1,rep,name=readings,proto3" json:"readings,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetAllReadingsResponse) Reset() {
-	*x = GetAllReadingsResponse{}
-	mi := &file_sensor_reading_proto_msgTypes[2]
+func (x *ListReadingsResponse) Reset() {
+	*x = ListReadingsResponse{}
+	mi := &file_reading_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetAllReadingsResponse) String() string {
+func (x *ListReadingsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetAllReadingsResponse) ProtoMessage() {}
+func (*ListReadingsResponse) ProtoMessage() {}
 
-func (x *GetAllReadingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[2]
+func (x *ListReadingsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_reading_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -209,12 +209,12 @@ func (x *GetAllReadingsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetAllReadingsResponse.ProtoReflect.Descriptor instead.
-func (*GetAllReadingsResponse) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use ListReadingsResponse.ProtoReflect.Descriptor instead.
+func (*ListReadingsResponse) Descriptor() ([]byte, []int) {
+	return file_reading_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetAllReadingsResponse) GetReadings() []*GetReadingResponse {
+func (x *ListReadingsResponse) GetReadings() []*GetReadingResponse {
 	if x != nil {
 		return x.Readings
 	}
@@ -239,7 +239,7 @@ type CreateReadingRequest struct {
 
 func (x *CreateReadingRequest) Reset() {
 	*x = CreateReadingRequest{}
-	mi := &file_sensor_reading_proto_msgTypes[3]
+	mi := &file_reading_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -251,7 +251,7 @@ func (x *CreateReadingRequest) String() string {
 func (*CreateReadingRequest) ProtoMessage() {}
 
 func (x *CreateReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[3]
+	mi := &file_reading_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -264,7 +264,7 @@ func (x *CreateReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReadingRequest.ProtoReflect.Descriptor instead.
 func (*CreateReadingRequest) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{3}
+	return file_reading_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateReadingRequest) GetTimestamp() *timestamppb.Timestamp {
@@ -339,7 +339,7 @@ type CreateReadingResponse struct {
 
 func (x *CreateReadingResponse) Reset() {
 	*x = CreateReadingResponse{}
-	mi := &file_sensor_reading_proto_msgTypes[4]
+	mi := &file_reading_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -351,7 +351,7 @@ func (x *CreateReadingResponse) String() string {
 func (*CreateReadingResponse) ProtoMessage() {}
 
 func (x *CreateReadingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[4]
+	mi := &file_reading_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -364,7 +364,7 @@ func (x *CreateReadingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReadingResponse.ProtoReflect.Descriptor instead.
 func (*CreateReadingResponse) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{4}
+	return file_reading_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateReadingResponse) GetSuccess() bool {
@@ -392,7 +392,7 @@ type UpdateReadingRequest struct {
 
 func (x *UpdateReadingRequest) Reset() {
 	*x = UpdateReadingRequest{}
-	mi := &file_sensor_reading_proto_msgTypes[5]
+	mi := &file_reading_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -404,7 +404,7 @@ func (x *UpdateReadingRequest) String() string {
 func (*UpdateReadingRequest) ProtoMessage() {}
 
 func (x *UpdateReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[5]
+	mi := &file_reading_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -417,7 +417,7 @@ func (x *UpdateReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReadingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateReadingRequest) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{5}
+	return file_reading_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateReadingRequest) GetId() string {
@@ -492,7 +492,7 @@ type UpdateReadingResponse struct {
 
 func (x *UpdateReadingResponse) Reset() {
 	*x = UpdateReadingResponse{}
-	mi := &file_sensor_reading_proto_msgTypes[6]
+	mi := &file_reading_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -504,7 +504,7 @@ func (x *UpdateReadingResponse) String() string {
 func (*UpdateReadingResponse) ProtoMessage() {}
 
 func (x *UpdateReadingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[6]
+	mi := &file_reading_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -517,7 +517,7 @@ func (x *UpdateReadingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReadingResponse.ProtoReflect.Descriptor instead.
 func (*UpdateReadingResponse) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{6}
+	return file_reading_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateReadingResponse) GetSuccess() bool {
@@ -537,7 +537,7 @@ type DeleteReadingRequest struct {
 
 func (x *DeleteReadingRequest) Reset() {
 	*x = DeleteReadingRequest{}
-	mi := &file_sensor_reading_proto_msgTypes[7]
+	mi := &file_reading_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -549,7 +549,7 @@ func (x *DeleteReadingRequest) String() string {
 func (*DeleteReadingRequest) ProtoMessage() {}
 
 func (x *DeleteReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[7]
+	mi := &file_reading_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -562,7 +562,7 @@ func (x *DeleteReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReadingRequest.ProtoReflect.Descriptor instead.
 func (*DeleteReadingRequest) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{7}
+	return file_reading_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *DeleteReadingRequest) GetId() string {
@@ -581,7 +581,7 @@ type DeleteReadingResponse struct {
 
 func (x *DeleteReadingResponse) Reset() {
 	*x = DeleteReadingResponse{}
-	mi := &file_sensor_reading_proto_msgTypes[8]
+	mi := &file_reading_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -593,7 +593,7 @@ func (x *DeleteReadingResponse) String() string {
 func (*DeleteReadingResponse) ProtoMessage() {}
 
 func (x *DeleteReadingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_sensor_reading_proto_msgTypes[8]
+	mi := &file_reading_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -606,7 +606,7 @@ func (x *DeleteReadingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReadingResponse.ProtoReflect.Descriptor instead.
 func (*DeleteReadingResponse) Descriptor() ([]byte, []int) {
-	return file_sensor_reading_proto_rawDescGZIP(), []int{8}
+	return file_reading_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DeleteReadingResponse) GetSuccess() bool {
@@ -616,11 +616,11 @@ func (x *DeleteReadingResponse) GetSuccess() bool {
 	return false
 }
 
-var File_sensor_reading_proto protoreflect.FileDescriptor
+var File_reading_proto protoreflect.FileDescriptor
 
-const file_sensor_reading_proto_rawDesc = "" +
+const file_reading_proto_rawDesc = "" +
 	"\n" +
-	"\x14sensor_reading.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"#\n" +
+	"\rreading.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"#\n" +
 	"\x11GetReadingRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"\xa1\x02\n" +
 	"\x12GetReadingResponse\x128\n" +
@@ -634,8 +634,8 @@ const file_sensor_reading_proto_rawDesc = "" +
 	"rawEthanol\x12\x13\n" +
 	"\x05pm_25\x18\b \x01(\x01R\x04pm25\x12\x1d\n" +
 	"\n" +
-	"fire_alarm\x18\t \x01(\rR\tfireAlarm\"I\n" +
-	"\x16GetAllReadingsResponse\x12/\n" +
+	"fire_alarm\x18\t \x01(\rR\tfireAlarm\"G\n" +
+	"\x14ListReadingsResponse\x12/\n" +
 	"\breadings\x18\x01 \x03(\v2\x13.GetReadingResponseR\breadings\"\xa3\x02\n" +
 	"\x14CreateReadingRequest\x128\n" +
 	"\ttimestamp\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12 \n" +
@@ -668,82 +668,69 @@ const file_sensor_reading_proto_rawDesc = "" +
 	"\x14DeleteReadingRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"1\n" +
 	"\x15DeleteReadingResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xd0\x02\n" +
-	"\x14SensorReadingService\x12A\n" +
-	"\x0eGetAllReadings\x12\x16.google.protobuf.Empty\x1a\x17.GetAllReadingsResponse\x125\n" +
-	"\n" +
-	"GetReading\x12\x12.GetReadingRequest\x1a\x13.GetReadingResponse\x12>\n" +
-	"\rCreateReading\x12\x15.CreateReadingRequest\x1a\x16.CreateReadingResponse\x12>\n" +
-	"\rUpdateReading\x12\x15.UpdateReadingRequest\x1a\x16.UpdateReadingResponse\x12>\n" +
-	"\rDeleteReading\x12\x15.DeleteReadingRequest\x1a\x16.DeleteReadingResponseBUZSgithub.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/readingb\x06proto3"
+	"\asuccess\x18\x01 \x01(\bR\asuccess2A\n" +
+	"\bReadings\x125\n" +
+	"\x04List\x12\x16.google.protobuf.Empty\x1a\x15.ListReadingsResponseBVZTgithub.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/sensorpgb\x06proto3"
 
 var (
-	file_sensor_reading_proto_rawDescOnce sync.Once
-	file_sensor_reading_proto_rawDescData []byte
+	file_reading_proto_rawDescOnce sync.Once
+	file_reading_proto_rawDescData []byte
 )
 
-func file_sensor_reading_proto_rawDescGZIP() []byte {
-	file_sensor_reading_proto_rawDescOnce.Do(func() {
-		file_sensor_reading_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_sensor_reading_proto_rawDesc), len(file_sensor_reading_proto_rawDesc)))
+func file_reading_proto_rawDescGZIP() []byte {
+	file_reading_proto_rawDescOnce.Do(func() {
+		file_reading_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_reading_proto_rawDesc), len(file_reading_proto_rawDesc)))
 	})
-	return file_sensor_reading_proto_rawDescData
+	return file_reading_proto_rawDescData
 }
 
-var file_sensor_reading_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_sensor_reading_proto_goTypes = []any{
-	(*GetReadingRequest)(nil),      // 0: GetReadingRequest
-	(*GetReadingResponse)(nil),     // 1: GetReadingResponse
-	(*GetAllReadingsResponse)(nil), // 2: GetAllReadingsResponse
-	(*CreateReadingRequest)(nil),   // 3: CreateReadingRequest
-	(*CreateReadingResponse)(nil),  // 4: CreateReadingResponse
-	(*UpdateReadingRequest)(nil),   // 5: UpdateReadingRequest
-	(*UpdateReadingResponse)(nil),  // 6: UpdateReadingResponse
-	(*DeleteReadingRequest)(nil),   // 7: DeleteReadingRequest
-	(*DeleteReadingResponse)(nil),  // 8: DeleteReadingResponse
-	(*timestamppb.Timestamp)(nil),  // 9: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),          // 10: google.protobuf.Empty
+var file_reading_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_reading_proto_goTypes = []any{
+	(*GetReadingRequest)(nil),     // 0: GetReadingRequest
+	(*GetReadingResponse)(nil),    // 1: GetReadingResponse
+	(*ListReadingsResponse)(nil),  // 2: ListReadingsResponse
+	(*CreateReadingRequest)(nil),  // 3: CreateReadingRequest
+	(*CreateReadingResponse)(nil), // 4: CreateReadingResponse
+	(*UpdateReadingRequest)(nil),  // 5: UpdateReadingRequest
+	(*UpdateReadingResponse)(nil), // 6: UpdateReadingResponse
+	(*DeleteReadingRequest)(nil),  // 7: DeleteReadingRequest
+	(*DeleteReadingResponse)(nil), // 8: DeleteReadingResponse
+	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),         // 10: google.protobuf.Empty
 }
-var file_sensor_reading_proto_depIdxs = []int32{
+var file_reading_proto_depIdxs = []int32{
 	9,  // 0: GetReadingResponse.timestamp:type_name -> google.protobuf.Timestamp
-	1,  // 1: GetAllReadingsResponse.readings:type_name -> GetReadingResponse
+	1,  // 1: ListReadingsResponse.readings:type_name -> GetReadingResponse
 	9,  // 2: CreateReadingRequest.timestamp:type_name -> google.protobuf.Timestamp
-	10, // 3: SensorReadingService.GetAllReadings:input_type -> google.protobuf.Empty
-	0,  // 4: SensorReadingService.GetReading:input_type -> GetReadingRequest
-	3,  // 5: SensorReadingService.CreateReading:input_type -> CreateReadingRequest
-	5,  // 6: SensorReadingService.UpdateReading:input_type -> UpdateReadingRequest
-	7,  // 7: SensorReadingService.DeleteReading:input_type -> DeleteReadingRequest
-	2,  // 8: SensorReadingService.GetAllReadings:output_type -> GetAllReadingsResponse
-	1,  // 9: SensorReadingService.GetReading:output_type -> GetReadingResponse
-	4,  // 10: SensorReadingService.CreateReading:output_type -> CreateReadingResponse
-	6,  // 11: SensorReadingService.UpdateReading:output_type -> UpdateReadingResponse
-	8,  // 12: SensorReadingService.DeleteReading:output_type -> DeleteReadingResponse
-	8,  // [8:13] is the sub-list for method output_type
-	3,  // [3:8] is the sub-list for method input_type
+	10, // 3: Readings.List:input_type -> google.protobuf.Empty
+	2,  // 4: Readings.List:output_type -> ListReadingsResponse
+	4,  // [4:5] is the sub-list for method output_type
+	3,  // [3:4] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_sensor_reading_proto_init() }
-func file_sensor_reading_proto_init() {
-	if File_sensor_reading_proto != nil {
+func init() { file_reading_proto_init() }
+func file_reading_proto_init() {
+	if File_reading_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sensor_reading_proto_rawDesc), len(file_sensor_reading_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_reading_proto_rawDesc), len(file_reading_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_sensor_reading_proto_goTypes,
-		DependencyIndexes: file_sensor_reading_proto_depIdxs,
-		MessageInfos:      file_sensor_reading_proto_msgTypes,
+		GoTypes:           file_reading_proto_goTypes,
+		DependencyIndexes: file_reading_proto_depIdxs,
+		MessageInfos:      file_reading_proto_msgTypes,
 	}.Build()
-	File_sensor_reading_proto = out.File
-	file_sensor_reading_proto_goTypes = nil
-	file_sensor_reading_proto_depIdxs = nil
+	File_reading_proto = out.File
+	file_reading_proto_goTypes = nil
+	file_reading_proto_depIdxs = nil
 }

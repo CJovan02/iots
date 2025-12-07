@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/reading";
+option go_package = "github.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/sensorpg";
 
 // Get Reading
 message GetReadingRequest {
@@ -22,8 +22,8 @@ message GetReadingResponse {
   uint32 fire_alarm = 9;
 }
 
-// Get All Readings
-message GetAllReadingsResponse {
+// List Readings
+message ListReadingsResponse {
   repeated GetReadingResponse readings = 1;
 }
 
@@ -70,10 +70,10 @@ message DeleteReadingResponse {
   bool success = 1;
 }
 
-service SensorReadingService {
-  rpc GetAllReadings(google.protobuf.Empty) returns(GetAllReadingsResponse);
-  rpc GetReading(GetReadingRequest) returns (GetReadingResponse);
-  rpc CreateReading(CreateReadingRequest) returns (CreateReadingResponse);
-  rpc UpdateReading(UpdateReadingRequest) returns (UpdateReadingResponse);
-  rpc DeleteReading(DeleteReadingRequest) returns (DeleteReadingResponse);
+service Readings {
+  rpc List(google.protobuf.Empty) returns(ListReadingsResponse);
+//  rpc Get(GetReadingRequest) returns (GetReadingResponse);
+//  rpc Create(CreateReadingRequest) returns (CreateReadingResponse);
+//  rpc Update(UpdateReadingRequest) returns (UpdateReadingResponse);
+//  rpc Delete(DeleteReadingRequest) returns (DeleteReadingResponse);
 }
