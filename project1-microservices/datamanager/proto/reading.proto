@@ -5,9 +5,14 @@ import "google/protobuf/empty.proto";
 
 option go_package = "github.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/sensorpg";
 
+// List Readings
+message ListReadingsResponse {
+  repeated GetReadingResponse readings = 1;
+}
+
 // Get Reading
 message GetReadingRequest {
-  string id = 1;
+  uint32 id = 1;
 }
 
 message GetReadingResponse {
@@ -22,9 +27,23 @@ message GetReadingResponse {
   uint32 fire_alarm = 9;
 }
 
-// List Readings
-message ListReadingsResponse {
-  repeated GetReadingResponse readings = 1;
+// Statistics
+message GetStatisticsRequest {
+  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp end_time = 2;
+}
+
+message GetStatisticsResponse {
+  uint32 readings_count = 1;
+  double min_temperature = 2;
+  double max_temperature = 3;
+  double avg_temperature = 4;
+  double min_humidity = 5;
+  double max_humidity = 6;
+  double avg_humidity = 7;
+  uint32 sum_tvoc = 8;
+  uint32 fire_alarm_count = 9;
+  uint32 no_fire_alarm_count = 10;
 }
 
 // Create Reading
@@ -36,17 +55,17 @@ message CreateReadingRequest {
   uint32 e_co2 = 5;
   uint32 raw_hw = 6;
   uint32 raw_ethanol = 7;
-  double pm_wt = 8;
+  double pm_25 = 8;
   uint32 fire_alarm = 9;
 }
 
 message CreateReadingResponse {
-  bool success = 1;
+  uint32 id = 1;
 }
 
 // Update Reading
 message UpdateReadingRequest {
-  string id = 1;
+  uint32 id = 1;
   double temperature = 2;
   double humidity = 3;
   uint32 tvoc = 4;
@@ -57,23 +76,16 @@ message UpdateReadingRequest {
   uint32 fire_alarm = 9;
 }
 
-message UpdateReadingResponse {
-  bool success = 1;
-}
-
 // Delete Reading
 message DeleteReadingRequest {
-  string id = 1;
-}
-
-message DeleteReadingResponse {
-  bool success = 1;
+  uint32 id = 1;
 }
 
 service Readings {
   rpc List(google.protobuf.Empty) returns(ListReadingsResponse);
-//  rpc Get(GetReadingRequest) returns (GetReadingResponse);
-//  rpc Create(CreateReadingRequest) returns (CreateReadingResponse);
-//  rpc Update(UpdateReadingRequest) returns (UpdateReadingResponse);
-//  rpc Delete(DeleteReadingRequest) returns (DeleteReadingResponse);
+  rpc Get(GetReadingRequest) returns (GetReadingResponse);
+  rpc Statistics(GetStatisticsRequest) returns (GetStatisticsResponse);
+  rpc Create(CreateReadingRequest) returns (CreateReadingResponse);
+  rpc Update(UpdateReadingRequest) returns (google.protobuf.Empty);
+  rpc Delete(DeleteReadingRequest) returns (google.protobuf.Empty);
 }

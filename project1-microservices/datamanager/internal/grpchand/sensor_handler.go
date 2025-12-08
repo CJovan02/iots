@@ -34,7 +34,52 @@ func (s *SensorHandler) List(ctx context.Context, _ *emptypb.Empty) (*sensorpg.L
 	return response, nil
 }
 
-//Get(context.Context, *GetReadingRequest) (*GetReadingResponse, error)
-//Create(context.Context, *CreateReadingRequest) (*CreateReadingResponse, error)
-//Update(context.Context, *UpdateReadingRequest) (*UpdateReadingResponse, error)
-//Delete(context.Context, *DeleteReadingRequest) (*DeleteReadingResponse, error)
+func (s *SensorHandler) Get(ctx context.Context, request *sensorpg.GetReadingRequest) (*sensorpg.GetReadingResponse, error) {
+	reading, err := s.service.GetById(ctx, request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return reading.ToProto(), nil
+}
+
+func (s *SensorHandler) Statistics(ctx context.Context, request *sensorpg.GetStatisticsRequest) (*sensorpg.GetStatisticsResponse, error) {
+	stat, err := s.service.GetStatistics(ctx, request.StartTime.AsTime(), request.EndTime.AsTime())
+	if err != nil {
+		return nil, err
+	}
+
+	return stat.ToProto(), nil
+}
+
+func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateReadingRequest) (*sensorpg.CreateReadingResponse, error) {
+	reading := sensor.ProtoCreateToReading(request)
+
+	id, err := s.service.Create(ctx, reading)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &sensorpg.CreateReadingResponse{Id: *id}
+	return response, nil
+
+}
+func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateReadingRequest) (*emptypb.Empty, error) {
+	reading := sensor.ProtoUpdateToReading(request)
+
+	err := s.service.Update(ctx, request.Id, reading)
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+func (s *SensorHandler) Delete(ctx context.Context, request *sensorpg.DeleteReadingRequest) (*emptypb.Empty, error) {
+	err := s.service.Delete(ctx, request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
+}

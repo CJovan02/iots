@@ -46,7 +46,6 @@ func main() {
 	server := grpc.NewServer()
 	// Register service handler to server
 	sensorpg.RegisterReadingsServer(server, sensorHandler)
-	// Enable reflection. It is required for testing with grpcurl
 	reflection.Register(server)
 
 	// Start listening to requests

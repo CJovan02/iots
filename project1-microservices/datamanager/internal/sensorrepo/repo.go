@@ -17,7 +17,7 @@ func New(db *pgxpool.Pool) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) GetById(ctx context.Context, id int32) (*sensor.Reading, error) {
+func (r *Repository) GetById(ctx context.Context, id uint32) (*sensor.Reading, error) {
 	const query = `
 		SELECT *
 		FROM sensor_readings
@@ -70,22 +70,24 @@ func (r *Repository) GetStatistics(ctx context.Context, startTime time.Time, end
 	return scanSensorStatistics(row)
 }
 
-func (r *Repository) Create(ctx context.Context, reading *sensor.Reading) error {
+func (r *Repository) Create(ctx context.Context, reading *sensor.Reading) (*uint32, error) {
 	const query = `
 		INSERT INTO sensor_readings 
 		(timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+		RETURNING id
 	`
 
-	_, err := r.db.Exec(ctx, query, sensorReadingArgs(reading)...)
+	var id uint32
+	err := r.db.QueryRow(ctx, query, sensorReadingArgs(reading)...).Scan(&id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &id, nil
 }
 
-func (r *Repository) Update(ctx context.Context, id int32, reading *sensor.Reading) error {
+func (r *Repository) Update(ctx context.Context, id uint32, reading *sensor.Reading) error {
 	const query = `
 		UPDATE sensor_readings
 		SET 
@@ -99,6 +101,7 @@ func (r *Repository) Update(ctx context.Context, id int32, reading *sensor.Readi
 		    pm_25 = $9,
 		    fire_alarm = $10
 		WHERE id = $1
+	
 	`
 	args := append([]any{id}, sensorReadingArgs(reading)...)
 
@@ -110,7 +113,7 @@ func (r *Repository) Update(ctx context.Context, id int32, reading *sensor.Readi
 	return nil
 }
 
-func (r *Repository) Delete(ctx context.Context, id int32) error {
+func (r *Repository) Delete(ctx context.Context, id uint32) error {
 	const query = `
 		DELETE FROM sensor_readings
 		WHERE id = $1

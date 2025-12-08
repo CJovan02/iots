@@ -6,10 +6,10 @@ import (
 )
 
 type Service interface {
-	GetById(ctx context.Context, id int32) (*Reading, error)
+	GetById(ctx context.Context, id uint32) (*Reading, error)
 	List(ctx context.Context) ([]Reading, error)
 	GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*Statistics, error)
-	Create(ctx context.Context, reading *Reading) error
-	Update(ctx context.Context, id int32, reading *Reading) error
-	Delete(ctx context.Context, id int32) error
+	Create(ctx context.Context, reading *Reading) (*uint32, error)
+	Update(ctx context.Context, id uint32, reading *Reading) error
+	Delete(ctx context.Context, id uint32) error
 }

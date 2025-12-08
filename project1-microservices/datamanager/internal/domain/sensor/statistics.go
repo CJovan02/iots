@@ -1,7 +1,7 @@
 package sensor
 
 type Statistics struct {
-	ReadingsCount    uint16
+	ReadingsCount    uint32
 	MinTemperature   float64
 	MaxTemperature   float64
 	AvgTemperature   float64
@@ -9,6 +9,6 @@ type Statistics struct {
 	MaxHumidity      float64
 	AvgHumidity      float64
 	SumTVOC          uint32
-	FireAlarmCount   uint16
-	NoFireAlarmCount uint16
+	FireAlarmCount   uint32
+	NoFireAlarmCount uint32
 }

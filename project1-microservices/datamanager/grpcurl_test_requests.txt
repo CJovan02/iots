@@ -1,0 +1,47 @@
+// LIST
+grpcurl -plaintext localhost:8080 Readings/List
+
+// GET
+grpcurl -plaintext -d '{"id": 7}' localhost:8080 Readings/Get
+
+// STATISTICS
+grpcurl -plaintext \
+  -d '{
+    "startTime": "1950-01-01T00:00:00Z",
+    "endTime":   "2050-01-01T00:00:00Z"
+  }' \
+  localhost:8080 Readings/Statistics
+
+
+// CREATE
+grpcurl -plaintext \
+  -d '{
+    "timestamp": "2025-12-05T21:00:00Z",
+    "temperature": 25.5,
+    "humidity": 40.2,
+    "tvoc": 10,
+    "eCo2": 20,
+    "rawHw": 30,
+    "rawEthanol": 40,
+    "pm25": 12.3,
+    "fireAlarm": 0
+}' \
+localhost:8080 Readings/Create
+
+// UPDATE
+grpcurl -plaintext \
+  -d '{
+    "id": "7",
+    "temperature": 21.5,
+    "humidity": 41.2,
+    "tvoc": 11,
+    "eCo2": 21,
+    "rawHw": 31,
+    "rawEthanol": 41,
+    "pm25": 11.3,
+    "fireAlarm": 1
+}' \
+localhost:8080 Readings/Update
+
+// DELETE
+grpcurl -plaintext -d '{ "id": 7 }' localhost:8080 Readings/Delete
