@@ -2,6 +2,7 @@ package grpchand
 
 import (
 	"context"
+	"errors"
 
 	"github.com/CJovan02/iots/project1-microservices/datamanager/internal/domain/sensor"
 	"github.com/CJovan02/iots/project1-microservices/datamanager/protogen/golang/sensorpg"
@@ -35,6 +36,10 @@ func (s *SensorHandler) List(ctx context.Context, _ *emptypb.Empty) (*sensorpg.L
 }
 
 func (s *SensorHandler) Get(ctx context.Context, request *sensorpg.GetReadingRequest) (*sensorpg.GetReadingResponse, error) {
+	if request.Id < 0 {
+		return nil, errors.New("id must be positive")
+	}
+
 	reading, err := s.service.GetById(ctx, request.Id)
 	if err != nil {
 		return nil, err
@@ -44,6 +49,12 @@ func (s *SensorHandler) Get(ctx context.Context, request *sensorpg.GetReadingReq
 }
 
 func (s *SensorHandler) Statistics(ctx context.Context, request *sensorpg.GetStatisticsRequest) (*sensorpg.GetStatisticsResponse, error) {
+	startTime := request.StartTime.AsTime()
+	endTime := request.EndTime.AsTime()
+	if (startTime.IsZero() || endTime.IsZero()) && startTime.After(endTime) {
+		return nil, errors.New("start and end time must not be zero and start time must be before end time")
+	}
+
 	stat, err := s.service.GetStatistics(ctx, request.StartTime.AsTime(), request.EndTime.AsTime())
 	if err != nil {
 		return nil, err
@@ -54,6 +65,17 @@ func (s *SensorHandler) Statistics(ctx context.Context, request *sensorpg.GetSta
 
 func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateReadingRequest) (*sensorpg.CreateReadingResponse, error) {
 	reading := sensor.ProtoCreateToReading(request)
+
+	if reading.FireAlarm != 1 && reading.FireAlarm != 0 {
+		return nil, errors.New("fire alarm must be either 1 or 0")
+	}
+
+	if reading.Temperature < -50 || reading.Temperature > 100 {
+		return nil, errors.New("temperature must be between 0 and 100")
+	}
+	if reading.Humidity < -50 || reading.Humidity > 100 {
+		return nil, errors.New("humidity must be between 0 and 100")
+	}
 
 	id, err := s.service.Create(ctx, reading)
 	if err != nil {
@@ -67,6 +89,21 @@ func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateRead
 func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateReadingRequest) (*emptypb.Empty, error) {
 	reading := sensor.ProtoUpdateToReading(request)
 
+	if request.Id < 0 {
+		return nil, errors.New("id must be positive")
+	}
+
+	if reading.FireAlarm != 1 && reading.FireAlarm != 0 {
+		return nil, errors.New("fire alarm must be either 1 or 0")
+	}
+
+	if reading.Temperature < -50 || reading.Temperature > 100 {
+		return nil, errors.New("temperature must be between 0 and 100")
+	}
+	if reading.Humidity < -50 || reading.Humidity > 100 {
+		return nil, errors.New("humidity must be between 0 and 100")
+	}
+
 	err := s.service.Update(ctx, request.Id, reading)
 	if err != nil {
 		return nil, err
@@ -76,6 +113,10 @@ func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateRead
 }
 
 func (s *SensorHandler) Delete(ctx context.Context, request *sensorpg.DeleteReadingRequest) (*emptypb.Empty, error) {
+	if request.Id < 0 {
+		return nil, errors.New("id must be positive")
+	}
+
 	err := s.service.Delete(ctx, request.Id)
 	if err != nil {
 		return nil, err
