@@ -19,8 +19,24 @@ func NewSensorHandler(s sensor.Service) *SensorHandler {
 	return &SensorHandler{service: s}
 }
 
-func (s *SensorHandler) List(ctx context.Context, _ *emptypb.Empty) (*sensorpg.ListReadingsResponse, error) {
-	readings, err := s.service.List(ctx)
+func (s *SensorHandler) CountAll(ctx context.Context, _ *emptypb.Empty) (*sensorpg.CountAllResponse, error) {
+	count, err := s.service.CountAll(ctx)
+	if err != nil {
+		return nil, MapErrToGrpc(err)
+	}
+
+	response := &sensorpg.CountAllResponse{
+		Count: *count,
+	}
+	return response, nil
+}
+
+func (s *SensorHandler) List(ctx context.Context, request *sensorpg.ListReadingsRequest) (*sensorpg.ListReadingsResponse, error) {
+	if request.PageSize > 50 {
+		return nil, status.Errorf(codes.InvalidArgument, "page size can't be bigger than 50")
+	}
+
+	readings, err := s.service.List(ctx, request.PageNumber, request.PageSize)
 	if err != nil {
 		return nil, MapErrToGrpc(err)
 	}

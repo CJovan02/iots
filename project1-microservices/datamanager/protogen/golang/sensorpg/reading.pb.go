@@ -23,7 +23,104 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Count all
+type CountAllResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         uint32                 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountAllResponse) Reset() {
+	*x = CountAllResponse{}
+	mi := &file_reading_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountAllResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountAllResponse) ProtoMessage() {}
+
+func (x *CountAllResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_reading_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountAllResponse.ProtoReflect.Descriptor instead.
+func (*CountAllResponse) Descriptor() ([]byte, []int) {
+	return file_reading_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *CountAllResponse) GetCount() uint32 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 // List Readings
+type ListReadingsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PageNumber    uint32                 `protobuf:"varint,1,opt,name=pageNumber,proto3" json:"pageNumber,omitempty"`
+	PageSize      uint32                 `protobuf:"varint,2,opt,name=pageSize,proto3" json:"pageSize,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListReadingsRequest) Reset() {
+	*x = ListReadingsRequest{}
+	mi := &file_reading_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListReadingsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListReadingsRequest) ProtoMessage() {}
+
+func (x *ListReadingsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reading_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListReadingsRequest.ProtoReflect.Descriptor instead.
+func (*ListReadingsRequest) Descriptor() ([]byte, []int) {
+	return file_reading_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ListReadingsRequest) GetPageNumber() uint32 {
+	if x != nil {
+		return x.PageNumber
+	}
+	return 0
+}
+
+func (x *ListReadingsRequest) GetPageSize() uint32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
 type ListReadingsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Readings      []*GetReadingResponse  `protobuf:"bytes,1,rep,name=readings,proto3" json:"readings,omitempty"`
@@ -33,7 +130,7 @@ type ListReadingsResponse struct {
 
 func (x *ListReadingsResponse) Reset() {
 	*x = ListReadingsResponse{}
-	mi := &file_reading_proto_msgTypes[0]
+	mi := &file_reading_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +142,7 @@ func (x *ListReadingsResponse) String() string {
 func (*ListReadingsResponse) ProtoMessage() {}
 
 func (x *ListReadingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[0]
+	mi := &file_reading_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +155,7 @@ func (x *ListReadingsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListReadingsResponse.ProtoReflect.Descriptor instead.
 func (*ListReadingsResponse) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{0}
+	return file_reading_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ListReadingsResponse) GetReadings() []*GetReadingResponse {
@@ -78,7 +175,7 @@ type GetReadingRequest struct {
 
 func (x *GetReadingRequest) Reset() {
 	*x = GetReadingRequest{}
-	mi := &file_reading_proto_msgTypes[1]
+	mi := &file_reading_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -90,7 +187,7 @@ func (x *GetReadingRequest) String() string {
 func (*GetReadingRequest) ProtoMessage() {}
 
 func (x *GetReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[1]
+	mi := &file_reading_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -103,7 +200,7 @@ func (x *GetReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetReadingRequest.ProtoReflect.Descriptor instead.
 func (*GetReadingRequest) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{1}
+	return file_reading_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetReadingRequest) GetId() uint32 {
@@ -115,22 +212,23 @@ func (x *GetReadingRequest) GetId() uint32 {
 
 type GetReadingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	Temperature   float64                `protobuf:"fixed64,2,opt,name=temperature,proto3" json:"temperature,omitempty"`
-	Humidity      float64                `protobuf:"fixed64,3,opt,name=humidity,proto3" json:"humidity,omitempty"`
-	Tvoc          uint32                 `protobuf:"varint,4,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
-	ECo2          uint32                 `protobuf:"varint,5,opt,name=e_co2,json=eCo2,proto3" json:"e_co2,omitempty"`
-	RawHw         uint32                 `protobuf:"varint,6,opt,name=raw_hw,json=rawHw,proto3" json:"raw_hw,omitempty"`
-	RawEthanol    uint32                 `protobuf:"varint,7,opt,name=raw_ethanol,json=rawEthanol,proto3" json:"raw_ethanol,omitempty"`
-	Pm_25         float64                `protobuf:"fixed64,8,opt,name=pm_25,json=pm25,proto3" json:"pm_25,omitempty"`
-	FireAlarm     uint32                 `protobuf:"varint,9,opt,name=fire_alarm,json=fireAlarm,proto3" json:"fire_alarm,omitempty"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Temperature   float64                `protobuf:"fixed64,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
+	Humidity      float64                `protobuf:"fixed64,4,opt,name=humidity,proto3" json:"humidity,omitempty"`
+	Tvoc          uint32                 `protobuf:"varint,5,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
+	ECo2          uint32                 `protobuf:"varint,6,opt,name=e_co2,json=eCo2,proto3" json:"e_co2,omitempty"`
+	RawHw         uint32                 `protobuf:"varint,7,opt,name=raw_hw,json=rawHw,proto3" json:"raw_hw,omitempty"`
+	RawEthanol    uint32                 `protobuf:"varint,8,opt,name=raw_ethanol,json=rawEthanol,proto3" json:"raw_ethanol,omitempty"`
+	Pm_25         float64                `protobuf:"fixed64,9,opt,name=pm_25,json=pm25,proto3" json:"pm_25,omitempty"`
+	FireAlarm     uint32                 `protobuf:"varint,10,opt,name=fire_alarm,json=fireAlarm,proto3" json:"fire_alarm,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetReadingResponse) Reset() {
 	*x = GetReadingResponse{}
-	mi := &file_reading_proto_msgTypes[2]
+	mi := &file_reading_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -142,7 +240,7 @@ func (x *GetReadingResponse) String() string {
 func (*GetReadingResponse) ProtoMessage() {}
 
 func (x *GetReadingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[2]
+	mi := &file_reading_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -155,7 +253,14 @@ func (x *GetReadingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetReadingResponse.ProtoReflect.Descriptor instead.
 func (*GetReadingResponse) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{2}
+	return file_reading_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetReadingResponse) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
 }
 
 func (x *GetReadingResponse) GetTimestamp() *timestamppb.Timestamp {
@@ -232,7 +337,7 @@ type GetStatisticsRequest struct {
 
 func (x *GetStatisticsRequest) Reset() {
 	*x = GetStatisticsRequest{}
-	mi := &file_reading_proto_msgTypes[3]
+	mi := &file_reading_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -244,7 +349,7 @@ func (x *GetStatisticsRequest) String() string {
 func (*GetStatisticsRequest) ProtoMessage() {}
 
 func (x *GetStatisticsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[3]
+	mi := &file_reading_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -257,7 +362,7 @@ func (x *GetStatisticsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetStatisticsRequest.ProtoReflect.Descriptor instead.
 func (*GetStatisticsRequest) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{3}
+	return file_reading_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetStatisticsRequest) GetStartTime() *timestamppb.Timestamp {
@@ -292,7 +397,7 @@ type GetStatisticsResponse struct {
 
 func (x *GetStatisticsResponse) Reset() {
 	*x = GetStatisticsResponse{}
-	mi := &file_reading_proto_msgTypes[4]
+	mi := &file_reading_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -304,7 +409,7 @@ func (x *GetStatisticsResponse) String() string {
 func (*GetStatisticsResponse) ProtoMessage() {}
 
 func (x *GetStatisticsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[4]
+	mi := &file_reading_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -317,7 +422,7 @@ func (x *GetStatisticsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetStatisticsResponse.ProtoReflect.Descriptor instead.
 func (*GetStatisticsResponse) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{4}
+	return file_reading_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetStatisticsResponse) GetReadingsCount() uint32 {
@@ -408,7 +513,7 @@ type CreateReadingRequest struct {
 
 func (x *CreateReadingRequest) Reset() {
 	*x = CreateReadingRequest{}
-	mi := &file_reading_proto_msgTypes[5]
+	mi := &file_reading_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -420,7 +525,7 @@ func (x *CreateReadingRequest) String() string {
 func (*CreateReadingRequest) ProtoMessage() {}
 
 func (x *CreateReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[5]
+	mi := &file_reading_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -433,7 +538,7 @@ func (x *CreateReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReadingRequest.ProtoReflect.Descriptor instead.
 func (*CreateReadingRequest) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{5}
+	return file_reading_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CreateReadingRequest) GetTimestamp() *timestamppb.Timestamp {
@@ -508,7 +613,7 @@ type CreateReadingResponse struct {
 
 func (x *CreateReadingResponse) Reset() {
 	*x = CreateReadingResponse{}
-	mi := &file_reading_proto_msgTypes[6]
+	mi := &file_reading_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -520,7 +625,7 @@ func (x *CreateReadingResponse) String() string {
 func (*CreateReadingResponse) ProtoMessage() {}
 
 func (x *CreateReadingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[6]
+	mi := &file_reading_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -533,7 +638,7 @@ func (x *CreateReadingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReadingResponse.ProtoReflect.Descriptor instead.
 func (*CreateReadingResponse) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{6}
+	return file_reading_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateReadingResponse) GetId() uint32 {
@@ -561,7 +666,7 @@ type UpdateReadingRequest struct {
 
 func (x *UpdateReadingRequest) Reset() {
 	*x = UpdateReadingRequest{}
-	mi := &file_reading_proto_msgTypes[7]
+	mi := &file_reading_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -573,7 +678,7 @@ func (x *UpdateReadingRequest) String() string {
 func (*UpdateReadingRequest) ProtoMessage() {}
 
 func (x *UpdateReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[7]
+	mi := &file_reading_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -586,7 +691,7 @@ func (x *UpdateReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReadingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateReadingRequest) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{7}
+	return file_reading_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpdateReadingRequest) GetId() uint32 {
@@ -662,7 +767,7 @@ type DeleteReadingRequest struct {
 
 func (x *DeleteReadingRequest) Reset() {
 	*x = DeleteReadingRequest{}
-	mi := &file_reading_proto_msgTypes[8]
+	mi := &file_reading_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -674,7 +779,7 @@ func (x *DeleteReadingRequest) String() string {
 func (*DeleteReadingRequest) ProtoMessage() {}
 
 func (x *DeleteReadingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reading_proto_msgTypes[8]
+	mi := &file_reading_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -687,7 +792,7 @@ func (x *DeleteReadingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReadingRequest.ProtoReflect.Descriptor instead.
 func (*DeleteReadingRequest) Descriptor() ([]byte, []int) {
-	return file_reading_proto_rawDescGZIP(), []int{8}
+	return file_reading_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteReadingRequest) GetId() uint32 {
@@ -701,23 +806,32 @@ var File_reading_proto protoreflect.FileDescriptor
 
 const file_reading_proto_rawDesc = "" +
 	"\n" +
-	"\rreading.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"G\n" +
+	"\rreading.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"(\n" +
+	"\x10CountAllResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\rR\x05count\"Q\n" +
+	"\x13ListReadingsRequest\x12\x1e\n" +
+	"\n" +
+	"pageNumber\x18\x01 \x01(\rR\n" +
+	"pageNumber\x12\x1a\n" +
+	"\bpageSize\x18\x02 \x01(\rR\bpageSize\"G\n" +
 	"\x14ListReadingsResponse\x12/\n" +
 	"\breadings\x18\x01 \x03(\v2\x13.GetReadingResponseR\breadings\"#\n" +
 	"\x11GetReadingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\xa1\x02\n" +
-	"\x12GetReadingResponse\x128\n" +
-	"\ttimestamp\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12 \n" +
-	"\vtemperature\x18\x02 \x01(\x01R\vtemperature\x12\x1a\n" +
-	"\bhumidity\x18\x03 \x01(\x01R\bhumidity\x12\x12\n" +
-	"\x04tvoc\x18\x04 \x01(\rR\x04tvoc\x12\x13\n" +
-	"\x05e_co2\x18\x05 \x01(\rR\x04eCo2\x12\x15\n" +
-	"\x06raw_hw\x18\x06 \x01(\rR\x05rawHw\x12\x1f\n" +
-	"\vraw_ethanol\x18\a \x01(\rR\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"\xb1\x02\n" +
+	"\x12GetReadingResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x128\n" +
+	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12 \n" +
+	"\vtemperature\x18\x03 \x01(\x01R\vtemperature\x12\x1a\n" +
+	"\bhumidity\x18\x04 \x01(\x01R\bhumidity\x12\x12\n" +
+	"\x04tvoc\x18\x05 \x01(\rR\x04tvoc\x12\x13\n" +
+	"\x05e_co2\x18\x06 \x01(\rR\x04eCo2\x12\x15\n" +
+	"\x06raw_hw\x18\a \x01(\rR\x05rawHw\x12\x1f\n" +
+	"\vraw_ethanol\x18\b \x01(\rR\n" +
 	"rawEthanol\x12\x13\n" +
-	"\x05pm_25\x18\b \x01(\x01R\x04pm25\x12\x1d\n" +
+	"\x05pm_25\x18\t \x01(\x01R\x04pm25\x12\x1d\n" +
 	"\n" +
-	"fire_alarm\x18\t \x01(\rR\tfireAlarm\"\x88\x01\n" +
+	"fire_alarm\x18\n" +
+	" \x01(\rR\tfireAlarm\"\x88\x01\n" +
 	"\x14GetStatisticsRequest\x129\n" +
 	"\n" +
 	"start_time\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\tstartTime\x125\n" +
@@ -761,9 +875,10 @@ const file_reading_proto_rawDesc = "" +
 	"\n" +
 	"fire_alarm\x18\t \x01(\rR\tfireAlarm\"&\n" +
 	"\x14DeleteReadingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xd9\x02\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id2\x8e\x03\n" +
 	"\bReadings\x125\n" +
-	"\x04List\x12\x16.google.protobuf.Empty\x1a\x15.ListReadingsResponse\x12.\n" +
+	"\bCountAll\x12\x16.google.protobuf.Empty\x1a\x11.CountAllResponse\x123\n" +
+	"\x04List\x12\x14.ListReadingsRequest\x1a\x15.ListReadingsResponse\x12.\n" +
 	"\x03Get\x12\x12.GetReadingRequest\x1a\x13.GetReadingResponse\x12;\n" +
 	"\n" +
 	"Statistics\x12\x15.GetStatisticsRequest\x1a\x16.GetStatisticsResponse\x127\n" +
@@ -783,40 +898,44 @@ func file_reading_proto_rawDescGZIP() []byte {
 	return file_reading_proto_rawDescData
 }
 
-var file_reading_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_reading_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_reading_proto_goTypes = []any{
-	(*ListReadingsResponse)(nil),  // 0: ListReadingsResponse
-	(*GetReadingRequest)(nil),     // 1: GetReadingRequest
-	(*GetReadingResponse)(nil),    // 2: GetReadingResponse
-	(*GetStatisticsRequest)(nil),  // 3: GetStatisticsRequest
-	(*GetStatisticsResponse)(nil), // 4: GetStatisticsResponse
-	(*CreateReadingRequest)(nil),  // 5: CreateReadingRequest
-	(*CreateReadingResponse)(nil), // 6: CreateReadingResponse
-	(*UpdateReadingRequest)(nil),  // 7: UpdateReadingRequest
-	(*DeleteReadingRequest)(nil),  // 8: DeleteReadingRequest
-	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),         // 10: google.protobuf.Empty
+	(*CountAllResponse)(nil),      // 0: CountAllResponse
+	(*ListReadingsRequest)(nil),   // 1: ListReadingsRequest
+	(*ListReadingsResponse)(nil),  // 2: ListReadingsResponse
+	(*GetReadingRequest)(nil),     // 3: GetReadingRequest
+	(*GetReadingResponse)(nil),    // 4: GetReadingResponse
+	(*GetStatisticsRequest)(nil),  // 5: GetStatisticsRequest
+	(*GetStatisticsResponse)(nil), // 6: GetStatisticsResponse
+	(*CreateReadingRequest)(nil),  // 7: CreateReadingRequest
+	(*CreateReadingResponse)(nil), // 8: CreateReadingResponse
+	(*UpdateReadingRequest)(nil),  // 9: UpdateReadingRequest
+	(*DeleteReadingRequest)(nil),  // 10: DeleteReadingRequest
+	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),         // 12: google.protobuf.Empty
 }
 var file_reading_proto_depIdxs = []int32{
-	2,  // 0: ListReadingsResponse.readings:type_name -> GetReadingResponse
-	9,  // 1: GetReadingResponse.timestamp:type_name -> google.protobuf.Timestamp
-	9,  // 2: GetStatisticsRequest.start_time:type_name -> google.protobuf.Timestamp
-	9,  // 3: GetStatisticsRequest.end_time:type_name -> google.protobuf.Timestamp
-	9,  // 4: CreateReadingRequest.timestamp:type_name -> google.protobuf.Timestamp
-	10, // 5: Readings.List:input_type -> google.protobuf.Empty
-	1,  // 6: Readings.Get:input_type -> GetReadingRequest
-	3,  // 7: Readings.Statistics:input_type -> GetStatisticsRequest
-	5,  // 8: Readings.Create:input_type -> CreateReadingRequest
-	7,  // 9: Readings.Update:input_type -> UpdateReadingRequest
-	8,  // 10: Readings.Delete:input_type -> DeleteReadingRequest
-	0,  // 11: Readings.List:output_type -> ListReadingsResponse
-	2,  // 12: Readings.Get:output_type -> GetReadingResponse
-	4,  // 13: Readings.Statistics:output_type -> GetStatisticsResponse
-	6,  // 14: Readings.Create:output_type -> CreateReadingResponse
-	10, // 15: Readings.Update:output_type -> google.protobuf.Empty
-	10, // 16: Readings.Delete:output_type -> google.protobuf.Empty
-	11, // [11:17] is the sub-list for method output_type
-	5,  // [5:11] is the sub-list for method input_type
+	4,  // 0: ListReadingsResponse.readings:type_name -> GetReadingResponse
+	11, // 1: GetReadingResponse.timestamp:type_name -> google.protobuf.Timestamp
+	11, // 2: GetStatisticsRequest.start_time:type_name -> google.protobuf.Timestamp
+	11, // 3: GetStatisticsRequest.end_time:type_name -> google.protobuf.Timestamp
+	11, // 4: CreateReadingRequest.timestamp:type_name -> google.protobuf.Timestamp
+	12, // 5: Readings.CountAll:input_type -> google.protobuf.Empty
+	1,  // 6: Readings.List:input_type -> ListReadingsRequest
+	3,  // 7: Readings.Get:input_type -> GetReadingRequest
+	5,  // 8: Readings.Statistics:input_type -> GetStatisticsRequest
+	7,  // 9: Readings.Create:input_type -> CreateReadingRequest
+	9,  // 10: Readings.Update:input_type -> UpdateReadingRequest
+	10, // 11: Readings.Delete:input_type -> DeleteReadingRequest
+	0,  // 12: Readings.CountAll:output_type -> CountAllResponse
+	2,  // 13: Readings.List:output_type -> ListReadingsResponse
+	4,  // 14: Readings.Get:output_type -> GetReadingResponse
+	6,  // 15: Readings.Statistics:output_type -> GetStatisticsResponse
+	8,  // 16: Readings.Create:output_type -> CreateReadingResponse
+	12, // 17: Readings.Update:output_type -> google.protobuf.Empty
+	12, // 18: Readings.Delete:output_type -> google.protobuf.Empty
+	12, // [12:19] is the sub-list for method output_type
+	5,  // [5:12] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
 	5,  // [5:5] is the sub-list for extension extendee
 	0,  // [0:5] is the sub-list for field type_name
@@ -833,7 +952,7 @@ func file_reading_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_reading_proto_rawDesc), len(file_reading_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

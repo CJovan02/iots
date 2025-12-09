@@ -1,5 +1,8 @@
+// COUNT ALL
+grpcurl -plaintext localhost:8080 Readings/CountAll
+
 // LIST
-grpcurl -plaintext localhost:8080 Readings/List
+grpcurl -plaintext -d '{ "pageNumber": 1, "pageSize": 1 }' localhost:8080 Readings/List
 
 // GET
 grpcurl -plaintext -d '{"id": 7}' localhost:8080 Readings/Get

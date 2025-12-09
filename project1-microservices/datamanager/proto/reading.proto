@@ -5,7 +5,17 @@ import "google/protobuf/empty.proto";
 
 option go_package = "github.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/sensorpg";
 
+// Count all
+message CountAllResponse {
+  uint32 count = 1;
+}
+
 // List Readings
+message ListReadingsRequest {
+  uint32 pageNumber = 1;
+  uint32 pageSize = 2;
+}
+
 message ListReadingsResponse {
   repeated GetReadingResponse readings = 1;
 }
@@ -16,15 +26,16 @@ message GetReadingRequest {
 }
 
 message GetReadingResponse {
-  google.protobuf.Timestamp timestamp = 1;
-  double temperature = 2;
-  double humidity = 3;
-  uint32 tvoc = 4;
-  uint32 e_co2 = 5;
-  uint32 raw_hw = 6;
-  uint32 raw_ethanol = 7;
-  double pm_25 = 8;
-  uint32 fire_alarm = 9;
+  uint32 id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  double temperature = 3;
+  double humidity = 4;
+  uint32 tvoc = 5;
+  uint32 e_co2 = 6;
+  uint32 raw_hw = 7;
+  uint32 raw_ethanol = 8;
+  double pm_25 = 9;
+  uint32 fire_alarm = 10;
 }
 
 // Statistics
@@ -82,7 +93,8 @@ message DeleteReadingRequest {
 }
 
 service Readings {
-  rpc List(google.protobuf.Empty) returns(ListReadingsResponse);
+  rpc CountAll(google.protobuf.Empty) returns (CountAllResponse);
+  rpc List(ListReadingsRequest) returns(ListReadingsResponse);
   rpc Get(GetReadingRequest) returns (GetReadingResponse);
   rpc Statistics(GetStatisticsRequest) returns (GetStatisticsResponse);
   rpc Create(CreateReadingRequest) returns (CreateReadingResponse);

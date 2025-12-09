@@ -4,7 +4,7 @@ import "time"
 
 // Reading represents necessary columns from the dataset for fire detection
 type Reading struct {
-	Id          int32
+	Id          uint32
 	Timestamp   time.Time // UTC timestamp
 	Temperature float64   // Air temperature, fires raise temperature
 	Humidity    float64   // Air humidity, very high or low can indicate fire

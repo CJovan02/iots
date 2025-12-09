@@ -7,6 +7,7 @@ import (
 
 func (r *Reading) ToProto() *sensorpg.GetReadingResponse {
 	return &sensorpg.GetReadingResponse{
+		Id:          r.Id,
 		Timestamp:   timestamppb.New(r.Timestamp),
 		Temperature: r.Temperature,
 		Humidity:    r.Humidity,

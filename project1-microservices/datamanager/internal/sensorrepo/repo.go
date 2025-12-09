@@ -17,25 +17,28 @@ func New(db *pgxpool.Pool) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) GetById(ctx context.Context, id uint32) (*sensor.Reading, error) {
-	const query = `
-		SELECT *
-		FROM sensor_readings
-		WHERE id = $1
-	`
+func (r *Repository) CountAll(ctx context.Context) (*uint32, error) {
+	const query = `SELECT COUNT(*) FROM sensor_readings`
 
-	row := r.db.QueryRow(ctx, query, id)
+	var count uint32
+	err := r.db.QueryRow(ctx, query).Scan(&count)
+	if err != nil {
+		return nil, err
+	}
 
-	return scanSensorReading(row)
+	return &count, nil
 }
 
-func (r *Repository) List(ctx context.Context) ([]sensor.Reading, error) {
+func (r *Repository) List(ctx context.Context, offset uint32, limit uint32) ([]sensor.Reading, error) {
 	const query = `
 		SELECT *
 		FROM sensor_readings
+		ORDER BY timestamp
+		OFFSET $1
+		LIMIT $2
 	`
 
-	rows, err := r.db.Query(ctx, query)
+	rows, err := r.db.Query(ctx, query, offset, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -47,6 +50,18 @@ func (r *Repository) List(ctx context.Context) ([]sensor.Reading, error) {
 	}
 
 	return readings, nil
+}
+
+func (r *Repository) GetById(ctx context.Context, id uint32) (*sensor.Reading, error) {
+	const query = `
+		SELECT *
+		FROM sensor_readings
+		WHERE id = $1
+	`
+
+	row := r.db.QueryRow(ctx, query, id)
+
+	return scanSensorReading(row)
 }
 
 func (r *Repository) GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*sensor.Statistics, error) {

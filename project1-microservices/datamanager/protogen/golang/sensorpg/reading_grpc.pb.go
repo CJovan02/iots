@@ -20,6 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	Readings_CountAll_FullMethodName   = "/Readings/CountAll"
 	Readings_List_FullMethodName       = "/Readings/List"
 	Readings_Get_FullMethodName        = "/Readings/Get"
 	Readings_Statistics_FullMethodName = "/Readings/Statistics"
@@ -32,7 +33,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReadingsClient interface {
-	List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListReadingsResponse, error)
+	CountAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CountAllResponse, error)
+	List(ctx context.Context, in *ListReadingsRequest, opts ...grpc.CallOption) (*ListReadingsResponse, error)
 	Get(ctx context.Context, in *GetReadingRequest, opts ...grpc.CallOption) (*GetReadingResponse, error)
 	Statistics(ctx context.Context, in *GetStatisticsRequest, opts ...grpc.CallOption) (*GetStatisticsResponse, error)
 	Create(ctx context.Context, in *CreateReadingRequest, opts ...grpc.CallOption) (*CreateReadingResponse, error)
@@ -48,7 +50,17 @@ func NewReadingsClient(cc grpc.ClientConnInterface) ReadingsClient {
 	return &readingsClient{cc}
 }
 
-func (c *readingsClient) List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListReadingsResponse, error) {
+func (c *readingsClient) CountAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CountAllResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountAllResponse)
+	err := c.cc.Invoke(ctx, Readings_CountAll_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *readingsClient) List(ctx context.Context, in *ListReadingsRequest, opts ...grpc.CallOption) (*ListReadingsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListReadingsResponse)
 	err := c.cc.Invoke(ctx, Readings_List_FullMethodName, in, out, cOpts...)
@@ -112,7 +124,8 @@ func (c *readingsClient) Delete(ctx context.Context, in *DeleteReadingRequest, o
 // All implementations must embed UnimplementedReadingsServer
 // for forward compatibility.
 type ReadingsServer interface {
-	List(context.Context, *emptypb.Empty) (*ListReadingsResponse, error)
+	CountAll(context.Context, *emptypb.Empty) (*CountAllResponse, error)
+	List(context.Context, *ListReadingsRequest) (*ListReadingsResponse, error)
 	Get(context.Context, *GetReadingRequest) (*GetReadingResponse, error)
 	Statistics(context.Context, *GetStatisticsRequest) (*GetStatisticsResponse, error)
 	Create(context.Context, *CreateReadingRequest) (*CreateReadingResponse, error)
@@ -128,7 +141,10 @@ type ReadingsServer interface {
 // pointer dereference when methods are called.
 type UnimplementedReadingsServer struct{}
 
-func (UnimplementedReadingsServer) List(context.Context, *emptypb.Empty) (*ListReadingsResponse, error) {
+func (UnimplementedReadingsServer) CountAll(context.Context, *emptypb.Empty) (*CountAllResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CountAll not implemented")
+}
+func (UnimplementedReadingsServer) List(context.Context, *ListReadingsRequest) (*ListReadingsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedReadingsServer) Get(context.Context, *GetReadingRequest) (*GetReadingResponse, error) {
@@ -167,8 +183,26 @@ func RegisterReadingsServer(s grpc.ServiceRegistrar, srv ReadingsServer) {
 	s.RegisterService(&Readings_ServiceDesc, srv)
 }
 
-func _Readings_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Readings_CountAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReadingsServer).CountAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Readings_CountAll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReadingsServer).CountAll(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Readings_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListReadingsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -180,7 +214,7 @@ func _Readings_List_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: Readings_List_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReadingsServer).List(ctx, req.(*emptypb.Empty))
+		return srv.(ReadingsServer).List(ctx, req.(*ListReadingsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -282,6 +316,10 @@ var Readings_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "Readings",
 	HandlerType: (*ReadingsServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CountAll",
+			Handler:    _Readings_CountAll_Handler,
+		},
 		{
 			MethodName: "List",
 			Handler:    _Readings_List_Handler,

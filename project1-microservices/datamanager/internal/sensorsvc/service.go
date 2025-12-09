@@ -15,8 +15,14 @@ func New(repo sensor.Repository) *Service {
 	return &Service{repo: repo}
 }
 
-func (s *Service) List(ctx context.Context) ([]sensor.Reading, error) {
-	return s.repo.List(ctx)
+func (s *Service) CountAll(ctx context.Context) (*uint32, error) {
+	return s.repo.CountAll(ctx)
+}
+
+func (s *Service) List(ctx context.Context, pageNumber uint32, pageSize uint32) ([]sensor.Reading, error) {
+	offset := (pageNumber - 1) * pageSize
+
+	return s.repo.List(ctx, offset, pageSize)
 }
 
 func (s *Service) GetById(ctx context.Context, id uint32) (*sensor.Reading, error) {
