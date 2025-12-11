@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: jovan
+      POSTGRES_PASSWORD: jovan
+      POSTGRES_DB: iot_smoke_detection
+    volumes:
+      # Volume pgdata on the host
+      - pgdata:/var/lib/postgresql
+      # Bind mount, ./db-init is the folder location on the host
+      - ./db-init:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  pgdata:

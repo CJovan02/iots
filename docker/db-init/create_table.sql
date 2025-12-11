@@ -1,4 +1,4 @@
-CREATE TABLE sensor_reading
+CREATE TABLE IF NOT EXISTS sensor_readings
 (
     id          SERIAL PRIMARY KEY,
     timestamp   TIMESTAMP NOT NULL,
