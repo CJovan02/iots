@@ -15,7 +15,14 @@ services:
     image: adminer
     restart: always
     ports:
-      - ${ADMINER_PORT:-8080}:8080
-
+      - ${ADMINER_PORT:-7000}:8080
+  data-manager:
+    build: ../project1-microservices/datamanager/
+    depends_on:
+      - db
+    environment: 
+      POSTGRES_SMOKE_CONNECTION_STRING: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    ports:
+      - ${DATA_MANAGER_PORT:-7001}:8080
 volumes:
   pgdata:

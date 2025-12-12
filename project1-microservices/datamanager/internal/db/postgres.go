@@ -3,21 +3,29 @@ package db
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func NewPostgresPool(connString string) (*pgxpool.Pool, error) {
+	retries := 10
+
 	pool, err := pgxpool.New(context.Background(), connString)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create pool: %w", err)
 	}
 
-	err = pool.Ping(context.Background())
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("✅ connected to postgres")
+	for i := 1; i <= retries; i++ {
+		err := pool.Ping(context.Background())
+		if err == nil {
+			fmt.Println("✅ connected to postgres")
+			return pool, nil
+		}
 
-	return pool, nil
+		fmt.Println("DB not ready, retrying...", err)
+		time.Sleep(time.Duration(i+1) * time.Second)
+	}
+
+	return nil, fmt.Errorf("could not connect to postgres after %d attempts: %w", retries, err)
 }

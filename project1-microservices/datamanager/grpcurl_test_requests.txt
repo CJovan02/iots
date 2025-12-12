@@ -1,11 +1,11 @@
 // COUNT ALL
-grpcurl -plaintext localhost:8080 Readings/CountAll
+grpcurl -plaintext localhost:7001 Readings/CountAll
 
 // LIST
-grpcurl -plaintext -d '{ "pageNumber": 1, "pageSize": 1 }' localhost:8080 Readings/List
+grpcurl -plaintext -d '{ "pageNumber": 1, "pageSize": 10 }' localhost:7001 Readings/List
 
 // GET
-grpcurl -plaintext -d '{"id": 7}' localhost:8080 Readings/Get
+grpcurl -plaintext -d '{"id": 3}' localhost:7001 Readings/Get
 
 // STATISTICS
 grpcurl -plaintext \
@@ -13,7 +13,7 @@ grpcurl -plaintext \
     "startTime": "1950-01-01T00:00:00Z",
     "endTime":   "2050-01-01T00:00:00Z"
   }' \
-  localhost:8080 Readings/Statistics
+  localhost:7001 Readings/Statistics
 
 
 // CREATE
@@ -27,9 +27,9 @@ grpcurl -plaintext \
     "rawHw": 30,
     "rawEthanol": 40,
     "pm25": 12.3,
-    "fireAlarm": 0
+    "fireAlarm": 1
 }' \
-localhost:8080 Readings/Create
+localhost:7001 Readings/Create
 
 // UPDATE
 grpcurl -plaintext \
@@ -44,7 +44,7 @@ grpcurl -plaintext \
     "pm25": 11.3,
     "fireAlarm": 1
 }' \
-localhost:8080 Readings/Update
+localhost:7001 Readings/Update
 
 // DELETE
-grpcurl -plaintext -d '{ "id": 7 }' localhost:8080 Readings/Delete
+grpcurl -plaintext -d '{ "id": 7 }' localhost:7001 Readings/Delete
