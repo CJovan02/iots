@@ -1,4 +1,4 @@
-module github.com/CJovan02/iots/project1-microservices/datamanager
+module github.com/CJovan02/iots/datamanager
 
 go 1.25.4
 

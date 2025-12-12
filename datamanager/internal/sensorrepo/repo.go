@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/CJovan02/iots/project1-microservices/datamanager/internal/domain/sensor"
+	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )

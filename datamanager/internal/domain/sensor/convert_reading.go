@@ -1,7 +1,7 @@
 package sensor
 
 import (
-	"github.com/CJovan02/iots/project1-microservices/datamanager/protogen/golang/sensorpg"
+	"github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

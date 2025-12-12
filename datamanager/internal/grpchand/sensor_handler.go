@@ -3,8 +3,8 @@ package grpchand
 import (
 	"context"
 
-	"github.com/CJovan02/iots/project1-microservices/datamanager/internal/domain/sensor"
-	"github.com/CJovan02/iots/project1-microservices/datamanager/protogen/golang/sensorpg"
+	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
+	"github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

@@ -17,7 +17,7 @@ services:
     ports:
       - ${ADMINER_PORT:-7000}:8080
   data-manager:
-    build: ../project1-microservices/datamanager/
+    build: ../datamanager/
     depends_on:
       - db
     environment: 

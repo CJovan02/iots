@@ -884,7 +884,7 @@ const file_reading_proto_rawDesc = "" +
 	"Statistics\x12\x15.GetStatisticsRequest\x1a\x16.GetStatisticsResponse\x127\n" +
 	"\x06Create\x12\x15.CreateReadingRequest\x1a\x16.CreateReadingResponse\x127\n" +
 	"\x06Update\x12\x15.UpdateReadingRequest\x1a\x16.google.protobuf.Empty\x127\n" +
-	"\x06Delete\x12\x15.DeleteReadingRequest\x1a\x16.google.protobuf.EmptyBVZTgithub.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/sensorpgb\x06proto3"
+	"\x06Delete\x12\x15.DeleteReadingRequest\x1a\x16.google.protobuf.EmptyB?Z=github.com/CJovan02/iots/dataManager/protogen/golang/sensorpgb\x06proto3"
 
 var (
 	file_reading_proto_rawDescOnce sync.Once

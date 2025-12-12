@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/CJovan02/IoTS/Project1-Microservices/DataManager/protogen/golang/sensorpg";
+option go_package = "github.com/CJovan02/iots/dataManager/protogen/golang/sensorpg";
 
 // Count all
 message CountAllResponse {
