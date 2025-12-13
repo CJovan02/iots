@@ -9,7 +9,9 @@ public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddGrpcReadingClient(this IServiceCollection services)
     {
-        var address = "http://localhost:8080";
+        var address = Environment.GetEnvironmentVariable("DATA_MANAGER_URL");
+        if (address is null)
+            throw new Exception("DATA_MANAGER_URL env variable not found");
 
         services.AddSingleton(sp =>
         {

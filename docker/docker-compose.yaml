@@ -11,11 +11,13 @@ services:
       - pgdata:/var/lib/postgresql
       # Bind mount, ./db-init is the folder location on the host
       - ./db-init:/docker-entrypoint-initdb.d
+
   adminer:
     image: adminer
     restart: always
     ports:
       - ${ADMINER_PORT:-7000}:8080
+
   data-manager:
     build: ../datamanager/
     depends_on:
@@ -24,5 +26,15 @@ services:
       POSTGRES_SMOKE_CONNECTION_STRING: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     ports:
       - ${DATA_MANAGER_PORT:-7001}:8080
+
+  gateway:
+    build: ../gateway/Gateway/
+    depends_on:
+      - data-manager
+    environment:
+      DATA_MANAGER_URL: http://data-manager:8080
+    ports:
+      - ${GATEWAY_PORT:-7002}:8080
+
 volumes:
   pgdata:

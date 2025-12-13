@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg";
+option csharp_namespace = "Gateway.Protos";
+
+// Count All
+message CountAllResponse {
+  uint32 count = 1;
+}
+
+// List Readings
+message ListReadingsRequest {
+  uint32 page_number = 1;
+  uint32 page_size = 2;
+}
+
+message ListReadingsResponse {
+  repeated GetReadingResponse readings = 1;
+}
+
+// Get Reading
+message GetReadingRequest {
+  uint32 id = 1;
+}
+
+message GetReadingResponse {
+  uint32 id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  double temperature = 3;
+  double humidity = 4;
+  uint32 tvoc = 5;
+  uint32 e_co2 = 6;
+  uint32 raw_hw = 7;
+  uint32 raw_ethanol = 8;
+  double pm_25 = 9;
+  uint32 fire_alarm = 10;
+}
+
+// Statistics
+message GetStatisticsRequest {
+  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp end_time = 2;
+}
+
+message GetStatisticsResponse {
+  uint32 readings_count = 1;
+  double min_temperature = 2;
+  double max_temperature = 3;
+  double avg_temperature = 4;
+  double min_humidity = 5;
+  double max_humidity = 6;
+  double avg_humidity = 7;
+  uint32 sum_tvoc = 8;
+  uint32 fire_alarm_count = 9;
+  uint32 no_fire_alarm_count = 10;
+}
+
+// Create Reading
+message CreateReadingRequest {
+  google.protobuf.Timestamp timestamp = 1;
+  double temperature = 2;
+  double humidity = 3;
+  uint32 tvoc = 4;
+  uint32 e_co2 = 5;
+  uint32 raw_hw = 6;
+  uint32 raw_ethanol = 7;
+  double pm_25 = 8;
+  uint32 fire_alarm = 9;
+}
+
+message CreateReadingResponse {
+  uint32 id = 1;
+}
+
+// Update Reading
+message UpdateReadingRequest {
+  uint32 id = 1;
+  double temperature = 2;
+  double humidity = 3;
+  uint32 tvoc = 4;
+  uint32 e_co2 = 5;
+  uint32 raw_hw = 6;
+  uint32 raw_ethanol = 7;
+  double pm_25 = 8;
+  uint32 fire_alarm = 9;
+}
+
+// Delete Reading
+message DeleteReadingRequest {
+  uint32 id = 1;
+}
+
+// Readings service provides operations for managing sensor readings
+service Readings {
+  // Counts all readings in db
+  rpc CountAll(google.protobuf.Empty) returns (CountAllResponse);
+  // Lists readings with pagination
+  rpc List(ListReadingsRequest) returns(ListReadingsResponse);
+  // Gets a specific reading by ID
+  rpc Get(GetReadingRequest) returns (GetReadingResponse);
+  // Gets statistics for readings within a time range
+  rpc Statistics(GetStatisticsRequest) returns (GetStatisticsResponse);
+  // Creates a new reading
+  rpc Create(CreateReadingRequest) returns (CreateReadingResponse);
+  // Updates an existing reading
+  rpc Update(UpdateReadingRequest) returns (google.protobuf.Empty);
+  // Deletes a reading by ID
+  rpc Delete(DeleteReadingRequest) returns (google.protobuf.Empty);
+}
