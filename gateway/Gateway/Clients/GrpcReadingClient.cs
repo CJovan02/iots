@@ -7,7 +7,7 @@ namespace Gateway.Clients;
 
 public class GrpcReadingClient(Readings.ReadingsClient service) : IGrpcReadingClient
 {
-    public async Task<uint> CountAll()
+    public async Task<uint> CountAllAsync()
     {
         try
         {

@@ -4,5 +4,5 @@ namespace Gateway.Clients;
 
 public interface IGrpcReadingClient
 {
-    Task<uint> CountAll();
+    Task<uint> CountAllAsync();
 }

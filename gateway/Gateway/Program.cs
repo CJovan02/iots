@@ -1,3 +1,4 @@
+using Gateway.Api;
 using Gateway.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,5 +19,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapReadingEndpoints();
 
 app.Run();
