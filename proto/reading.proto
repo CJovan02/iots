@@ -4,8 +4,9 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
 option go_package = "github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg";
+option csharp_namespace = "Gateway.Protos";
 
-// Count all
+// Count All
 message CountAllResponse {
   uint32 count = 1;
 }
