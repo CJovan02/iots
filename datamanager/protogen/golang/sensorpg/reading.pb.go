@@ -71,8 +71,8 @@ func (x *CountAllResponse) GetCount() uint32 {
 // List Readings
 type ListReadingsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PageNumber    uint32                 `protobuf:"varint,1,opt,name=pageNumber,proto3" json:"pageNumber,omitempty"`
-	PageSize      uint32                 `protobuf:"varint,2,opt,name=pageSize,proto3" json:"pageSize,omitempty"`
+	PageNumber    uint32                 `protobuf:"varint,1,opt,name=page_number,json=pageNumber,proto3" json:"page_number,omitempty"`
+	PageSize      uint32                 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -808,12 +808,11 @@ const file_reading_proto_rawDesc = "" +
 	"\n" +
 	"\rreading.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"(\n" +
 	"\x10CountAllResponse\x12\x14\n" +
-	"\x05count\x18\x01 \x01(\rR\x05count\"Q\n" +
-	"\x13ListReadingsRequest\x12\x1e\n" +
-	"\n" +
-	"pageNumber\x18\x01 \x01(\rR\n" +
-	"pageNumber\x12\x1a\n" +
-	"\bpageSize\x18\x02 \x01(\rR\bpageSize\"G\n" +
+	"\x05count\x18\x01 \x01(\rR\x05count\"S\n" +
+	"\x13ListReadingsRequest\x12\x1f\n" +
+	"\vpage_number\x18\x01 \x01(\rR\n" +
+	"pageNumber\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\rR\bpageSize\"G\n" +
 	"\x14ListReadingsResponse\x12/\n" +
 	"\breadings\x18\x01 \x03(\v2\x13.GetReadingResponseR\breadings\"#\n" +
 	"\x11GetReadingRequest\x12\x0e\n" +
@@ -884,7 +883,7 @@ const file_reading_proto_rawDesc = "" +
 	"Statistics\x12\x15.GetStatisticsRequest\x1a\x16.GetStatisticsResponse\x127\n" +
 	"\x06Create\x12\x15.CreateReadingRequest\x1a\x16.CreateReadingResponse\x127\n" +
 	"\x06Update\x12\x15.UpdateReadingRequest\x1a\x16.google.protobuf.Empty\x127\n" +
-	"\x06Delete\x12\x15.DeleteReadingRequest\x1a\x16.google.protobuf.EmptyB?Z=github.com/CJovan02/iots/dataManager/protogen/golang/sensorpgb\x06proto3"
+	"\x06Delete\x12\x15.DeleteReadingRequest\x1a\x16.google.protobuf.EmptyB?Z=github.com/CJovan02/iots/datamanager/protogen/golang/sensorpgb\x06proto3"
 
 var (
 	file_reading_proto_rawDescOnce sync.Once

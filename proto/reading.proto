@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/CJovan02/iots/dataManager/protogen/golang/sensorpg";
+option go_package = "github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg";
 
 // Count all
 message CountAllResponse {
@@ -12,8 +12,8 @@ message CountAllResponse {
 
 // List Readings
 message ListReadingsRequest {
-  uint32 pageNumber = 1;
-  uint32 pageSize = 2;
+  uint32 page_number = 1;
+  uint32 page_size = 2;
 }
 
 message ListReadingsResponse {
@@ -92,12 +92,20 @@ message DeleteReadingRequest {
   uint32 id = 1;
 }
 
+// Readings service provides operations for managing sensor readings
 service Readings {
+  // Counts all readings in db
   rpc CountAll(google.protobuf.Empty) returns (CountAllResponse);
+  // Lists readings with pagination
   rpc List(ListReadingsRequest) returns(ListReadingsResponse);
+  // Gets a specific reading by ID
   rpc Get(GetReadingRequest) returns (GetReadingResponse);
+  // Gets statistics for readings within a time range
   rpc Statistics(GetStatisticsRequest) returns (GetStatisticsResponse);
+  // Creates a new reading
   rpc Create(CreateReadingRequest) returns (CreateReadingResponse);
+  // Updates an existing reading
   rpc Update(UpdateReadingRequest) returns (google.protobuf.Empty);
+  // Deletes a reading by ID
   rpc Delete(DeleteReadingRequest) returns (google.protobuf.Empty);
 }

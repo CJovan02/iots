@@ -32,13 +32,22 @@ const (
 // ReadingsClient is the client API for Readings service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Readings service provides operations for managing sensor readings
 type ReadingsClient interface {
+	// Counts all readings in db
 	CountAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CountAllResponse, error)
+	// Lists readings with pagination
 	List(ctx context.Context, in *ListReadingsRequest, opts ...grpc.CallOption) (*ListReadingsResponse, error)
+	// Gets a specific reading by ID
 	Get(ctx context.Context, in *GetReadingRequest, opts ...grpc.CallOption) (*GetReadingResponse, error)
+	// Gets statistics for readings within a time range
 	Statistics(ctx context.Context, in *GetStatisticsRequest, opts ...grpc.CallOption) (*GetStatisticsResponse, error)
+	// Creates a new reading
 	Create(ctx context.Context, in *CreateReadingRequest, opts ...grpc.CallOption) (*CreateReadingResponse, error)
+	// Updates an existing reading
 	Update(ctx context.Context, in *UpdateReadingRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Deletes a reading by ID
 	Delete(ctx context.Context, in *DeleteReadingRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -123,13 +132,22 @@ func (c *readingsClient) Delete(ctx context.Context, in *DeleteReadingRequest, o
 // ReadingsServer is the server API for Readings service.
 // All implementations must embed UnimplementedReadingsServer
 // for forward compatibility.
+//
+// Readings service provides operations for managing sensor readings
 type ReadingsServer interface {
+	// Counts all readings in db
 	CountAll(context.Context, *emptypb.Empty) (*CountAllResponse, error)
+	// Lists readings with pagination
 	List(context.Context, *ListReadingsRequest) (*ListReadingsResponse, error)
+	// Gets a specific reading by ID
 	Get(context.Context, *GetReadingRequest) (*GetReadingResponse, error)
+	// Gets statistics for readings within a time range
 	Statistics(context.Context, *GetStatisticsRequest) (*GetStatisticsResponse, error)
+	// Creates a new reading
 	Create(context.Context, *CreateReadingRequest) (*CreateReadingResponse, error)
+	// Updates an existing reading
 	Update(context.Context, *UpdateReadingRequest) (*emptypb.Empty, error)
+	// Deletes a reading by ID
 	Delete(context.Context, *DeleteReadingRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedReadingsServer()
 }
