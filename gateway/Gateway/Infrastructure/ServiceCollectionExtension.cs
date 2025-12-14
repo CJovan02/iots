@@ -1,4 +1,5 @@
 using Gateway.Clients;
+using Gateway.ExceptionHandlers;
 using Gateway.Protos;
 using Grpc.Net.Client;
 using Microsoft.OpenApi.Models;
@@ -30,5 +31,13 @@ public static class ServiceCollectionExtension
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "Gateway Api", Version = "v1" });
         });
+    }
+
+    public static IServiceCollection AddExceptionHandlers(this IServiceCollection services)
+    {
+        return services
+            .AddExceptionHandler<RpcExceptionHandler>()
+            .AddExceptionHandler<GlobalExceptionHandler>()
+            .AddProblemDetails();
     }
 }
