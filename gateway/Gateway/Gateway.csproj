@@ -31,8 +31,4 @@
         <Protobuf Include=".\Protos\Reading.proto" GrpcServices="Client" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Dto\Reading\Request\" />
-    </ItemGroup>
-
 </Project>
