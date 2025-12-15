@@ -26,7 +26,9 @@ public static class ReadingEndpoints
             .WithName("ListReadings")
             .WithTags("Readings");
 
-        app.MapGet("readings/statistics", async ([AsParameters] StatisticsRequest request, IGrpcReadingClient client) =>
+        app.MapGet("readings/statistics", async (
+                [AsParameters] StatisticsRequest request,
+                IGrpcReadingClient client) =>
             {
                 var statistics = await client.StatisticsAsync(request);
                 return Results.Ok(statistics);
@@ -60,7 +62,10 @@ public static class ReadingEndpoints
             .WithName("CreateReading")
             .WithTags("Readings");
 
-        app.MapPut("readings/{id:int}", async (int id, [FromBody] UpdateReadingQuery query, IGrpcReadingClient client) =>
+        app.MapPut("readings/{id:int}", async (
+                int id,
+                [FromBody] UpdateReadingQuery query,
+                IGrpcReadingClient client) =>
             {
                 if (id <= 0)
                     return Results.BadRequest(new ProblemDetails
