@@ -6,10 +6,6 @@ public class UpdateReadingQueryValidator : AbstractValidator<UpdateReadingQuery>
 {
     public UpdateReadingQueryValidator()
     {
-        RuleFor(x => x.Id)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Id must be greater than or equal to 0");
-
         RuleFor(x => x.ECo2)
             .GreaterThanOrEqualTo(0)
             .WithMessage("Eco2 must be greater than or equal to 0");

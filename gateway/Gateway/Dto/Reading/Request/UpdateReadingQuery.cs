@@ -1,7 +1,6 @@
 namespace Gateway.Dto.Reading.Request;
 
 public sealed record UpdateReadingQuery(
-    int Id,
     double Temperature,
     double Humidity,
     int Tvoc,

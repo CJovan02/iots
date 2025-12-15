@@ -31,11 +31,11 @@ public static class ReadingExtensions
         };
     }
 
-    public static UpdateReadingRequest ToProto(this UpdateReadingQuery query)
+    public static UpdateReadingRequest ToProto(this UpdateReadingQuery query, uint id)
     {
         return new UpdateReadingRequest
         {
-            Id = (uint)query.Id,
+            Id = id,
             Temperature = query.Temperature,
             Humidity = query.Humidity,
             Tvoc = (uint)query.Tvoc,

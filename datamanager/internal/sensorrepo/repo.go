@@ -67,18 +67,18 @@ func (r *Repository) GetById(ctx context.Context, id uint32) (*sensor.Reading, e
 func (r *Repository) GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*sensor.Statistics, error) {
 	const query = `
 		SELECT 
-		    COUNT(*) as readings_count, 
-			MIN(temperature) as min_temp,
-			MAX(temperature) as max_temp,
-			AVG(temperature) as avg_temp,
-			MIN(humidity) as min_humidity,
-			MAX(humidity) as max_humidity,
-			AVG(humidity) as avg_humidity,
-			SUM(tvoc) as sum_tvoc,
+			COUNT(*) as readings_count, 
+			COALESCE(MIN(temperature), 0) as min_temp,
+			COALESCE(MAX(temperature), 0) as max_temp,
+			COALESCE(AVG(temperature), 0) as avg_temp,
+			COALESCE(MIN(humidity), 0) as min_humidity,
+			COALESCE(MAX(humidity), 0) as max_humidity,
+			COALESCE(AVG(humidity), 0) as avg_humidity,
+			COALESCE(SUM(tvoc), 0) as sum_tvoc,
 			COUNT(*) FILTER ( WHERE fire_alarm = 1 ) as fire_alarm_count,
 			COUNT(*) FILTER ( WHERE fire_alarm = 0 ) as no_fire_alarm_count
 		FROM sensor_readings
-		where timestamp >= $1 and timestamp <= $2
+		WHERE timestamp >= $1 AND timestamp <= $2
 	`
 
 	row := r.db.QueryRow(ctx, query, startTime, endTime)
@@ -106,19 +106,19 @@ func (r *Repository) Update(ctx context.Context, id uint32, reading *sensor.Read
 	const query = `
 		UPDATE sensor_readings
 		SET 
-		    timestamp = $2,
-		    temperature = $3,
-		    humidity = $4,
-		    tvoc = $5,
-		    e_co2 = $6,
-		    raw_hw = $7,
-		    raw_ethanol = $8,
-		    pm_25 = $9,
-		    fire_alarm = $10
+		    temperature = $2,
+		    humidity = $3,
+		    tvoc = $4,
+		    e_co2 = $5,
+		    raw_hw = $6,
+		    raw_ethanol = $7,
+		    pm_25 = $8,
+		    fire_alarm = $9
 		WHERE id = $1
 	
 	`
-	args := append([]any{id}, sensorReadingArgs(reading)...)
+	args := sensorReadingArgs(reading)
+	args = append([]any{id}, args[1:]...)
 
 	_, err := r.db.Exec(ctx, query, args...)
 	if err != nil {

@@ -68,7 +68,7 @@ func (s *SensorHandler) Get(ctx context.Context, request *sensorpg.GetReadingReq
 func (s *SensorHandler) Statistics(ctx context.Context, request *sensorpg.GetStatisticsRequest) (*sensorpg.GetStatisticsResponse, error) {
 	startTime := request.StartTime.AsTime()
 	endTime := request.EndTime.AsTime()
-	if (startTime.IsZero() || endTime.IsZero()) && startTime.After(endTime) {
+	if startTime.IsZero() || endTime.IsZero() || startTime.After(endTime) {
 		return nil, status.Errorf(codes.InvalidArgument,
 			"start and end time must not be zero and start time must be before end time")
 	}
@@ -89,10 +89,10 @@ func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateRead
 	}
 
 	if reading.Temperature < -50 || reading.Temperature > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "temperature must be between 0 and 100")
+		return nil, status.Errorf(codes.InvalidArgument, "temperature must be between -50 and 100")
 	}
 	if reading.Humidity < -50 || reading.Humidity > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "humidity must be between 0 and 100")
+		return nil, status.Errorf(codes.InvalidArgument, "humidity must be between -50 and 100")
 	}
 
 	id, err := s.service.Create(ctx, reading)
@@ -107,7 +107,7 @@ func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateRead
 func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateReadingRequest) (*emptypb.Empty, error) {
 	reading := sensor.ProtoUpdateToReading(request)
 
-	if reading.Id == 0 {
+	if request.Id <= 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "id must be greater than zero")
 	}
 
@@ -116,10 +116,10 @@ func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateRead
 	}
 
 	if reading.Temperature < -50 || reading.Temperature > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "temperature must be between 0 and 100")
+		return nil, status.Errorf(codes.InvalidArgument, "temperature must be between -50 and 100")
 	}
 	if reading.Humidity < -50 || reading.Humidity > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "humidity must be between 0 and 100")
+		return nil, status.Errorf(codes.InvalidArgument, "humidity must be between -50 and 100")
 	}
 
 	err := s.service.Update(ctx, request.Id, reading)
@@ -131,7 +131,7 @@ func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateRead
 }
 
 func (s *SensorHandler) Delete(ctx context.Context, request *sensorpg.DeleteReadingRequest) (*emptypb.Empty, error) {
-	if request.Id == 0 {
+	if request.Id <= 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "id must be greater than zero")
 	}
 

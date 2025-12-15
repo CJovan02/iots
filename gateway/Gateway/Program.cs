@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 
-builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.AddFluentValidationEndpointFilter();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddGrpcReadingClient();
 

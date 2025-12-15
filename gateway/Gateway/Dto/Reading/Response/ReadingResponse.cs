@@ -4,7 +4,7 @@ namespace Gateway.Dto.Reading.Response;
 
 public sealed record ReadingResponse(
     uint Id,
-    DateTimeOffset Timestamp,
+    DateTime Timestamp,
     double Temperature,
     double Humidity,
     uint Tvoc,
@@ -20,7 +20,7 @@ public sealed record ReadingResponse(
         return new ReadingResponse
         (
             proto.Id,
-            proto.Timestamp.ToDateTimeOffset(),
+            proto.Timestamp.ToDateTime(),
             proto.Temperature,
             proto.Humidity,
             proto.Tvoc,
