@@ -60,7 +60,7 @@ public static class ReadingEndpoints
             .WithName("CreateReading")
             .WithTags("Readings");
 
-        app.MapPut("reading/{id:int}", async (int id, [FromBody] UpdateReadingQuery query, IGrpcReadingClient client) =>
+        app.MapPut("readings/{id:int}", async (int id, [FromBody] UpdateReadingQuery query, IGrpcReadingClient client) =>
             {
                 if (id <= 0)
                     return Results.BadRequest(new ProblemDetails
@@ -77,7 +77,7 @@ public static class ReadingEndpoints
             .WithName("UpdateReading")
             .WithTags("Readings");
 
-        app.MapDelete("reading/{id:int}", async (int id, IGrpcReadingClient client) =>
+        app.MapDelete("readings/{id:int}", async (int id, IGrpcReadingClient client) =>
             {
                 if (id <= 0)
                     return Results.BadRequest(new ProblemDetails
