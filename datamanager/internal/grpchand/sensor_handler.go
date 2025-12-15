@@ -53,6 +53,10 @@ func (s *SensorHandler) List(ctx context.Context, request *sensorpg.ListReadings
 }
 
 func (s *SensorHandler) Get(ctx context.Context, request *sensorpg.GetReadingRequest) (*sensorpg.GetReadingResponse, error) {
+	if request.Id == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "id must be greater than zero")
+	}
+
 	reading, err := s.service.GetById(ctx, request.Id)
 	if err != nil {
 		return nil, MapErrToGrpc(err)
@@ -103,6 +107,10 @@ func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateRead
 func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateReadingRequest) (*emptypb.Empty, error) {
 	reading := sensor.ProtoUpdateToReading(request)
 
+	if reading.Id == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "id must be greater than zero")
+	}
+
 	if reading.FireAlarm != 1 && reading.FireAlarm != 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "fire alarm must be either 1 or 0")
 	}
@@ -123,6 +131,10 @@ func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateRead
 }
 
 func (s *SensorHandler) Delete(ctx context.Context, request *sensorpg.DeleteReadingRequest) (*emptypb.Empty, error) {
+	if request.Id == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "id must be greater than zero")
+	}
+
 	err := s.service.Delete(ctx, request.Id)
 	if err != nil {
 		return nil, MapErrToGrpc(err)

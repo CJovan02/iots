@@ -1,3 +1,4 @@
+using Gateway.Dto.Reading.Response;
 using Gateway.Exceptions;
 using Gateway.Protos;
 using Google.Protobuf.WellKnownTypes;
@@ -13,5 +14,14 @@ public class GrpcReadingClient(Readings.ReadingsClient service) : IGrpcReadingCl
             throw new ReadingNullResponseException();
 
         return result.Count;
+    }
+
+    public async Task<ReadingResponse> GetAsync(uint id)
+    {
+        var result = await service.GetAsync(new GetReadingRequest{Id = id});
+        if (result is null)
+            throw new ReadingNullResponseException();
+
+        return ReadingResponse.From(result);
     }
 }
