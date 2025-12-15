@@ -52,6 +52,24 @@ func (r *Repository) List(ctx context.Context, offset uint32, limit uint32) ([]s
 	return readings, nil
 }
 
+func (r *Repository) Exists(ctx context.Context, id uint32) (bool, error) {
+	const query = `
+		SELECT EXISTS (
+			SELECT 1
+			FROM sensor_readings
+			WHERE id = $1   
+		)
+	`
+
+	var exists bool
+	err := r.db.QueryRow(ctx, query, id).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
+}
+
 func (r *Repository) GetById(ctx context.Context, id uint32) (*sensor.Reading, error) {
 	const query = `
 		SELECT *

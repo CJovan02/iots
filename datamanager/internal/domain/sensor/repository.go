@@ -7,6 +7,7 @@ import (
 
 type Repository interface {
 	CountAll(ctx context.Context) (*uint32, error)
+	Exists(ctx context.Context, id uint32) (bool, error)
 	GetById(ctx context.Context, id uint32) (*Reading, error)
 	List(ctx context.Context, offset uint32, limit uint32) ([]Reading, error)
 	GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*Statistics, error)
