@@ -38,6 +38,10 @@ func (s *Service) Create(ctx context.Context, reading *sensor.Reading) (*uint32,
 	return s.repo.Create(ctx, reading)
 }
 
+func (s *Service) BatchCreate(ctx context.Context, readings []*sensor.Reading) ([]uint32, error) {
+	return s.repo.BatchCreate(ctx, readings)
+}
+
 func (s *Service) Update(ctx context.Context, id uint32, reading *sensor.Reading) error {
 	exists, err := s.repo.Exists(ctx, id)
 	if err != nil {

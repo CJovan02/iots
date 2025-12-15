@@ -31,6 +31,47 @@ grpcurl -plaintext \
 }' \
 localhost:7001 Readings/Create
 
+// BATCH CREATE
+grpcurl -plaintext \
+  -d '{
+    "readingRequests": [
+      {
+        "timestamp": "2025-01-01T12:00:00Z",
+        "temperature": 22.5,
+        "humidity": 45.0,
+        "tvoc": 120,
+        "eCo2": 450,
+        "rawHw": 13500,
+        "rawEthanol": 21000,
+        "pm25": 8.3,
+        "fireAlarm": 0
+      },
+      {
+        "timestamp": "2025-01-01T12:01:00Z",
+        "temperature": 68.2,
+        "humidity": 18.4,
+        "tvoc": 950,
+        "eCo2": 2200,
+        "rawHw": 48000,
+        "rawEthanol": 76000,
+        "pm25": 145.7,
+        "fireAlarm": 1
+      },
+      {
+        "timestamp": "2025-01-01T12:02:00Z",
+        "temperature": 24.1,
+        "humidity": 42.8,
+        "tvoc": 140,
+        "eCo2": 520,
+        "rawHw": 14200,
+        "rawEthanol": 22500,
+        "pm25": 10.1,
+        "fireAlarm": 0
+      }
+    ]
+  }' \
+  localhost:8080 Readings/BatchCreate
+
 // UPDATE
 grpcurl -plaintext \
   -d '{

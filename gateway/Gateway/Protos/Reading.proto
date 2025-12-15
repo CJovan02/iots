@@ -75,6 +75,15 @@ message CreateReadingResponse {
   uint32 id = 1;
 }
 
+// Batch Create
+message BatchCreateReadingsRequest {
+  repeated CreateReadingRequest reading_requests = 1;
+}
+
+message BatchCreateReadingsResponse {
+  repeated uint32 Ids = 1;
+}
+
 // Update Reading
 message UpdateReadingRequest {
   uint32 id = 1;
@@ -105,6 +114,8 @@ service Readings {
   rpc Statistics(GetStatisticsRequest) returns (GetStatisticsResponse);
   // Creates a new reading
   rpc Create(CreateReadingRequest) returns (CreateReadingResponse);
+  // Creates readings in a batch
+  rpc BatchCreate(BatchCreateReadingsRequest) returns (BatchCreateReadingsResponse);
   // Updates an existing reading
   rpc Update(UpdateReadingRequest) returns (google.protobuf.Empty);
   // Deletes a reading by ID

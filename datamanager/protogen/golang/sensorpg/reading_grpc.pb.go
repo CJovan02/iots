@@ -20,13 +20,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Readings_CountAll_FullMethodName   = "/Readings/CountAll"
-	Readings_List_FullMethodName       = "/Readings/List"
-	Readings_Get_FullMethodName        = "/Readings/Get"
-	Readings_Statistics_FullMethodName = "/Readings/Statistics"
-	Readings_Create_FullMethodName     = "/Readings/Create"
-	Readings_Update_FullMethodName     = "/Readings/Update"
-	Readings_Delete_FullMethodName     = "/Readings/Delete"
+	Readings_CountAll_FullMethodName    = "/Readings/CountAll"
+	Readings_List_FullMethodName        = "/Readings/List"
+	Readings_Get_FullMethodName         = "/Readings/Get"
+	Readings_Statistics_FullMethodName  = "/Readings/Statistics"
+	Readings_Create_FullMethodName      = "/Readings/Create"
+	Readings_BatchCreate_FullMethodName = "/Readings/BatchCreate"
+	Readings_Update_FullMethodName      = "/Readings/Update"
+	Readings_Delete_FullMethodName      = "/Readings/Delete"
 )
 
 // ReadingsClient is the client API for Readings service.
@@ -45,6 +46,8 @@ type ReadingsClient interface {
 	Statistics(ctx context.Context, in *GetStatisticsRequest, opts ...grpc.CallOption) (*GetStatisticsResponse, error)
 	// Creates a new reading
 	Create(ctx context.Context, in *CreateReadingRequest, opts ...grpc.CallOption) (*CreateReadingResponse, error)
+	// Creates readings in a batch
+	BatchCreate(ctx context.Context, in *BatchCreateReadingsRequest, opts ...grpc.CallOption) (*BatchCreateReadingsResponse, error)
 	// Updates an existing reading
 	Update(ctx context.Context, in *UpdateReadingRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Deletes a reading by ID
@@ -109,6 +112,16 @@ func (c *readingsClient) Create(ctx context.Context, in *CreateReadingRequest, o
 	return out, nil
 }
 
+func (c *readingsClient) BatchCreate(ctx context.Context, in *BatchCreateReadingsRequest, opts ...grpc.CallOption) (*BatchCreateReadingsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BatchCreateReadingsResponse)
+	err := c.cc.Invoke(ctx, Readings_BatchCreate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *readingsClient) Update(ctx context.Context, in *UpdateReadingRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -145,6 +158,8 @@ type ReadingsServer interface {
 	Statistics(context.Context, *GetStatisticsRequest) (*GetStatisticsResponse, error)
 	// Creates a new reading
 	Create(context.Context, *CreateReadingRequest) (*CreateReadingResponse, error)
+	// Creates readings in a batch
+	BatchCreate(context.Context, *BatchCreateReadingsRequest) (*BatchCreateReadingsResponse, error)
 	// Updates an existing reading
 	Update(context.Context, *UpdateReadingRequest) (*emptypb.Empty, error)
 	// Deletes a reading by ID
@@ -174,6 +189,9 @@ func (UnimplementedReadingsServer) Statistics(context.Context, *GetStatisticsReq
 func (UnimplementedReadingsServer) Create(context.Context, *CreateReadingRequest) (*CreateReadingResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
 }
+func (UnimplementedReadingsServer) BatchCreate(context.Context, *BatchCreateReadingsRequest) (*BatchCreateReadingsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BatchCreate not implemented")
+}
 func (UnimplementedReadingsServer) Update(context.Context, *UpdateReadingRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
 }
@@ -185,7 +203,7 @@ func (UnimplementedReadingsServer) testEmbeddedByValue()                  {}
 
 // UnsafeReadingsServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to ReadingsServer will
-// result in compilation reading_errors.
+// result in compilation errors.
 type UnsafeReadingsServer interface {
 	mustEmbedUnimplementedReadingsServer()
 }
@@ -291,6 +309,24 @@ func _Readings_Create_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Readings_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateReadingsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReadingsServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Readings_BatchCreate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReadingsServer).BatchCreate(ctx, req.(*BatchCreateReadingsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Readings_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateReadingRequest)
 	if err := dec(in); err != nil {
@@ -353,6 +389,10 @@ var Readings_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _Readings_Create_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _Readings_BatchCreate_Handler,
 		},
 		{
 			MethodName: "Update",

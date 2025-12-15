@@ -2,6 +2,8 @@ package sensorrepo
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
@@ -118,6 +120,45 @@ func (r *Repository) Create(ctx context.Context, reading *sensor.Reading) (*uint
 	}
 
 	return &id, nil
+}
+
+func (r *Repository) BatchCreate(ctx context.Context, readings []*sensor.Reading) ([]uint32, error) {
+	query := `	
+		INSERT INTO sensor_readings 
+		(timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
+		VALUES
+	`
+
+	args := make([]any, 0, len(readings)*9)
+	values := make([]string, 0, len(readings))
+
+	i := 1
+	for _, reading := range readings {
+		values = append(values, fmt.Sprintf(
+			"($%d,$%d,$%d,$%d,$%d,$%d,$%d,$%d,$%d)", i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8),
+		)
+		args = append(args, sensorReadingArgs(reading)...)
+		i += 9
+	}
+	query += strings.Join(values, ",")
+	query += "RETURNING Id"
+
+	rows, err := r.db.Query(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	result, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (uint32, error) {
+		var id uint32
+		err := row.Scan(&id)
+		return id, err
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (r *Repository) Update(ctx context.Context, id uint32, reading *sensor.Reading) error {

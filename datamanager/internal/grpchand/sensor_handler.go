@@ -84,15 +84,9 @@ func (s *SensorHandler) Statistics(ctx context.Context, request *sensorpg.GetSta
 func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateReadingRequest) (*sensorpg.CreateReadingResponse, error) {
 	reading := sensor.ProtoCreateToReading(request)
 
-	if reading.FireAlarm != 1 && reading.FireAlarm != 0 {
-		return nil, status.Errorf(codes.InvalidArgument, "fire alarm must be either 1 or 0")
-	}
-
-	if reading.Temperature < -50 || reading.Temperature > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "temperature must be between -50 and 100")
-	}
-	if reading.Humidity < -50 || reading.Humidity > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "humidity must be between -50 and 100")
+	err := ValidateReading(reading)
+	if err != nil {
+		return nil, err
 	}
 
 	id, err := s.service.Create(ctx, reading)
@@ -104,6 +98,37 @@ func (s *SensorHandler) Create(ctx context.Context, request *sensorpg.CreateRead
 	return response, nil
 
 }
+
+func (s *SensorHandler) BatchCreate(
+	ctx context.Context,
+	request *sensorpg.BatchCreateReadingsRequest,
+) (*sensorpg.BatchCreateReadingsResponse, error) {
+	if len(request.ReadingRequests) == 0 || len(request.ReadingRequests) > 100 {
+		return nil, status.Errorf(
+			codes.InvalidArgument, "invalid number of readings, it must be between 1 and 100",
+		)
+	}
+
+	readings := make([]*sensor.Reading, 0, len(request.ReadingRequests))
+
+	for _, reqReading := range request.ReadingRequests {
+		reading := sensor.ProtoCreateToReading(reqReading)
+		readings = append(readings, reading)
+
+		err := ValidateReading(reading)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	ids, err := s.service.BatchCreate(ctx, readings)
+	if err != nil {
+		return nil, MapErrToGrpc(err)
+	}
+
+	return &sensorpg.BatchCreateReadingsResponse{Ids: ids}, nil
+}
+
 func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateReadingRequest) (*emptypb.Empty, error) {
 	reading := sensor.ProtoUpdateToReading(request)
 
@@ -111,18 +136,12 @@ func (s *SensorHandler) Update(ctx context.Context, request *sensorpg.UpdateRead
 		return nil, status.Errorf(codes.InvalidArgument, "id must be greater than zero")
 	}
 
-	if reading.FireAlarm != 1 && reading.FireAlarm != 0 {
-		return nil, status.Errorf(codes.InvalidArgument, "fire alarm must be either 1 or 0")
+	err := ValidateReading(reading)
+	if err != nil {
+		return nil, err
 	}
 
-	if reading.Temperature < -50 || reading.Temperature > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "temperature must be between -50 and 100")
-	}
-	if reading.Humidity < -50 || reading.Humidity > 100 {
-		return nil, status.Errorf(codes.InvalidArgument, "humidity must be between -50 and 100")
-	}
-
-	err := s.service.Update(ctx, request.Id, reading)
+	err = s.service.Update(ctx, request.Id, reading)
 	if err != nil {
 		return nil, MapErrToGrpc(err)
 	}
@@ -141,4 +160,18 @@ func (s *SensorHandler) Delete(ctx context.Context, request *sensorpg.DeleteRead
 	}
 
 	return &emptypb.Empty{}, nil
+}
+
+func ValidateReading(reading *sensor.Reading) error {
+	if reading.FireAlarm != 1 && reading.FireAlarm != 0 {
+		return status.Errorf(codes.InvalidArgument, "fire alarm must be either 1 or 0")
+	}
+
+	if reading.Temperature < -50 || reading.Temperature > 100 {
+		return status.Errorf(codes.InvalidArgument, "temperature must be between -50 and 100")
+	}
+	if reading.Humidity < -50 || reading.Humidity > 100 {
+		return status.Errorf(codes.InvalidArgument, "humidity must be between -50 and 100")
+	}
+	return nil
 }
