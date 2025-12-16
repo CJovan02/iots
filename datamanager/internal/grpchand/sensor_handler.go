@@ -164,14 +164,14 @@ func (s *SensorHandler) Delete(ctx context.Context, request *sensorpg.DeleteRead
 
 func ValidateReading(reading *sensor.Reading) error {
 	if reading.FireAlarm != 1 && reading.FireAlarm != 0 {
-		return status.Errorf(codes.InvalidArgument, "fire alarm must be either 1 or 0")
+		return status.Errorf(codes.InvalidArgument, "%d: fire alarm must be either 1 or 0", reading.Id)
 	}
 
 	if reading.Temperature < -50 || reading.Temperature > 100 {
-		return status.Errorf(codes.InvalidArgument, "temperature must be between -50 and 100")
+		return status.Errorf(codes.InvalidArgument, "%d: temperature must be between -50 and 100", reading.Id)
 	}
 	if reading.Humidity < -50 || reading.Humidity > 100 {
-		return status.Errorf(codes.InvalidArgument, "humidity must be between -50 and 100")
+		return status.Errorf(codes.InvalidArgument, "%d: humidity must be between -50 and 100", reading.Id)
 	}
 	return nil
 }
