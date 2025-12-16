@@ -1,5 +1,6 @@
 using Gateway.Dto.Reading.Request;
 using Gateway.Protos;
+using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 
 namespace Gateway.Dto.Reading;
@@ -29,6 +30,15 @@ public static class ReadingExtensions
             Pm25 =  query.Pm25,
             FireAlarm = (uint)query.FireAlarm,
         };
+    }
+
+    public static BatchCreateReadingsRequest ToProto(this List<CreateReadingQuery> readings)
+    {
+        var request = new BatchCreateReadingsRequest();
+        request.ReadingRequests.AddRange(
+            readings.Select(query => query.ToProto())
+        );
+        return request;
     }
 
     public static UpdateReadingRequest ToProto(this UpdateReadingQuery query, uint id)

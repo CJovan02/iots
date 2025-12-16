@@ -43,7 +43,7 @@ internal sealed class RpcExceptionHandler(ILogger<RpcExceptionHandler> logger) :
                 problemDetails.Status = 503;
                 break;
             default:
-                problemDetails.Title = "Internal server error";
+                problemDetails.Title = "Internal gRpc server error";
                 problemDetails.Status = 500;
                 break;
         }

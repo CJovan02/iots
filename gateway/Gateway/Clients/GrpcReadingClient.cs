@@ -59,6 +59,16 @@ public class GrpcReadingClient(Readings.ReadingsClient service) : IGrpcReadingCl
         return result.Id;
     }
 
+    public async Task<List<uint>> BatchCreateAsync(BatchCreateReadingsQuery request)
+    {
+        var result = await service.BatchCreateAsync(request.readings.ToProto());
+        if (result is null)
+            throw new ReadingNullResponseException();
+
+        return result.Ids.Select(id => id).ToList();
+    }
+
+
     public async Task UpdateAsync(uint id, UpdateReadingQuery request)
     {
         var result = await service.UpdateAsync(request.ToProto(id));

@@ -62,6 +62,17 @@ public static class ReadingEndpoints
             .WithName("CreateReading")
             .WithTags("Readings");
 
+        app.MapPost("readings/batch", async (
+            [FromBody] BatchCreateReadingsQuery query,
+            IGrpcReadingClient client) =>
+            {
+                var ids = await client.BatchCreateAsync(query);
+                return Results.Ok(ids);
+            })
+            .AddFluentValidationFilter()
+            .WithName("BatchCreateReading")
+            .WithTags("Readings");
+
         app.MapPut("readings/{id:int}", async (
                 int id,
                 [FromBody] UpdateReadingQuery query,

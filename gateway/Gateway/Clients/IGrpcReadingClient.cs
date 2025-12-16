@@ -12,6 +12,7 @@ public interface IGrpcReadingClient
     Task<ReadingResponse> GetAsync(uint id);
     Task<StatisticsResponse> StatisticsAsync(StatisticsRequest request);
     Task<uint> CreateAsync(CreateReadingQuery request);
+    Task<List<uint>> BatchCreateAsync(BatchCreateReadingsQuery query);
     Task UpdateAsync(uint id, UpdateReadingQuery request);
     Task DeleteAsync(uint id);
 }

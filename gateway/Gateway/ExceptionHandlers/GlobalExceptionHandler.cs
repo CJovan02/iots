@@ -7,7 +7,6 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
 {
     private readonly ILogger<GlobalExceptionHandler> _logger = logger;
 
-
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
