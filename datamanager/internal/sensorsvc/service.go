@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
-	"github.com/CJovan02/iots/datamanager/internal/reading_errors"
 )
 
 type Service struct {
@@ -49,7 +48,7 @@ func (s *Service) Update(ctx context.Context, id uint32, reading *sensor.Reading
 	}
 
 	if !exists {
-		return reading_errors.NewNotFound("reading", id)
+		return sensor.NewNotFound(id)
 	}
 
 	return s.repo.Update(ctx, id, reading)

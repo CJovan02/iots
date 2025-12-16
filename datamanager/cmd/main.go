@@ -45,8 +45,9 @@ func main() {
 
 	// Create gRPC server
 	server := grpc.NewServer(
-		grpc.UnaryInterceptor(
+		grpc.ChainUnaryInterceptor(
 			interceptor.UnaryServerLoggingInterceptor,
+			interceptor.UnaryServerErrMappingInterceptor,
 		),
 	)
 	// Register service handler to server
