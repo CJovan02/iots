@@ -9,12 +9,16 @@ def configure_parser() -> argparse.ArgumentParser:
 
 def __generate_parser() -> argparse.ArgumentParser:
     return argparse.ArgumentParser(
-        description=
-        'Simulator for smoke detection IoT data readings.\n'
-        'It reads data from .csv file and sends it to gateway API to write data in database.\n'
-        'It sends data in batches, delay is used to specify delay between requests.\n\n'
-        "NOTE: All of the parameters are optional, they all have default values",
-        epilog='Example: python generator.py --file data.csv --start 5 --end 200 --delay 0.5',
+        description=(
+            "Simulator for smoke detection IoT data readings.\n"
+            "Reads 'batch-size' number of rows from the provided CSV file, sends them to the API, "
+            "and waits for 'delay' seconds before sending the next batch\n"
+            "This simulates IoT sensor readings in real time.\n"
+            "Use 'start' and 'end' to specify which rows should be sent.\n\n"
+            "All parameters are optional and have default values."
+        ),
+        epilog='Example: python generator.py --file data.csv --start 5 --end 200 --batch-size 3 --delay 10',
+
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
@@ -30,12 +34,12 @@ def __add_arguments(parser: argparse.ArgumentParser) -> None:
                         help='start reading from this row (inclusive). (default: 0)')
     parser.add_argument('--end', '-e', type=int, default=100,
                         help='stop reading at this row (exclusive). (default: 100)')
-    parser.add_argument('--batch-size', '-bs', type=int, default=50,
-                        help='number of readings sent per API request. (default: 50)')
-    parser.add_argument('--delay', '-d', type=float, default=1.0,
-                        help='delay between batch requests in seconds. (default: 1.0)')
-    parser.add_argument('--print-readings', '-pr', action="store_true",
-                        help='print each reading as it is read from CSV')
+    parser.add_argument('--batch-size', '-bs', type=int, default=5,
+                        help='number of readings sent per API request. (default: 5)')
+    parser.add_argument('--delay', '-d', type=float, default=5,
+                        help='delay between batch requests in seconds. (default: 5)')
+    parser.add_argument('--verbose', '-ver', action='store_true',
+                        help='enable debug logging (prints all readings and internal info)')
     parser.add_argument('--dry-run', '-dr', action='store_true', help='run without sending data to API')
     parser.add_argument("--version", '-v', action='version', version='%(prog)s 1.0.0')
 
