@@ -17,19 +17,13 @@ def __generate_parser() -> argparse.ArgumentParser:
             "Use 'start' and 'end' to specify which rows should be sent.\n\n"
             "All parameters are optional and have default values."
         ),
-        epilog='Example: python generator.py --file data.csv --start 5 --end 200 --batch-size 3 --delay 10',
+        epilog='Example: python generator.py --file data.csv --start 5 --end 200 --batch-size 3 --delay 10 --url http://localhost:8080',
 
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
 
 def __add_arguments(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument(
-        '--file', '-f',
-        help='Path to data file, must be csv format with specific columns.\nSee data/smoke_detection_iot.csv for example, '
-             'this is also the default file.',
-        default='data/smoke_detection_iot.csv',
-    )
     parser.add_argument('--start', '-s', type=int, default=0,
                         help='start reading from this row (inclusive). (default: 0)')
     parser.add_argument('--end', '-e', type=int, default=100,
@@ -38,6 +32,15 @@ def __add_arguments(parser: argparse.ArgumentParser) -> None:
                         help='number of readings sent per API request. (default: 5)')
     parser.add_argument('--delay', '-d', type=float, default=5,
                         help='delay between batch requests in seconds. (default: 5)')
+    parser.add_argument(
+        '--file', '-f',
+        help='Path to data file, must be csv format with specific columns.\nSee data/smoke_detection_iot.csv for example, '
+             'this is also the default file.',
+        default='data/smoke_detection_iot.csv',
+    )
+    parser.add_argument('--url', '-u', type=str,
+                        help="gateway url. NOTE: if you pass this argument the default url from the root/docker/.env won't be used. "
+                             "This is only used when you are not running the server with docker compose and you want to manually enter gateway url.")
     parser.add_argument('--verbose', '-ver', action='store_true',
                         help='enable debug logging (prints all readings and internal info)')
     parser.add_argument('--dry-run', '-dr', action='store_true', help='run without sending data to API')

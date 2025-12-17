@@ -6,20 +6,20 @@ import requests
 import logging
 
 from api.batch_create_request import BatchCreateRequest
+from config.env_config import get_gateway_url_from_dotenv
 from config.logger_config import configure_logging
 from config.parser_config import configure_parser, validate_args
 from domain.reading import Reading
 
 
-def batch_create(readings: list[Reading], dry_run: bool) -> None:
+def batch_create(readings: list[Reading], url: str, dry_run: bool) -> None:
     logger = logging.getLogger()
-
+    url += "/readings/batch"
     if dry_run:
         logger.info(f"Would send request with {len(readings)} readings")
         return
 
     logger.info("Sending batch (%d readings)", len(readings))
-    url = "http://localhost:8081/readings/batch"
 
     dto = BatchCreateRequest(readings=readings)
 
@@ -53,10 +53,16 @@ def main():
         dry_run = args.dry_run
         batch_size = args.batch_size
         verbose = args.verbose
+        arg_url = args.url
 
         logger = configure_logging(verbose)
 
+        url = get_gateway_url_from_dotenv()
+        if arg_url is not None:
+            url = arg_url
+
         logger.info(
+            f"Gateway URL: {url}\n\n"
             "Arguments:\n"
             f"File path: {file}\n"
             f"Start at row: {start}\n"
@@ -81,7 +87,7 @@ def main():
                         sleep_with_message(delay)
 
                     print()
-                    batch_create(readings, dry_run)
+                    batch_create(readings, url, dry_run)
                     readings = []
                     first_batch = False
 
@@ -90,8 +96,9 @@ def main():
                     sleep_with_message(delay)
 
                 print()
-                batch_create(readings, dry_run)
+                batch_create(readings, url, dry_run)
 
+            print()
             logger.info("Finished. Total readings sent: %d", len(readings))
     except KeyboardInterrupt:
         print()
