@@ -1,7 +1,19 @@
-import requests
+import csv
+from itertools import islice
 
-url = "http://localhost:8081/readings/count"
+from batchCreateRequest import BatchCreateRequest
+from reading import Reading
 
-response = requests.get(url)
+dataPath = "data/smoke_detection_iot.csv"
 
-print(response.json())
+with open(dataPath, mode='r') as file:
+    csvFile = csv.DictReader(file)
+    readings: list[Reading] = []
+
+    for row in islice(csvFile, 0, 10):
+        reading = Reading.from_dict(row)
+        print(reading)
+        readings.append(reading)
+
+    request = BatchCreateRequest(readings)
+
