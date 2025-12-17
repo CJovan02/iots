@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Reading:
-    timestamp: str
+    timestamp: int
     temperature: float
     humidity: float
     tvoc: int
@@ -15,7 +15,7 @@ class Reading:
     @staticmethod
     def from_dict(data: dict) -> 'Reading':
         return Reading(
-            timestamp=data['UTC'],
+            timestamp=int(data['UTC']),
             temperature=float(data["Temperature[C]"]),
             humidity=float(data["Humidity[%]"]),
             tvoc=int(data["TVOC[ppb]"]),
