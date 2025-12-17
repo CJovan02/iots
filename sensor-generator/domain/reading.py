@@ -25,3 +25,16 @@ class Reading:
             pm25=float(data["PM2.5"]),
             fireAlarm=int(data["Fire Alarm"])
         )
+
+    def to_dict(self) -> dict:
+        return {
+            "timestamp": self.timestamp,
+            "temperature": self.temperature,
+            "humidity": self.humidity,
+            "tvoc": self.tvoc,
+            "eco2": self.eco2,
+            "rawHw": self.rawHw,
+            "rawEthanol": self.rawEthanol,
+            "pm25": self.pm25,
+            "fireAlarm": self.fireAlarm
+        }
