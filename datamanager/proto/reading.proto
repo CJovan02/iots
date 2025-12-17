@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
 option go_package = "github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg";
@@ -28,7 +27,7 @@ message GetReadingRequest {
 
 message GetReadingResponse {
   uint32 id = 1;
-  google.protobuf.Timestamp timestamp = 2;
+  int64 timestamp = 2;
   double temperature = 3;
   double humidity = 4;
   uint32 tvoc = 5;
@@ -41,8 +40,8 @@ message GetReadingResponse {
 
 // Statistics
 message GetStatisticsRequest {
-  google.protobuf.Timestamp start_time = 1;
-  google.protobuf.Timestamp end_time = 2;
+  int64 start_time = 1;
+  int64 end_time = 2;
 }
 
 message GetStatisticsResponse {
@@ -60,7 +59,7 @@ message GetStatisticsResponse {
 
 // Create Reading
 message CreateReadingRequest {
-  google.protobuf.Timestamp timestamp = 1;
+  int64 timestamp = 1;
   double temperature = 2;
   double humidity = 3;
   uint32 tvoc = 4;

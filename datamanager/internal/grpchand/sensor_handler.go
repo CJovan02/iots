@@ -74,15 +74,13 @@ func (s *SensorHandler) Get(
 func (s *SensorHandler) Statistics(ctx context.Context,
 	request *sensorpg.GetStatisticsRequest,
 ) (*sensorpg.GetStatisticsResponse, error) {
-	startTime := request.StartTime.AsTime()
-	endTime := request.EndTime.AsTime()
-	if startTime.IsZero() || endTime.IsZero() || startTime.After(endTime) {
+	if request.StartTime == 0 || request.EndTime == 0 || request.StartTime > request.EndTime {
 		return nil, sensor.NewInvalidArgument(
 			"start and end time must not be zero and start time must be before end time",
 		)
 	}
 
-	stat, err := s.service.GetStatistics(ctx, request.StartTime.AsTime(), request.EndTime.AsTime())
+	stat, err := s.service.GetStatistics(ctx, request.StartTime, request.EndTime)
 	if err != nil {
 		return nil, err
 	}

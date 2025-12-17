@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
 	"github.com/jackc/pgx/v5"
@@ -84,7 +83,7 @@ func (r *Repository) GetById(ctx context.Context, id uint32) (*sensor.Reading, e
 	return scanSensorReading(row)
 }
 
-func (r *Repository) GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*sensor.Statistics, error) {
+func (r *Repository) GetStatistics(ctx context.Context, startTime int64, endTime int64) (*sensor.Statistics, error) {
 	const query = `
 		SELECT 
 			COUNT(*) as readings_count, 

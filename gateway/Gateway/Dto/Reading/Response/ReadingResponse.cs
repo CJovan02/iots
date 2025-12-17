@@ -20,7 +20,7 @@ public sealed record ReadingResponse(
         return new ReadingResponse
         (
             proto.Id,
-            proto.Timestamp.ToDateTime(),
+            DateTimeOffset.FromUnixTimeSeconds(proto.Timestamp).UtcDateTime,
             proto.Temperature,
             proto.Humidity,
             proto.Tvoc,

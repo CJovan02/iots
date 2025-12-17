@@ -1,7 +1,5 @@
 using Gateway.Dto.Reading.Request;
 using Gateway.Protos;
-using Google.Protobuf.Collections;
-using Google.Protobuf.WellKnownTypes;
 
 namespace Gateway.Dto.Reading;
 
@@ -20,7 +18,7 @@ public static class ReadingExtensions
     {
         return new CreateReadingRequest
         {
-            Timestamp = query.Timestamp.ToTimestamp(),
+            Timestamp = query.Timestamp,
             Temperature = query.Temperature,
             Humidity = query.Humidity,
             Tvoc = (uint)query.Tvoc,

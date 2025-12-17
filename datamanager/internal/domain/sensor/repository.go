@@ -2,7 +2,6 @@ package sensor
 
 import (
 	"context"
-	"time"
 )
 
 type Repository interface {
@@ -10,7 +9,7 @@ type Repository interface {
 	Exists(ctx context.Context, id uint32) (bool, error)
 	GetById(ctx context.Context, id uint32) (*Reading, error)
 	List(ctx context.Context, offset uint32, limit uint32) ([]Reading, error)
-	GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*Statistics, error)
+	GetStatistics(ctx context.Context, startTime int64, endTime int64) (*Statistics, error)
 	Create(ctx context.Context, reading *Reading) (*uint32, error)
 	BatchCreate(ctx context.Context, readings []*Reading) ([]uint32, error)
 	Update(ctx context.Context, id uint32, reading *Reading) error

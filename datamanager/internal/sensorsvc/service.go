@@ -2,7 +2,6 @@ package sensorsvc
 
 import (
 	"context"
-	"time"
 
 	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
 )
@@ -29,7 +28,7 @@ func (s *Service) GetById(ctx context.Context, id uint32) (*sensor.Reading, erro
 	return s.repo.GetById(ctx, id)
 }
 
-func (s *Service) GetStatistics(ctx context.Context, startTime time.Time, endTime time.Time) (*sensor.Statistics, error) {
+func (s *Service) GetStatistics(ctx context.Context, startTime int64, endTime int64) (*sensor.Statistics, error) {
 	return s.repo.GetStatistics(ctx, startTime, endTime)
 }
 

@@ -10,7 +10,6 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -213,7 +212,7 @@ func (x *GetReadingRequest) GetId() uint32 {
 type GetReadingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Timestamp     int64                  `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	Temperature   float64                `protobuf:"fixed64,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
 	Humidity      float64                `protobuf:"fixed64,4,opt,name=humidity,proto3" json:"humidity,omitempty"`
 	Tvoc          uint32                 `protobuf:"varint,5,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
@@ -263,11 +262,11 @@ func (x *GetReadingResponse) GetId() uint32 {
 	return 0
 }
 
-func (x *GetReadingResponse) GetTimestamp() *timestamppb.Timestamp {
+func (x *GetReadingResponse) GetTimestamp() int64 {
 	if x != nil {
 		return x.Timestamp
 	}
-	return nil
+	return 0
 }
 
 func (x *GetReadingResponse) GetTemperature() float64 {
@@ -329,8 +328,8 @@ func (x *GetReadingResponse) GetFireAlarm() uint32 {
 // Statistics
 type GetStatisticsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StartTime     *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	EndTime       *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	StartTime     int64                  `protobuf:"varint,1,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	EndTime       int64                  `protobuf:"varint,2,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -365,18 +364,18 @@ func (*GetStatisticsRequest) Descriptor() ([]byte, []int) {
 	return file_reading_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GetStatisticsRequest) GetStartTime() *timestamppb.Timestamp {
+func (x *GetStatisticsRequest) GetStartTime() int64 {
 	if x != nil {
 		return x.StartTime
 	}
-	return nil
+	return 0
 }
 
-func (x *GetStatisticsRequest) GetEndTime() *timestamppb.Timestamp {
+func (x *GetStatisticsRequest) GetEndTime() int64 {
 	if x != nil {
 		return x.EndTime
 	}
-	return nil
+	return 0
 }
 
 type GetStatisticsResponse struct {
@@ -498,7 +497,7 @@ func (x *GetStatisticsResponse) GetNoFireAlarmCount() uint32 {
 // Create Reading
 type CreateReadingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Timestamp     int64                  `protobuf:"varint,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	Temperature   float64                `protobuf:"fixed64,2,opt,name=temperature,proto3" json:"temperature,omitempty"`
 	Humidity      float64                `protobuf:"fixed64,3,opt,name=humidity,proto3" json:"humidity,omitempty"`
 	Tvoc          uint32                 `protobuf:"varint,4,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
@@ -541,11 +540,11 @@ func (*CreateReadingRequest) Descriptor() ([]byte, []int) {
 	return file_reading_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *CreateReadingRequest) GetTimestamp() *timestamppb.Timestamp {
+func (x *CreateReadingRequest) GetTimestamp() int64 {
 	if x != nil {
 		return x.Timestamp
 	}
-	return nil
+	return 0
 }
 
 func (x *CreateReadingRequest) GetTemperature() float64 {
@@ -895,7 +894,7 @@ var File_reading_proto protoreflect.FileDescriptor
 
 const file_reading_proto_rawDesc = "" +
 	"\n" +
-	"\rreading.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"(\n" +
+	"\rreading.proto\x1a\x1bgoogle/protobuf/empty.proto\"(\n" +
 	"\x10CountAllResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\rR\x05count\"S\n" +
 	"\x13ListReadingsRequest\x12\x1f\n" +
@@ -905,10 +904,10 @@ const file_reading_proto_rawDesc = "" +
 	"\x14ListReadingsResponse\x12/\n" +
 	"\breadings\x18\x01 \x03(\v2\x13.GetReadingResponseR\breadings\"#\n" +
 	"\x11GetReadingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\xb1\x02\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"\x95\x02\n" +
 	"\x12GetReadingResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x128\n" +
-	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12 \n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1c\n" +
+	"\ttimestamp\x18\x02 \x01(\x03R\ttimestamp\x12 \n" +
 	"\vtemperature\x18\x03 \x01(\x01R\vtemperature\x12\x1a\n" +
 	"\bhumidity\x18\x04 \x01(\x01R\bhumidity\x12\x12\n" +
 	"\x04tvoc\x18\x05 \x01(\rR\x04tvoc\x12\x13\n" +
@@ -919,11 +918,11 @@ const file_reading_proto_rawDesc = "" +
 	"\x05pm_25\x18\t \x01(\x01R\x04pm25\x12\x1d\n" +
 	"\n" +
 	"fire_alarm\x18\n" +
-	" \x01(\rR\tfireAlarm\"\x88\x01\n" +
-	"\x14GetStatisticsRequest\x129\n" +
+	" \x01(\rR\tfireAlarm\"P\n" +
+	"\x14GetStatisticsRequest\x12\x1d\n" +
 	"\n" +
-	"start_time\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\tstartTime\x125\n" +
-	"\bend_time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\aendTime\"\x96\x03\n" +
+	"start_time\x18\x01 \x01(\x03R\tstartTime\x12\x19\n" +
+	"\bend_time\x18\x02 \x01(\x03R\aendTime\"\x96\x03\n" +
 	"\x15GetStatisticsResponse\x12%\n" +
 	"\x0ereadings_count\x18\x01 \x01(\rR\rreadingsCount\x12'\n" +
 	"\x0fmin_temperature\x18\x02 \x01(\x01R\x0eminTemperature\x12'\n" +
@@ -935,9 +934,9 @@ const file_reading_proto_rawDesc = "" +
 	"\bsum_tvoc\x18\b \x01(\rR\asumTvoc\x12(\n" +
 	"\x10fire_alarm_count\x18\t \x01(\rR\x0efireAlarmCount\x12-\n" +
 	"\x13no_fire_alarm_count\x18\n" +
-	" \x01(\rR\x10noFireAlarmCount\"\xa3\x02\n" +
-	"\x14CreateReadingRequest\x128\n" +
-	"\ttimestamp\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12 \n" +
+	" \x01(\rR\x10noFireAlarmCount\"\x87\x02\n" +
+	"\x14CreateReadingRequest\x12\x1c\n" +
+	"\ttimestamp\x18\x01 \x01(\x03R\ttimestamp\x12 \n" +
 	"\vtemperature\x18\x02 \x01(\x01R\vtemperature\x12\x1a\n" +
 	"\bhumidity\x18\x03 \x01(\x01R\bhumidity\x12\x12\n" +
 	"\x04tvoc\x18\x04 \x01(\rR\x04tvoc\x12\x13\n" +
@@ -1006,37 +1005,32 @@ var file_reading_proto_goTypes = []any{
 	(*BatchCreateReadingsResponse)(nil), // 10: BatchCreateReadingsResponse
 	(*UpdateReadingRequest)(nil),        // 11: UpdateReadingRequest
 	(*DeleteReadingRequest)(nil),        // 12: DeleteReadingRequest
-	(*timestamppb.Timestamp)(nil),       // 13: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),               // 14: google.protobuf.Empty
+	(*emptypb.Empty)(nil),               // 13: google.protobuf.Empty
 }
 var file_reading_proto_depIdxs = []int32{
 	4,  // 0: ListReadingsResponse.readings:type_name -> GetReadingResponse
-	13, // 1: GetReadingResponse.timestamp:type_name -> google.protobuf.Timestamp
-	13, // 2: GetStatisticsRequest.start_time:type_name -> google.protobuf.Timestamp
-	13, // 3: GetStatisticsRequest.end_time:type_name -> google.protobuf.Timestamp
-	13, // 4: CreateReadingRequest.timestamp:type_name -> google.protobuf.Timestamp
-	7,  // 5: BatchCreateReadingsRequest.reading_requests:type_name -> CreateReadingRequest
-	14, // 6: Readings.CountAll:input_type -> google.protobuf.Empty
-	1,  // 7: Readings.List:input_type -> ListReadingsRequest
-	3,  // 8: Readings.Get:input_type -> GetReadingRequest
-	5,  // 9: Readings.Statistics:input_type -> GetStatisticsRequest
-	7,  // 10: Readings.Create:input_type -> CreateReadingRequest
-	9,  // 11: Readings.BatchCreate:input_type -> BatchCreateReadingsRequest
-	11, // 12: Readings.Update:input_type -> UpdateReadingRequest
-	12, // 13: Readings.Delete:input_type -> DeleteReadingRequest
-	0,  // 14: Readings.CountAll:output_type -> CountAllResponse
-	2,  // 15: Readings.List:output_type -> ListReadingsResponse
-	4,  // 16: Readings.Get:output_type -> GetReadingResponse
-	6,  // 17: Readings.Statistics:output_type -> GetStatisticsResponse
-	8,  // 18: Readings.Create:output_type -> CreateReadingResponse
-	10, // 19: Readings.BatchCreate:output_type -> BatchCreateReadingsResponse
-	14, // 20: Readings.Update:output_type -> google.protobuf.Empty
-	14, // 21: Readings.Delete:output_type -> google.protobuf.Empty
-	14, // [14:22] is the sub-list for method output_type
-	6,  // [6:14] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	7,  // 1: BatchCreateReadingsRequest.reading_requests:type_name -> CreateReadingRequest
+	13, // 2: Readings.CountAll:input_type -> google.protobuf.Empty
+	1,  // 3: Readings.List:input_type -> ListReadingsRequest
+	3,  // 4: Readings.Get:input_type -> GetReadingRequest
+	5,  // 5: Readings.Statistics:input_type -> GetStatisticsRequest
+	7,  // 6: Readings.Create:input_type -> CreateReadingRequest
+	9,  // 7: Readings.BatchCreate:input_type -> BatchCreateReadingsRequest
+	11, // 8: Readings.Update:input_type -> UpdateReadingRequest
+	12, // 9: Readings.Delete:input_type -> DeleteReadingRequest
+	0,  // 10: Readings.CountAll:output_type -> CountAllResponse
+	2,  // 11: Readings.List:output_type -> ListReadingsResponse
+	4,  // 12: Readings.Get:output_type -> GetReadingResponse
+	6,  // 13: Readings.Statistics:output_type -> GetStatisticsResponse
+	8,  // 14: Readings.Create:output_type -> CreateReadingResponse
+	10, // 15: Readings.BatchCreate:output_type -> BatchCreateReadingsResponse
+	13, // 16: Readings.Update:output_type -> google.protobuf.Empty
+	13, // 17: Readings.Delete:output_type -> google.protobuf.Empty
+	10, // [10:18] is the sub-list for method output_type
+	2,  // [2:10] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_reading_proto_init() }

@@ -1,7 +1,7 @@
 namespace Gateway.Dto.Reading.Request;
 
 public sealed record CreateReadingQuery(
-    DateTimeOffset Timestamp,
+    long Timestamp,
     double Temperature,
     double Humidity,
     int Tvoc,

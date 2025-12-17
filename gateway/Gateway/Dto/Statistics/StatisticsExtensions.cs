@@ -10,8 +10,8 @@ public static class StatisticsExtensions
     {
         return new GetStatisticsRequest
         {
-            StartTime = request.StartTime.ToTimestamp(),
-            EndTime = request.EndTime.ToTimestamp(),
+            StartTime = request.StartTime,
+            EndTime = request.EndTime,
         };
     }
 }
