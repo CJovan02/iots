@@ -63,8 +63,8 @@ public static class ReadingEndpoints
             .WithTags("Readings");
 
         app.MapPost("readings/batch", async (
-            [FromBody] BatchCreateReadingsQuery query,
-            IGrpcReadingClient client) =>
+                [FromBody] BatchCreateReadingsQuery query,
+                IGrpcReadingClient client) =>
             {
                 var ids = await client.BatchCreateAsync(query);
                 return Results.Ok(ids);
