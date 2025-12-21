@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/CJovan02/iots/datamanager/internal/config"
 	"github.com/CJovan02/iots/datamanager/internal/db"
@@ -19,6 +23,14 @@ import (
 )
 
 func main() {
+	// Unblocks ctx.Done() channel when os closes the program
+	ctx, stop := signal.NotifyContext(
+		context.Background(),
+		os.Interrupt,
+		syscall.SIGTERM,
+	)
+	defer stop()
+
 	// Load config
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -64,8 +76,24 @@ func main() {
 	reflection.Register(server)
 
 	// Start listening to requests
-	log.Printf("server listening at %v", listener.Addr())
-	if err = server.Serve(listener); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
+	// We put this in go routine in so that we don't block the main thread
+	// We block main thread with "<-ctx.Done()" so that we can have more control over
+	// closing open connections when program exits
+	go func() {
+		log.Printf("🚀 server listening at %v", listener.Addr())
+		if err := server.Serve(listener); err != nil {
+			if err != grpc.ErrServerStopped {
+				log.Printf("❌ gRPC server error: %v", err)
+				stop()
+			}
+		}
+	}()
+
+	<-ctx.Done() // channel waits for signal (os.Interrupt or syscall.SIGTERM)
+
+	log.Println("shutting down...")
+
+	server.GracefulStop()
+	publisher.Disconnect()
+	pool.Close()
 }

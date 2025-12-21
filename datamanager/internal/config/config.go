@@ -22,16 +22,16 @@ func LoadConfig() (*Config, error) {
 	}
 
 	if cfg.DatabaseUrl == "" {
-		return nil, fmt.Errorf("no postgres connection string provided")
+		return nil, fmt.Errorf("POSTGRES_SMOKE_CONNECTION_STRING environment variable not set")
 	}
 	if cfg.MqttBroker == "" {
-		return nil, fmt.Errorf("MQTT broker not provided")
+		return nil, fmt.Errorf("MQTT_BROKER environment variable not set")
 	}
 	if cfg.MqttTopic == "" {
-		return nil, fmt.Errorf("MQTT topic not provided")
+		return nil, fmt.Errorf("MQTT_TOPIC environment variable not set")
 	}
 	if cfg.MqttClientId == "" {
-		log.Printf("MQTT client id not provided, using the default 'data-manager'")
+		log.Printf("MQTT_TOPIC environment variable not set, using the default 'data-manager'")
 		cfg.MqttClientId = "data-manager"
 	}
 

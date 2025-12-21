@@ -44,10 +44,23 @@ func (c *ReadingsClient) PublishJson(topic string, payload any) error {
 	if err != nil {
 		return err
 	}
-
 	return c.Publish(topic, data)
+}
+
+func (c *ReadingsClient) Subscribe(topic string) error {
+	token := c.client.Subscribe(topic, 0, HandleMessage)
+	if token.Wait() && token.Error() != nil {
+		return token.Error()
+	}
+
+	log.Printf("✅ subscribed to topic: %s\n", topic)
+	return nil
 }
 
 func (c *ReadingsClient) Disconnect() {
 	c.client.Disconnect(250)
+}
+
+func HandleMessage(client mqtt.Client, message mqtt.Message) {
+	log.Printf("received message from topic: %s\n%s", message.Topic(), message.Payload())
 }
