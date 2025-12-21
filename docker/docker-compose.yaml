@@ -51,7 +51,18 @@ services:
       - 1883:1883
     volumes:
       - ./mosquitto/config:/mosquitto/config
-    
+
+  event-manager:
+    build: ../event-manager/
+    container_name: event-manager
+    depends_on:
+      - data-manager
+      - mosquitto
+    environment:
+      MQTT_BROKER: tcp://mosquitto:1883
+      MQTT_CLIENT_ID: event-manager
+      MQTT_SUBSCRIBE_TOPIC: data-manager/raw-readings
+      MQTT_PUBLISH_TOPIC: event-manager/threshold-readings
 
 volumes:
   pgdata:
