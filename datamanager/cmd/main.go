@@ -32,15 +32,16 @@ func main() {
 	}
 	defer pool.Close()
 
-	// Connect to MQTT broker
-	_, err = mqtt.CreateClientAndConnect(cfg.MqttBroker, cfg.MqttClientId)
+	// Create client and connect to MQTT broker
+	var publisher sensor.ReadingsPublisher
+	publisher, err = mqtt.NewReadingsClient(cfg.MqttBroker, cfg.MqttClientId)
 	if err != nil {
 		log.Fatalf("❌ failed to connect to MQTT broker: %v", err)
 	}
 
 	// Create repo and service
 	var repo sensor.Repository = sensorrepo.New(pool)
-	var service sensor.Service = sensorsvc.New(repo)
+	var service sensor.Service = sensorsvc.New(repo, publisher, cfg.MqttTopic)
 
 	// Create gRPC handler
 	var sensorHandler = grpchand.NewSensorHandler(service)

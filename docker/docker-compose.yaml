@@ -25,10 +25,12 @@ services:
     container_name: data-manager
     depends_on:
       - db
+      - mosquitto
     environment: 
       POSTGRES_SMOKE_CONNECTION_STRING: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       MQTT_BROKER: tcp://mosquitto:1883
       MQTT_CLIENT_ID: data-manager
+      MQTT_TOPIC: data-manager/raw-readings
     ports:
       - ${DATA_MANAGER_PORT:-7001}:8080
 

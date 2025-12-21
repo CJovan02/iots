@@ -7,11 +7,13 @@ import (
 )
 
 type Service struct {
-	repo sensor.Repository
+	repo      sensor.Repository
+	publisher sensor.ReadingsPublisher
+	topic     string
 }
 
-func New(repo sensor.Repository) *Service {
-	return &Service{repo: repo}
+func New(repo sensor.Repository, publisher sensor.ReadingsPublisher, topic string) *Service {
+	return &Service{repo: repo, publisher: publisher, topic: topic}
 }
 
 func (s *Service) CountAll(ctx context.Context) (*uint32, error) {
@@ -33,11 +35,33 @@ func (s *Service) GetStatistics(ctx context.Context, startTime int64, endTime in
 }
 
 func (s *Service) Create(ctx context.Context, reading *sensor.Reading) (*uint32, error) {
-	return s.repo.Create(ctx, reading)
+	id, err := s.repo.Create(ctx, reading)
+	if err != nil {
+		return nil, err
+	}
+
+	// publish reading to MQTT topic
+	err = s.publisher.PublishJson(s.topic, reading)
+	if err != nil {
+		return nil, err
+	}
+
+	return id, nil
 }
 
 func (s *Service) BatchCreate(ctx context.Context, readings []*sensor.Reading) ([]uint32, error) {
-	return s.repo.BatchCreate(ctx, readings)
+	ids, err := s.repo.BatchCreate(ctx, readings)
+	if err != nil {
+		return nil, err
+	}
+
+	// publish reading to MQTT broker
+	err = s.publisher.PublishJson(s.topic, readings)
+	if err != nil {
+		return nil, err
+	}
+
+	return ids, nil
 }
 
 func (s *Service) Update(ctx context.Context, id uint32, reading *sensor.Reading) error {
