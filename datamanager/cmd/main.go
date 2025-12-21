@@ -14,6 +14,8 @@ import (
 	"github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	mqtt "github.com/CJovan02/iots/datamanager/internal/mqtt"
 )
 
 func main() {
@@ -29,6 +31,12 @@ func main() {
 		log.Fatalf("❌ failed to connect to database: %v", err)
 	}
 	defer pool.Close()
+
+	// Connect to MQTT broker
+	_, err = mqtt.CreateClientAndConnect(cfg.MqttBroker, cfg.MqttClientId)
+	if err != nil {
+		log.Fatalf("❌ failed to connect to MQTT broker: %v", err)
+	}
 
 	// Create repo and service
 	var repo sensor.Repository = sensorrepo.New(pool)
