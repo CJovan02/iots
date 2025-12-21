@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres
+    container_name: db
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -14,12 +15,14 @@ services:
 
   adminer:
     image: adminer
+    container_name: adminer
     restart: always
     ports:
       - ${ADMINER_PORT:-7000}:8080
 
   data-manager:
     build: ../datamanager/
+    container_name: data-manager
     depends_on:
       - db
     environment: 
@@ -29,12 +32,22 @@ services:
 
   gateway:
     build: ../gateway/Gateway/
+    container_name: gateway
     depends_on:
       - data-manager
     environment:
       DATA_MANAGER_URL: http://data-manager:8080
     ports:
       - ${GATEWAY_PORT:-7002}:8080
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    ports:
+      - 1883:1883
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+    
 
 volumes:
   pgdata:
