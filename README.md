@@ -84,7 +84,7 @@ While this reduces convenience, it improves performance and keeps the implementa
 
 ## Data Manager (modifications)
 
-[View AsyncAPI in AsyncApi Studio](https://studio.asyncapi.com/?share=22d2fa4c-a8ef-479e-9a47-30b362b6f5e1)
+[View AsyncAPI in AsyncApi Studio](https://studio.asyncapi.com/?share=2f09cc15-830e-484f-9012-5eda290ad220)
 
 # Dataset
 Smoke Detection (Kaggle):

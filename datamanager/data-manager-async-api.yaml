@@ -19,12 +19,12 @@ channels:
     description: The topic on which raw sensor readings may be produced or consumed.
     messages:
       reading:
-        $ref: '#/components/messages/reading'
+        $ref: "#/components/messages/reading"
 operations:
-  receiveReading:
-    action: receive
+  sendReading:
+    action: send
     channel:
-      $ref: '#/channels/raw-readings'
+      $ref: "#/channels/raw-readings"
 components:
   messages:
     reading:
@@ -32,7 +32,7 @@ components:
       title: Raw Sensor Reading
       summary: Raw Sensor Reading from iot device
       payload:
-        $ref: '#/components/schemas/readingPayload'
+        $ref: "#/components/schemas/readingPayload"
   schemas:
     readingPayload:
       type: object
