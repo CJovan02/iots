@@ -13,6 +13,8 @@ graph LR
     SG -->|REST| GW[Gateway]
     GW -->|gRPC| DM[Data Manager]
     DM --> DB[(PostgreSQL)]
+    DM -->|MQTT| EM[Event Manager]
+    EM -->|MQTT| MQT[MQTT Client]
 ```
 
 ---
