@@ -63,6 +63,11 @@ services:
       MQTT_CLIENT_ID: event-manager
       MQTT_SUBSCRIBE_TOPIC: data-manager/raw-readings
       MQTT_PUBLISH_TOPIC: event-manager/threshold-readings
+      PM_25_THRESHOLD: ${PM_25_THRESHOLD:-50}
+      TVOC_THRESHOLD: ${TVOC_THRESHOLD:-600}
+      ECO2_THRESHOLD: ${ECO2_THRESHOLD:-2000}
+      TEMPERATURE_THRESHOLD: ${TEMPERATURE_THRESHOLD:-50}
+
 
 volumes:
   pgdata:

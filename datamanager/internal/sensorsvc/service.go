@@ -2,6 +2,7 @@ package sensorsvc
 
 import (
 	"context"
+	"log"
 
 	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
 )
@@ -40,10 +41,12 @@ func (s *Service) Create(ctx context.Context, reading *sensor.Reading) (*uint32,
 		return nil, err
 	}
 
-	// publish reading to MQTT topic
+	reading.Id = *id
+
+	// publish readings to MQTT topic
 	err = s.publisher.PublishJson(s.topic, reading)
 	if err != nil {
-		return nil, err
+		log.Printf("❌ error trying to publish message, %v\n", err)
 	}
 
 	return id, nil
@@ -55,10 +58,14 @@ func (s *Service) BatchCreate(ctx context.Context, readings []*sensor.Reading) (
 		return nil, err
 	}
 
-	// publish reading to MQTT broker
-	err = s.publisher.PublishJson(s.topic, readings)
-	if err != nil {
-		return nil, err
+	// publish reading to MQTT topic
+	for i, id := range ids {
+		readings[i].Id = id
+
+		err = s.publisher.PublishJson(s.topic, readings[i])
+		if err != nil {
+			log.Printf("❌ error trying to publish message, %v\n", err)
+		}
 	}
 
 	return ids, nil

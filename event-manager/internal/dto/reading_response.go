@@ -1,7 +1,7 @@
-package sensor
+package dto
 
-// Reading represents necessary columns from the dataset for fire detection
-type Reading struct {
+// ReadingResponse message format received from topic "data-manager/raw-readings"
+type ReadingResponse struct {
 	Id          uint32  `json:"id"`
 	Timestamp   int64   `json:"timestamp"`   // Raw UTC timestamp
 	Temperature float64 `json:"temperature"` // Air temperature, fires raise temperature

@@ -25,7 +25,7 @@ func main() {
 	}
 
 	// Create client and connect to broker
-	client, err := mqtt.NewReadingsClient(cfg.Broker, cfg.ClientId)
+	client, err := mqtt.NewReadingsClient(cfg.Broker, cfg.ClientId, cfg.Thresholds, cfg.PublishTopic)
 	if err != nil {
 		log.Fatal(err)
 	}
