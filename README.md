@@ -80,6 +80,12 @@ The Data Manager is implemented in Go due to its:
 An ORM was intentionally avoided in favor of direct SQL queries using _pgx_.
 While this reduces convenience, it improves performance and keeps the implementation simple. With single data model and small amout of queries this was not a big problem.
 
+# Project II - Event driven communication using MQTT
+
+## Data Manager (modifications)
+
+[View AsyncAPI in AsyncApi Studio](https://studio.asyncapi.com/?share=22d2fa4c-a8ef-479e-9a47-30b362b6f5e1)
+
 # Dataset
 Smoke Detection (Kaggle):
 https://www.kaggle.com/datasets/deepcontractor/smoke-detection-dataset

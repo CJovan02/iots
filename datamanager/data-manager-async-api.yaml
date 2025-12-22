@@ -1,0 +1,80 @@
+asyncapi: 3.0.0
+info:
+  title: Smoke Detection Data Manager API
+  version: 1.0.0
+  description: >-
+    Manages smoke detection sensor reading data, writing it to database, and
+    sends MQTT messages when reading is created.
+  license:
+    name: Jovan Cvetkovic
+    url: https://www.github.com/cjovan02
+servers:
+  production:
+    host: test.mosquitto.org
+    protocol: mqtt
+    description: Public Mosquitto MQTT broker
+channels:
+  raw-readings:
+    address: data-manager/raw-readings
+    description: The topic on which raw sensor readings may be produced or consumed.
+    messages:
+      reading:
+        $ref: '#/components/messages/reading'
+operations:
+  receiveReading:
+    action: receive
+    channel:
+      $ref: '#/channels/raw-readings'
+components:
+  messages:
+    reading:
+      name: reading
+      title: Raw Sensor Reading
+      summary: Raw Sensor Reading from iot device
+      payload:
+        $ref: '#/components/schemas/readingPayload'
+  schemas:
+    readingPayload:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the object in database
+        timestamp:
+          type: integer
+          description: Raw UTC timestamp of the reading
+        temperature:
+          type: number
+          description: Air temperature, fires raise temperature
+        humidity:
+          type: number
+          description: Air humidity, very high or low can indicate fire
+        tvoc:
+          type: integer
+          description: Total Volatile Organic Compounds, high numbers indicate fire
+        e_co2:
+          type: integer
+          description: CO2 equivalent concentration, indirect signal for combustion
+        raw_hw:
+          type: integer
+          description: Raw molecular hydrogen, additional chemical signal
+        raw_ethanol:
+          type: integer
+          description: Raw ethanol gas, additional chemical signal
+        pm_25:
+          type: number
+          description: Particulate matter <2.5 µm, smoke increases concentrations
+        fire_alarm:
+          type: integer
+          description: Ground truth, 1 if fire is present
+      example:
+        id: 449
+        timestamp: 1654733345
+        temperature: 20.204
+        humidity: 51.17
+        tvoc: 0
+        e_co2: 403
+        raw_hw: 12468
+        raw_ethanol: 19338
+        pm_25: 2.96
+        fire_alarm: 0
