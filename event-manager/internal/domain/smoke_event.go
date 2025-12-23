@@ -10,9 +10,9 @@ const (
 )
 
 type Trigger struct {
-	Type      ThresholdType
-	Value     float64
-	Threshold float64
+	Type      ThresholdType `json:"type"`      // Type of threshold
+	Value     float64       `json:"value"`     // Actual sensor value that exceeded the threshold
+	Threshold float64       `json:"threshold"` // Configured threshold value
 }
 
 type SmokeEvent struct {
