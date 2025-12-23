@@ -98,6 +98,7 @@ Mosquitto is used as a message broker, running as a docker container listening o
 Upon creating new sensor reading, either from ```Create``` or ```BatchCreate``` function, it also publishes each reading as a message to ```data-manager/raw-readings``` topic, without modifying nor deleting fields from model.
 
 Async api specification is at ```/data-manager/data-manager-async-api.yaml```, or:
+
 [View AsyncAPI in AsyncApi Studio](https://studio.asyncapi.com/?share=56aed91b-f696-4693-8d2b-9cc0fced1fa0)
 
 ### Event Manager
@@ -107,6 +108,7 @@ Async api specification is at ```/data-manager/data-manager-async-api.yaml```, o
 Consume messages from ```data-manager/raw-readings``` topic, if certain fields exceed configurable thresholds, then create **Smoke Event** model with more details about the reading and the exceeding thresholds, and publish it to ```event-manager/threshold-readings``` topic
 
 Async api specification is at ```/event-manager/event-manager-async-api.yaml```, or:
+
 [View AsyncApi in AsyncAPi Studio](https://studio.asyncapi.com/?share=969ab085-2900-4d76-9b4e-8e9355422e6e)
 
 ### MQTT Client
