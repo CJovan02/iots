@@ -51,6 +51,8 @@ Acts as an API gateway and translates REST requests into gRPC calls.
 - **Responsibility**:
 Reads sensor data from _CSV_ and sends it to the _Gateway_ at configurable intervals.
 
+---
+
 ## Design Decisions
 
 ### Microservice Architecture
