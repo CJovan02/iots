@@ -24,10 +24,10 @@ def __generate_parser() -> argparse.ArgumentParser:
 
 
 def __add_arguments(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument('--start', '-s', type=int, default=0,
-                        help='start reading from this row (inclusive). (default: 0)')
-    parser.add_argument('--end', '-e', type=int, default=100,
-                        help='stop reading at this row (exclusive). (default: 100)')
+    parser.add_argument('--start', '-s', type=int, default=24950,
+                        help='start reading from this row (inclusive). (default: 24950)')
+    parser.add_argument('--end', '-e', type=int, default=25200,
+                        help='stop reading at this row (exclusive). (default: 25200)')
     parser.add_argument('--batch-size', '-bs', type=int, default=5,
                         help='number of readings sent per API request. (default: 5)')
     parser.add_argument('--delay', '-d', type=float, default=5,
