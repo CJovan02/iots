@@ -73,6 +73,8 @@ The Data Manager is implemented in Go due to its:
 An ORM was intentionally avoided in favor of direct SQL queries using _pgx_.
 While this reduces convenience, it improves performance and keeps the implementation simple. With single data model and small amout of queries this was not a big problem.
 
+---
+
 # Project II - Event driven communication using MQTT
 
 ## Overview
