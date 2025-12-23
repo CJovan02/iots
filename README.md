@@ -130,6 +130,14 @@ Go is fast and reliable for this use case.
 
 ---
 
+# Project III
+Todo :)
+
+---
+
+# How to Run
+Todo :)
+
 # Dataset
 Smoke Detection (Kaggle):
 https://www.kaggle.com/datasets/deepcontractor/smoke-detection-dataset
