@@ -9,7 +9,8 @@ The goal of these projects is to simulate an IoT system by generating sensor dat
 
 - [System Architecture](#system-architecture)
 - [How to Run](#how-to-run)
-- [Project I - Data Management](#project-i-data-management)
+- [Project I - Data Management](#project-i---data-management)
+- [Project II - Event driven communication using MQTT](#project-ii---event-driven-communication-using-mqtt)
 - [Dataset](#dataset)
 
 ---
