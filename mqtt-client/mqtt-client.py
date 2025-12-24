@@ -1,13 +1,15 @@
 from config.mqtt_client_config import configure_mqtt_client
 from config.logger_config import configure_logging
+from config.env_loader import load_envs
 import logging
 
 def main():
     try:
         logger = configure_logging(False)
+        address, port = load_envs()
 
         mqttc = configure_mqtt_client();
-        mqttc.connect("localhost", 1883)
+        mqttc.connect(address, port)
         mqttc.loop_forever()
     except KeyboardInterrupt:
         print()
