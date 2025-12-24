@@ -5,6 +5,15 @@ The goal of these projects is to simulate an IoT system by generating sensor dat
 
 ---
 
+# Table of Contents
+
+- [System Architecture](#system-architecture)
+- [How to Run](#how-to-run)
+- [Project I - Data Management](#project-i-data-management)
+- [Dataset](#dataset)
+
+---
+
 # System Architecture
 
 ```mermaid
@@ -16,6 +25,77 @@ graph LR
     DM -->|MQTT| EM[Event Manager]
     EM -->|MQTT| MQT[MQTT Client]
 ```
+
+---
+
+# How to Run
+You only need to have ```docker``` and ```docker compose``` in order to test entire application.
+
+---
+
+## Prerequisites
+- Docker – [Install guide](https://docs.docker.com/engine/install)
+- Docker Compose – [Install guide](https://docs.docker.com/compose/install)
+
+Make sure Docker is running before proceeding.
+
+### Stap 1. Clone the project 
+```bash
+git clone https://github.com/cjovan02/iots.git
+cd iots
+```
+
+### Step 2. Navigate to Docker configuration folder
+```bash
+cd ./docker
+```
+
+This folder contains **docker configuration** to run the services.
+
+### Step 3. Create a copy of the example environment file
+```bash
+cp .env.example .env
+```
+
+It's recommended to change ```POSTGRES_USER``` and ```POSTGRES_PASSWORD``` for security,
+but for testing purposes, the defaults will work.
+You can also tweak other environment variables if needed.
+
+### Step 4. Run the server
+```bash
+docker compose up --build
+```
+
+This will start all microservices, the database, message broker, and Adminer.
+
+Some ports of the server are exposed to the host:
+|    Service    |    Port    |    Description            |
+| ------------- | ---------- | ------------------------- |
+| Swagger UI    |    7002    | REST API Documentation    |
+| Adminer       |    7000    | Database Management UI    |
+
+This means you can visit ```http://localhost:7002/swagger``` to explore the API.
+Or you can visit the adminer at ```http://localhost:7000``` to see database data.
+
+### 5. Running the client tools
+The project includes simple CLI Python clients for testing:
+1. **mqtt-client** - prints events from the server:
+```bash
+docker compose run --rm mqtt-client
+```
+
+2. **sensor-generator** - simulates sensor readings from a CSV file:
+```bash
+docker compose run --rm sensor-generator
+```
+
+> I suggest starting the _mqtt-client_ before _sensor-generator_ because _mqtt-client_ will print events caused by _sensor-generator_.
+
+### 6. Docker cleanup
+```bash
+docker compose down -v
+```
+This will delete all containers created previously.
 
 ---
 
@@ -134,75 +214,6 @@ Go is fast and reliable for this use case.
 Todo :)
 
 ---
-
-# How to Run
-You only need to have ```docker``` and ```docker compose``` in order to test entire application.
-
----
-
-## Prerequisites
-- Docker – [Install guide](https://docs.docker.com/engine/install)
-- Docker Compose – [Install guide](https://docs.docker.com/compose/install)
-
-Make sure Docker is running before proceeding.
-
-### Stap 1. Clone the project 
-```bash
-git clone https://github.com/cjovan02/iots.git
-cd iots
-```
-
-### Step 2. Navigate to Docker configuration folder
-```bash
-cd ./docker
-```
-
-This folder contains **docker configuration** to run the services.
-
-### Step 3. Create a copy of the example environment file
-```bash
-cp .env.example .env
-```
-
-It's recommended to change ```POSTGRES_USER``` and ```POSTGRES_PASSWORD``` for security,
-but for testing purposes, the defaults will work.
-You can also tweak other environment variables if needed.
-
-### Step 4. Run the server
-```bash
-docker compose up --build
-```
-
-This will start all microservices, the database, message broker, and Adminer.
-
-Some ports of the server are exposed to the host:
-|    Service    |    Port    |    Description            |
-| ------------- | ---------- | ------------------------- |
-| Swagger UI    |    7002    | REST API Documentation    |
-| Adminer       |    7000    | Database Management UI    |
-
-This means you can visit ```http://localhost:7002/swagger``` to explore the API.
-Or you can visit the adminer at ```http://localhost:7000``` to see database data.
-
-### 5. Running the client tools
-The project includes simple CLI Python clients for testing:
-1. **mqtt-client** - prints events from the server:
-```bash
-docker compose run --rm mqtt-client
-```
-
-2. **sensor-generator** - simulates sensor readings from a CSV file:
-```bash
-docker compose run --rm sensor-generator
-```
-
-> I suggest starting the _mqtt-client_ before _sensor-generator_ because _mqtt-client_ will print events caused by _sensor-generator_.
-
-### 6. Docker cleanup
-```bash
-docker compose down -v
-```
-This will delete all containers created previously.
 
 # Dataset
 Smoke Detection (Kaggle):
