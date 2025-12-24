@@ -1,3 +1,9 @@
+# Server services are automatically launched with "docker compose up"
+# Client apps can be lauched with "docker compose run --rm *service-name* *--args*"
+
+# If client images are changed you need to run:
+# sudo docker compose --profile clients build
+
 services:
   # Server microservices
   db:
@@ -80,6 +86,15 @@ services:
     environment:
       MQTT_BROKER_ADDRESS: mosquitto
       MQTT_BROKER_PORT: 1883
+
+  sensor-generator:
+    build: ../sensor-generator/
+    profiles: ["clients"]
+    container_name: sensor-generator
+    stdin_open: true            # docker run -i
+    tty: true                   # docker run -t
+    environment:
+      GATEWAY_URL: http://gateway:8080
 
 
 volumes:

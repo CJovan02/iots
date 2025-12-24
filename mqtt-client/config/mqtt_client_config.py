@@ -17,7 +17,7 @@ def __on_message(client, userdata, message):
     payload = json.loads(message.payload.decode())
     pretty = json.dumps(payload, indent=2)
 
-    logger.info("Received message from topic: %s\n%s", message.topic, pretty)
+    logger.info("Received message from topic: %s\n%s\n", message.topic, pretty)
 
 def __on_subscribe(client, userdata, mid, reason_code_list, properties):
     logger = logging.getLogger()

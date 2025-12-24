@@ -88,7 +88,7 @@ func (c *ReadingsClient) handleMessage(_ mqtt.Client, message mqtt.Message) {
 		return
 	}
 
-	log.Println("smoke event detected")
+	log.Printf("reading %d: smoke event detected\n", event.ReadingId)
 
 	err = c.PublishJson(c.publishTopic, *event)
 	if err != nil {

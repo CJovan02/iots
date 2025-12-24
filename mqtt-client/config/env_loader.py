@@ -1,10 +1,7 @@
-from dotenv import load_dotenv
 import os
 import logging
 
 def load_envs() -> tuple[str, str]:
-    load_dotenv("../docker/.env")
-    
     address = os.getenv("MQTT_BROKER_ADDRESS")
     if address is None:
         logging.getLogger().warning("MQTT_BROKER_ADDRESS env variable not found, using the default value 'localhost'")
