@@ -75,7 +75,6 @@ services:
       ECO2_THRESHOLD: ${ECO2_THRESHOLD:-2000}
       TEMPERATURE_THRESHOLD: ${TEMPERATURE_THRESHOLD:-50}
 
-
   # Client apps
   mqtt-client:
     build: ../mqtt-client/
