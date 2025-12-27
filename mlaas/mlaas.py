@@ -1,16 +1,13 @@
-# This is a sample Python script.
+data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-# Press Ctrl+F5 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+test_x= []
+train_x = []
 
+for i in range(2, 8):
+    print(i)
+    if i % 3 == 2:
+        test_x.append(data[i])
+    else:
+        train_x.append(data[i])
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+print(train_x, test_x)
