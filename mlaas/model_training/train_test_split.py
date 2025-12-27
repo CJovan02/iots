@@ -1,8 +1,9 @@
+import sys
 import numpy as np
-
+np.set_printoptions(threshold=sys.maxsize)
 
 # Yes, it's a big function :)
-def create_train_test_split(x, y, early_warning_interval: int) -> tuple[
+def create_train_test_split(x, y, early_warning_interval: int, future_prediction: int) -> tuple[
     tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray], tuple[
         np.ndarray, np.ndarray]]:
     """
@@ -23,6 +24,7 @@ def create_train_test_split(x, y, early_warning_interval: int) -> tuple[
     :param x: Features
     :param y: Label
     :param early_warning_interval: The amount of readings before the fire to put into "early_warning_test"
+    :param future_prediction: How many readings model should predict in the future. When splitting data in test set we need to account for this metric.
     :return:
     """
 
@@ -56,17 +58,18 @@ def create_train_test_split(x, y, early_warning_interval: int) -> tuple[
 
     # Then we grab configurable amount of readings right before fire 1 and put inside early_war_test
     early_warning_test = (
-        x[fire_1_start - early_warning_interval:fire_1_start],
-        y[fire_1_start - early_warning_interval:fire_1_start]
+        x[fire_1_start - early_warning_interval:fire_1_start + future_prediction],
+        y[fire_1_start - early_warning_interval:fire_1_start + future_prediction]
     )
 
     print("Early warning test for fire 1: ")
     print(early_warning_test[0].shape, early_warning_test[1].shape)
+    # print(early_warning_test[1])
     print()
 
     # Then we grab 85% of the fire 1 for training
-    fire_1_train_x = x[fire_1_start:fire_1_end - int(fire_1_length * fire_amount)]
-    fire_1_train_y = y[fire_1_start:fire_1_end - int(fire_1_length * fire_amount)]
+    fire_1_train_x = x[fire_1_start + future_prediction:fire_1_end - int(fire_1_length * fire_amount)]
+    fire_1_train_y = y[fire_1_start + future_prediction:fire_1_end - int(fire_1_length * fire_amount)]
 
     print("Fire 1 for train: ")
     print(fire_1_train_x.shape, fire_1_train_y.shape)
@@ -106,11 +109,12 @@ def create_train_test_split(x, y, early_warning_interval: int) -> tuple[
     )
 
     # We grab the early warning interval before fire 2
-    early_war_fire_2_x = x[fire_2_start - early_warning_interval:fire_2_start]
-    early_war_fire_2_y = y[fire_2_start - early_warning_interval:fire_2_start]
+    early_war_fire_2_x = x[fire_2_start - early_warning_interval:fire_2_start + future_prediction]
+    early_war_fire_2_y = y[fire_2_start - early_warning_interval:fire_2_start + future_prediction]
 
     print("Early warning test for fire 2: ")
     print(early_war_fire_2_x.shape, early_war_fire_2_y.shape)
+    # print(early_war_fire_2_y)
     print()
 
     early_warning_test = (
@@ -119,8 +123,8 @@ def create_train_test_split(x, y, early_warning_interval: int) -> tuple[
     )
 
     # Then we grab first 85% of the fire 2 event for training
-    fire_2_train_x = x[fire_2_start:fire_2_end - int(fire_2_length * fire_amount)]
-    fire_2_train_y = y[fire_2_start:fire_2_end - int(fire_2_length * fire_amount)]
+    fire_2_train_x = x[fire_2_start + future_prediction:fire_2_end - int(fire_2_length * fire_amount)]
+    fire_2_train_y = y[fire_2_start + future_prediction:fire_2_end - int(fire_2_length * fire_amount)]
 
     print("Fire 2 for train: ")
     print(fire_2_train_x.shape, fire_2_train_y.shape)
@@ -163,6 +167,7 @@ def create_train_test_split(x, y, early_warning_interval: int) -> tuple[
 
     print("Early warning test: ")
     print(early_warning_test[0].shape, early_warning_test[1].shape)
+    # print(early_warning_test[1])
     print()
 
     print("Fire test")
