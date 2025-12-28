@@ -14,12 +14,15 @@ def create_sliding_window(data: tuple, window_size: int) -> tuple[
 
 
 def create_sliding_window_for_early_warning(
-        x,
+        data: tuple,
         window_size: int,
         fire_start_idx: int,
         early_warning_window: int
 ) -> tuple[
     np.ndarray, np.ndarray]:
+
+    x = data[0]
+    y = data[1]
     print("Early war window creation")
     print(x.shape)
     print("Fire start index: ", fire_start_idx)
@@ -32,12 +35,10 @@ def create_sliding_window_for_early_warning(
         t = i + window_size
         distance = fire_start_idx - t
 
-        if distance <= 0:
-            label = 1.0
-        elif distance <= early_warning_window:
+        if 0 <= distance <= early_warning_window:
             label = 1 - (distance / early_warning_window)
         else:
-            label = 0.0
+            label = y[i + window_size]
 
         y_win.append(label)
 

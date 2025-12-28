@@ -3,24 +3,22 @@ from keras.src.losses import mean_absolute_error
 
 from matplotlib import pyplot as plt
 
-from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler
 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.layers import LSTM, Dense, Input
 from tensorflow.keras.optimizers import Adam
 
 from model_training.sliding_window import create_sliding_window, create_sliding_window_for_early_warning
 from model_training.train_test_split import create_train_test_split
 
-import sys
-import numpy as np
+# import sys
+# import numpy as np
+#
+# np.set_printoptions(threshold=sys.maxsize)
 
-np.set_printoptions(threshold=sys.maxsize)
-
-WINDOW_SIZE = 60
-EARLY_WARNING_WINDOW = 200
+WINDOW_SIZE = 80
+EARLY_WARNING_WINDOW = 700
 
 # We don't use all the features since the server doesn't store all the features
 # This is for project simplicity reasons
@@ -39,8 +37,8 @@ y = df[label].values
 print(x.head())
 
 # Create train_test split
-train_set_raw, early_warning_test_1_raw, early_warning_test_2_raw, fire_test_raw, calm_test_raw = \
-    create_train_test_split(x, y, 300)
+train_set_raw, early_warning_test_2_raw, fire_test_raw, calm_test_raw = \
+    create_train_test_split(x, y, 2000)
 
 # LSTM requires scaled labels
 # Fit scaler only on train
@@ -51,10 +49,10 @@ train_set_raw = (
 )
 
 # Transform test sets
-early_warning_test_1_raw = (
-    scaler.transform(early_warning_test_1_raw[0]),
-    early_warning_test_1_raw[1]
-)
+# early_warning_test_1_raw = (
+#     scaler.transform(early_warning_test_1_raw[0]),
+#     early_warning_test_1_raw[1]
+# )
 
 early_warning_test_2_raw = (
     scaler.transform(early_warning_test_2_raw[0]),
@@ -72,20 +70,24 @@ calm_test_raw = (
 )
 
 # Only after splitting we create sliding windows
-train_x, train_y = create_sliding_window(train_set_raw, WINDOW_SIZE)
-early_war_1_x, early_war_1_y = \
-    create_sliding_window_for_early_warning(
-        early_warning_test_1_raw[0],
-        WINDOW_SIZE,
-        len(early_warning_test_1_raw[1]) - 1,
-        EARLY_WARNING_WINDOW)
+train_x, train_y = create_sliding_window_for_early_warning(train_set_raw, WINDOW_SIZE, 3177, EARLY_WARNING_WINDOW)
+
+#print(train_set_raw[1][3177])
+# early_war_1_x, early_war_1_y = \
+#     create_sliding_window_for_early_warning(
+#         early_warning_test_1_raw[0],
+#         WINDOW_SIZE,
+#         len(early_warning_test_1_raw[1]) - 1,
+#         EARLY_WARNING_WINDOW)
 
 early_war_2_x, early_war_2_y = \
     create_sliding_window_for_early_warning(
-        early_warning_test_2_raw[0],
+        early_warning_test_2_raw,
         WINDOW_SIZE,
         len(early_warning_test_2_raw[1]) - 1,
         EARLY_WARNING_WINDOW)
+
+#print(early_war_2_y)
 
 fire_test_x, fire_test_y = create_sliding_window(fire_test_raw, WINDOW_SIZE)
 calm_test_x, calm_test_y = create_sliding_window(calm_test_raw, WINDOW_SIZE)
@@ -111,16 +113,16 @@ model.fit(train_x, train_y, epochs=10, batch_size=64, validation_split=0.2)
 # Predictions
 
 # Early fire 1
-early_war_1_pred = model.predict(early_war_1_x).flatten()
-#early_war_1_pred = (early_war_1_pred > 0.5).astype(int)
-
-print("Early fire 1 warning test")
-print(mean_absolute_error(early_war_1_y, early_war_1_pred))
-
-early_war_results = pd.DataFrame(data={"Train Predictions": early_war_1_pred, "Actual Values": early_war_1_y})
-plt.plot(early_war_results["Train Predictions"])
-plt.plot(early_war_results["Actual Values"])
-plt.show()
+# early_war_1_pred = model.predict(early_war_1_x).flatten()
+# #early_war_1_pred = (early_war_1_pred > 0.5).astype(int)
+#
+# print("Early fire 1 warning test")
+# print(mean_absolute_error(early_war_1_y, early_war_1_pred))
+#
+# early_war_results = pd.DataFrame(data={"Train Predictions": early_war_1_pred, "Actual Values": early_war_1_y})
+# plt.plot(early_war_results["Train Predictions"])
+# plt.plot(early_war_results["Actual Values"])
+# plt.show()
 
 
 # Early fire 2
