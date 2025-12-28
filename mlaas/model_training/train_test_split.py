@@ -16,17 +16,17 @@ def create_train_test_split(x, y, early_warning_interval: int, future_prediction
     - Right before the fire starts, we grab *early_warning_interval* amount of readings and assign it to "early_warning_test"
     - Around 15% of readings at the end of fire events and assign it "fire_test"
     - Around 10% of readings at the end of a dataset that represent calm state and assign it to "calm_test"
-    - The rest of the data is used for training.
+    - The rest of the model_test_results is used for training.
 
     We do this process for both fire events inside dataset.
 
     The "early_warning_test" is the most important, but since we don't have enough fire events to make it big enough.
-    we create 2 more tests that have way more data for testing.
+    we create 2 more tests that have way more model_test_results for testing.
 
     :param x: Features
     :param y: Label
     :param early_warning_interval: The amount of readings before the fire to put into "early_warning_test"
-    :param future_prediction: How many readings model should predict in the future. When splitting data in test set we need to account for this metric.
+    :param future_prediction: How many readings model should predict in the future. When splitting model_test_results in test set we need to account for this metric.
     :return:
     """
 
@@ -47,42 +47,13 @@ def create_train_test_split(x, y, early_warning_interval: int, future_prediction
     print(fire_1_length, fire_2_length)
     print()
 
-    # We start from the beginning, grabbing everything from the start, up to right before the early_war_interval before
-    # fire 1 starts and put in train set
+    # We start from the beginning, grabbing everything from the start and up to 85% of entire fire 1
     train_set = (
-        x[:fire_1_start],
-        y[:fire_1_start]
+        x[:fire_1_end - int(fire_1_length * fire_amount)],
+        y[:fire_1_end - int(fire_1_length * fire_amount)]
     )
 
-    print("Train set first part before the fire 1: ")
-    print(train_set[0].shape, train_set[1].shape)
-    print()
-
-    # Then we grab configurable amount of readings right before fire 1 and put inside early_war_test
-    # early_warning_test_1 = (
-    #     x[fire_1_start - early_warning_interval:fire_1_start + future_prediction],
-    #     y[fire_1_start - early_warning_interval:fire_1_start + future_prediction]
-    # )
-    #
-    # print("Early warning test for fire 1: ")
-    # print(early_warning_test_1[0].shape, early_warning_test_1[1].shape)
-    # # print(early_warning_test[1])
-    # print()
-
-    # Then we grab 85% of the fire 1 for training
-    fire_1_train_x = x[fire_1_start + future_prediction:fire_1_end - int(fire_1_length * fire_amount)]
-    fire_1_train_y = y[fire_1_start + future_prediction:fire_1_end - int(fire_1_length * fire_amount)]
-
-    print("Fire 1 for train: ")
-    print(fire_1_train_x.shape, fire_1_train_y.shape)
-    print()
-
-    train_set = (
-        np.concatenate([train_set[0], fire_1_train_x], axis=0),
-        np.concatenate([train_set[1], fire_1_train_y], axis=0)
-    )
-
-    print("Test set combined: ")
+    print("Train set, first part and 85% of fire 1: ")
     print(train_set[0].shape, train_set[1].shape)
     print()
 
@@ -149,25 +120,19 @@ def create_train_test_split(x, y, early_warning_interval: int, future_prediction
 
     # We get another 8000 readings after fire 2 for training
     train_set = (
-        np.concatenate([train_set[0], x[fire_2_end:fire_2_end + 8000]], axis=0),
-        np.concatenate([train_set[1], y[fire_2_end:fire_2_end + 8000]], axis=0)
+        np.concatenate([train_set[0], x[fire_2_end:fire_2_end + 5000]], axis=0),
+        np.concatenate([train_set[1], y[fire_2_end:fire_2_end + 5000]], axis=0)
     )
 
     # The rest goes to clam_test
-
     calm_test = (
-        x[fire_2_end + 8000:],
-        y[fire_2_end + 8000:]
+        x[fire_2_end + 5000:],
+        y[fire_2_end + 5000:]
     )
 
     print("Train set: ")
     print(train_set[0].shape, train_set[1].shape)
     print()
-
-    #print("Early warning test 1: ")
-    #print(early_warning_test_1[0].shape, early_warning_test_1[1].shape)
-    # print(early_warning_test[1])
-    #print()
 
     print("Early warning test 2: ")
     print(early_warning_test_2[0].shape, early_warning_test_2[1].shape)

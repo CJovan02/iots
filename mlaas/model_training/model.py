@@ -1,44 +1,46 @@
 import pandas as pd
-from keras.src.losses import mean_absolute_error
-
-from matplotlib import pyplot as plt
 
 from sklearn.preprocessing import StandardScaler
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import ModelCheckpoint
 
+from model_training.prediction_tests import test_predictions
 from model_training.sliding_window import create_sliding_window, create_sliding_window_for_early_warning
 from model_training.train_test_split import create_train_test_split
+from model_training.utils import print_last_20_percent
 
 # import sys
 # import numpy as np
-#
 # np.set_printoptions(threshold=sys.maxsize)
 
-WINDOW_SIZE = 80
+WINDOW_SIZE = 70
 EARLY_WARNING_WINDOW = 700
 
-# We don't use all the features since the server doesn't store all the features
+# We don't use all the features since the server doesn't store all of them.
 # This is for project simplicity reasons
 features = ["Temperature[C]", "Humidity[%]", "TVOC[ppb]", "eCO2[ppm]", "Raw H2", "Raw Ethanol", "PM2.5", ]
 label = "Fire Alarm"
 
 # Load the dataset
-df = pd.read_csv("../data/smoke_detection_iot.csv")
+df = pd.read_csv("smoke_detection_iot.csv")
 
 x = df[features]
 y = df[label].values
-
-# y.plot()
-# plt.show()
 
 print(x.head())
 
 # Create train_test split
 train_set_raw, early_warning_test_2_raw, fire_test_raw, calm_test_raw = \
     create_train_test_split(x, y, 2000)
+
+y = train_set_raw[0]
+split_idx = int(0.8 * len(y))
+
+val_y = y[split_idx:]
+train_y_only = y[:split_idx]
 
 # LSTM requires scaled labels
 # Fit scaler only on train
@@ -49,11 +51,6 @@ train_set_raw = (
 )
 
 # Transform test sets
-# early_warning_test_1_raw = (
-#     scaler.transform(early_warning_test_1_raw[0]),
-#     early_warning_test_1_raw[1]
-# )
-
 early_warning_test_2_raw = (
     scaler.transform(early_warning_test_2_raw[0]),
     early_warning_test_2_raw[1]
@@ -70,27 +67,23 @@ calm_test_raw = (
 )
 
 # Only after splitting we create sliding windows
+
+# Train set includes a window before fire starts, so we pass the *fire_start_idx* in order to have a linear increase of
+# y label before the fire 1
 train_x, train_y = create_sliding_window_for_early_warning(train_set_raw, WINDOW_SIZE, 3177, EARLY_WARNING_WINDOW)
+#print_last_20_percent((train_x, train_y))
 
-#print(train_set_raw[1][3177])
-# early_war_1_x, early_war_1_y = \
-#     create_sliding_window_for_early_warning(
-#         early_warning_test_1_raw[0],
-#         WINDOW_SIZE,
-#         len(early_warning_test_1_raw[1]) - 1,
-#         EARLY_WARNING_WINDOW)
-
-early_war_2_x, early_war_2_y = \
+# This test set includes only the period before fire 2 starts, so the fire start index is the last inside y array
+early_warning_test = \
     create_sliding_window_for_early_warning(
         early_warning_test_2_raw,
         WINDOW_SIZE,
         len(early_warning_test_2_raw[1]) - 1,
         EARLY_WARNING_WINDOW)
 
-#print(early_war_2_y)
-
-fire_test_x, fire_test_y = create_sliding_window(fire_test_raw, WINDOW_SIZE)
-calm_test_x, calm_test_y = create_sliding_window(calm_test_raw, WINDOW_SIZE)
+# The rest of test sets don't include transitional period
+fire_test = create_sliding_window(fire_test_raw, WINDOW_SIZE)
+calm_test = create_sliding_window(calm_test_raw, WINDOW_SIZE)
 
 # Neural network
 model = Sequential()
@@ -104,56 +97,29 @@ model.add(Dense(1, activation='sigmoid'))
 
 print(model.summary())
 
-# cp = ModelCheckpoint("model.keras", save_best_only=True)
+# After all epochs are completed, it will look for the epoch that has the smallest "val_loss" and it will save it.
+cp = ModelCheckpoint(
+    filepath="model_artifacts/model.keras",
+    save_best_only=True,
+    monitor="val_loss",
+    mode="min",
+    verbose=1
+)
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='mse', metrics=['mae'])
 
-# Training
-model.fit(train_x, train_y, epochs=10, batch_size=64, validation_split=0.2)
+# This trains the model. Validation split=0.2 grabs the last 20% of the train set to use as a validation
+model.fit(
+    train_x, train_y,
+    epochs=50,
+    batch_size=64,
+    validation_split=0.2,
+    shuffle=False,
+    callbacks=[cp]
+)
 
-# Predictions
+from tensorflow.keras.models import load_model
 
-# Early fire 1
-# early_war_1_pred = model.predict(early_war_1_x).flatten()
-# #early_war_1_pred = (early_war_1_pred > 0.5).astype(int)
-#
-# print("Early fire 1 warning test")
-# print(mean_absolute_error(early_war_1_y, early_war_1_pred))
-#
-# early_war_results = pd.DataFrame(data={"Train Predictions": early_war_1_pred, "Actual Values": early_war_1_y})
-# plt.plot(early_war_results["Train Predictions"])
-# plt.plot(early_war_results["Actual Values"])
-# plt.show()
+best_model = load_model("model_artifacts/model.keras")
 
-
-# Early fire 2
-early_war_2_pred = model.predict(early_war_2_x).flatten()
-#early_war_2_pred = (early_war_2_pred > 0.5).astype(int)
-
-print("Early fire 2 warning test")
-print(mean_absolute_error(early_war_2_y, early_war_2_pred))
-
-early_war_results = pd.DataFrame(data={"Train Predictions": early_war_2_pred, "Actual Values": early_war_2_y})
-plt.plot(early_war_results["Train Predictions"])
-plt.plot(early_war_results["Actual Values"])
-plt.show()
-
-# Fire test
-fire_test_pred = model.predict(fire_test_x).flatten()
-#fire_test_pred = (fire_test_pred > 0.5).astype(int)
-
-print(mean_absolute_error(fire_test_y, fire_test_pred))
-fire_test_results = pd.DataFrame(data={"Train Predictions": fire_test_pred, "Actual Values": fire_test_y})
-plt.plot(fire_test_results["Train Predictions"])
-plt.plot(fire_test_results["Actual Values"])
-plt.show()
-
-
-# Calm test
-calm_test_pred = model.predict(calm_test_x).flatten()
-#calm_test_pred = (calm_test_pred > 0.5).astype(int)
-
-print(mean_absolute_error(calm_test_y, calm_test_pred))
-calm_test_results = pd.DataFrame(data={"Train Predictions": calm_test_pred, "Actual Values": calm_test_y})
-plt.plot(calm_test_results["Train Predictions"])
-plt.plot(calm_test_results["Actual Values"])
-plt.show()
+# Testing the model
+test_predictions(best_model, early_warning_test, fire_test, calm_test)
