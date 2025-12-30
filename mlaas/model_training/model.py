@@ -10,14 +10,13 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from model_training.prediction_tests import test_predictions
 from model_training.sliding_window import create_sliding_window, create_sliding_window_for_early_warning
 from model_training.train_test_split import create_train_test_split
-from model_training.utils import print_last_20_percent
 
 # import sys
 # import numpy as np
 # np.set_printoptions(threshold=sys.maxsize)
 
-WINDOW_SIZE = 70
-EARLY_WARNING_WINDOW = 700
+WINDOW_SIZE = 40
+EARLY_WARNING_WINDOW = 500
 
 # We don't use all the features since the server doesn't store all of them.
 # This is for project simplicity reasons
@@ -34,7 +33,7 @@ print(x.head())
 
 # Create train_test split
 train_set_raw, early_warning_test_2_raw, fire_test_raw, calm_test_raw = \
-    create_train_test_split(x, y, 2000)
+    create_train_test_split(x, y, 1000)
 
 y = train_set_raw[0]
 split_idx = int(0.8 * len(y))
@@ -99,7 +98,7 @@ print(model.summary())
 
 # After all epochs are completed, it will look for the epoch that has the smallest "val_loss" and it will save it.
 cp = ModelCheckpoint(
-    filepath="model_artifacts/model.keras",
+    filepath="../model_artifacts/model.keras",
     save_best_only=True,
     monitor="val_loss",
     mode="min",
@@ -119,7 +118,7 @@ model.fit(
 
 from tensorflow.keras.models import load_model
 
-best_model = load_model("model_artifacts/model.keras")
+best_model = load_model("../model_artifacts/model.keras")
 
 # Testing the model
 test_predictions(best_model, early_warning_test, fire_test, calm_test)

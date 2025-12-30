@@ -1,4 +1,0 @@
-Early fire 2 warning test: 0.50976
-Fire test: 0.15403916
-Calm test: 0.56609774
-
