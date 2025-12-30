@@ -1,2 +1,2 @@
-fastapi
-tensorflow
+fastapi[standard]==0.128.0
+tensorflow==2.20.0

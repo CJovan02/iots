@@ -75,6 +75,12 @@ services:
       ECO2_THRESHOLD: ${ECO2_THRESHOLD:-2000}
       TEMPERATURE_THRESHOLD: ${TEMPERATURE_THRESHOLD:-50}
 
+  mlaas:
+    build: ../mlaas/
+    container_name: mlaas
+    ports:
+      - ${MLAAS_PORT}:8080
+
   # Client apps
   mqtt-client:
     build: ../mqtt-client/

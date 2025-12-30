@@ -1,11 +1,13 @@
-FROM python:3
+FROM python:3.13
 
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY app ./app
+COPY model_artifacts ./model_artifacts
 
-ENTRYPOINT [ "python", "./mlaas.py" ]
-CMD [ ]
+EXPOSE 8080
+
+CMD [ "fastapi", "run", "./app/main.py", "--port", "8080" ]
