@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/cjovan02/iots/analytics/internal/analyser"
 	"github.com/cjovan02/iots/analytics/internal/config"
 	"github.com/cjovan02/iots/analytics/internal/mqtt"
 )
@@ -20,7 +21,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	client, err := mqtt.NewReadingsClient(cfg.MqttBroker, cfg.MqttClientID)
+	an := analyser.NewAnalyser(cfg.MlaasUrl)
+
+	client, err := mqtt.NewReadingsClient(cfg.MqttBroker, cfg.MqttClientID, an)
 	if err != nil {
 		log.Fatal(err)
 	}

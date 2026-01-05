@@ -3,7 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from tensorflow.keras.models import load_model
 
-from app.dto import PredictionRequest
+from app.dto import PredictionRequest, PredictionResponse
 from app.utils.converters import y_to_float, request_to_x
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,9 +16,9 @@ app = FastAPI()
 async def root():
     return {"message": "Welcome to the MLaaS API"}
 
-@app.post("/predict")
+@app.post("/predict", response_model=PredictionResponse)
 def predict(request: PredictionRequest):
     x = request_to_x(request)
     y = model.predict(x)
 
-    return {"prediction": y_to_float(y)}
+    return PredictionResponse(prediction=y_to_float(y))

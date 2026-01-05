@@ -1,17 +1,21 @@
 package mqtt
 
 import (
+	json2 "encoding/json"
 	"log"
 
+	"github.com/cjovan02/iots/analytics/internal/analyser"
+	"github.com/cjovan02/iots/analytics/internal/domain"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 type ReadingsClient struct {
-	client mqtt.Client
+	client   mqtt.Client
+	analyser *analyser.Analyser
 }
 
 // NewReadingsClient creates readings client instance and connects to broker
-func NewReadingsClient(broker string, clientId string) (*ReadingsClient, error) {
+func NewReadingsClient(broker string, clientId string, analyser *analyser.Analyser) (*ReadingsClient, error) {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(broker)
 	opts.ClientID = clientId
@@ -29,7 +33,7 @@ func NewReadingsClient(broker string, clientId string) (*ReadingsClient, error) 
 		return nil, token.Error()
 	}
 
-	return &ReadingsClient{client: client}, nil
+	return &ReadingsClient{client: client, analyser: analyser}, nil
 }
 
 func (c *ReadingsClient) Subscribe(topic string) error {
@@ -48,4 +52,18 @@ func (c *ReadingsClient) Disconnect() {
 
 func (c *ReadingsClient) handleMessage(_ mqtt.Client, message mqtt.Message) {
 	log.Printf("received message from topic: %s\n", message.Topic())
+
+	// Convert message to domain model
+	var reading domain.Reading
+	err := json2.Unmarshal(message.Payload(), &reading)
+	if err != nil {
+		log.Printf(
+			"❌ error trying to unmarshal message. topic=%s, payload=%s, err=%v\n",
+			message.Topic(), message.Payload(), err,
+		)
+		return
+	}
+
+	// Call MLAAS REST API to analyze the data
+	c.analyser.Predict(reading)
 }

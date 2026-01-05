@@ -14,7 +14,7 @@ PositiveInt = Annotated[int, AfterValidator(is_positive)]
 
 class Reading(BaseModel):
     temperature: float
-    humidity: PositiveInt
+    humidity: float
     tvoc: PositiveInt
     e_co2: PositiveInt
     raw_hw: PositiveInt

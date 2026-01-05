@@ -9,6 +9,7 @@ type Config struct {
 	MqttBroker         string
 	MqttClientID       string
 	MqttSubscribeTopic string
+	MlaasUrl           string
 }
 
 func LoadConfig() (*Config, error) {
@@ -16,6 +17,7 @@ func LoadConfig() (*Config, error) {
 		MqttBroker:         os.Getenv("MQTT_BROKER"),
 		MqttClientID:       os.Getenv("MQTT_CLIENT_ID"),
 		MqttSubscribeTopic: os.Getenv("MQTT_SUBSCRIBE_TOPIC"),
+		MlaasUrl:           os.Getenv("MLAAS_URL"),
 	}
 
 	if cfg.MqttBroker == "" {
@@ -28,6 +30,10 @@ func LoadConfig() (*Config, error) {
 
 	if cfg.MqttSubscribeTopic == "" {
 		return nil, fmt.Errorf("MQTT_SUBSCRIBE_TOPIC env variable not set")
+	}
+
+	if cfg.MlaasUrl == "" {
+		return nil, fmt.Errorf("MLAAS_URL env variable not set")
 	}
 
 	return cfg, nil

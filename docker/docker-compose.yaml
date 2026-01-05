@@ -90,6 +90,7 @@ services:
       MQTT_BROKER: tcp://mosquitto:1883
       MQTT_CLIENT_ID: analytics
       MQTT_SUBSCRIBE_TOPIC: data-manager/raw-readings
+      MLAAS_URL: http://mlaas:8080
 
   # Client apps
   mqtt-client:
