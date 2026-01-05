@@ -1,5 +1,5 @@
 # USER FRIENDLY FORMAT IS HERE:
-# https://studio.asyncapi.com/?share=969ab085-2900-4d76-9b4e-8e9355422e6e
+# https://studio.asyncapi.com/?share=29535030-af5c-4154-93de-8d061a0c85b0
 
 asyncapi: 3.0.0
 info:
@@ -72,6 +72,9 @@ components:
         id:
           type: string
           description: Id of the object in database
+        device_id:
+          type: string
+          description: Id of the device that recorded this reading
         timestamp:
           type: integer
           description: Raw UTC timestamp of the reading
@@ -101,6 +104,7 @@ components:
           description: Ground truth, 1 if fire is present
       example:
         id: 449
+        device_id: "device-1"
         timestamp: 1654733345
         temperature: 20.204
         humidity: 51.17

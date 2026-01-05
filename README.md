@@ -180,7 +180,7 @@ Upon creating new sensor reading, either from ```Create``` or ```BatchCreate``` 
 
 Async api specification is at ```/data-manager/data-manager-async-api.yaml```, or:
 
-[View AsyncAPI in AsyncApi Studio](https://studio.asyncapi.com/?share=56aed91b-f696-4693-8d2b-9cc0fced1fa0)
+[View AsyncAPI in AsyncApi Studio](https://studio.asyncapi.com/?share=376c4c03-7b1c-4ddd-b4f0-ec17d12f27b7)
 
 ### Event Manager
 - **Language**: Go
@@ -190,7 +190,7 @@ Consume messages from ```data-manager/raw-readings``` topic, if certain fields e
 
 Async api specification is at ```/event-manager/event-manager-async-api.yaml```, or:
 
-[View AsyncApi in AsyncAPi Studio](https://studio.asyncapi.com/?share=969ab085-2900-4d76-9b4e-8e9355422e6e)
+[View AsyncApi in AsyncAPi Studio](https://studio.asyncapi.com/?share=29535030-af5c-4154-93de-8d061a0c85b0)
 
 ### MQTT Client
 - **Language**: Python
