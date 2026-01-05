@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 type Config struct {
@@ -10,6 +11,7 @@ type Config struct {
 	MqttClientID       string
 	MqttSubscribeTopic string
 	MlaasUrl           string
+	WindowSize         uint
 }
 
 func LoadConfig() (*Config, error) {
@@ -18,6 +20,11 @@ func LoadConfig() (*Config, error) {
 		MqttClientID:       os.Getenv("MQTT_CLIENT_ID"),
 		MqttSubscribeTopic: os.Getenv("MQTT_SUBSCRIBE_TOPIC"),
 		MlaasUrl:           os.Getenv("MLAAS_URL"),
+	}
+
+	size, err := getEnvUint("ANALYSE_WINDOW_SIZE")
+	if err != nil {
+		return nil, err
 	}
 
 	if cfg.MqttBroker == "" {
@@ -36,5 +43,21 @@ func LoadConfig() (*Config, error) {
 		return nil, fmt.Errorf("MLAAS_URL env variable not set")
 	}
 
+	cfg.WindowSize = size
+
 	return cfg, nil
+}
+
+func getEnvUint(key string) (uint, error) {
+	val := os.Getenv(key)
+	if val == "" {
+		return 0, fmt.Errorf("%s env variable not set", key)
+	}
+
+	i, err := strconv.ParseUint(val, 10, 32)
+	if err != nil {
+		return 0, err
+	}
+
+	return uint(i), nil
 }

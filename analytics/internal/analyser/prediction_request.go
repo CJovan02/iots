@@ -12,6 +12,22 @@ type Reading struct {
 	PM25        float64 `json:"pm_25"`
 }
 
+type PredictionRequest struct {
+	Readings []Reading `json:"readings"`
+}
+
+func FromDomainReadings(readings []domain.Reading) *PredictionRequest {
+	dtoReadings := make([]Reading, len(readings))
+
+	for i, reading := range readings {
+		dtoReadings[i] = *FromDomainReading(reading)
+	}
+
+	return &PredictionRequest{
+		Readings: dtoReadings,
+	}
+}
+
 func FromDomainReading(r domain.Reading) *Reading {
 	return &Reading{
 		Temperature: r.Temperature,

@@ -65,5 +65,12 @@ func (c *ReadingsClient) handleMessage(_ mqtt.Client, message mqtt.Message) {
 	}
 
 	// Call MLAAS REST API to analyze the data
-	c.analyser.Predict(reading)
+	resp, analysed, err := c.analyser.AddReading(reading)
+	if err != nil {
+		log.Printf("error adding reading. error=%v\n", err)
+	}
+
+	if analysed {
+		log.Printf("prediction for device id: %s, is %f", reading.DeviceId, resp.Prediction)
+	}
 }

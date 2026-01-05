@@ -21,7 +21,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	an := analyser.NewAnalyser(cfg.MlaasUrl)
+	an := analyser.NewAnalyser(cfg.MlaasUrl, cfg.WindowSize)
 
 	client, err := mqtt.NewReadingsClient(cfg.MqttBroker, cfg.MqttClientID, an)
 	if err != nil {

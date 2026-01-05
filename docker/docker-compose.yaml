@@ -91,6 +91,7 @@ services:
       MQTT_CLIENT_ID: analytics
       MQTT_SUBSCRIBE_TOPIC: data-manager/raw-readings
       MLAAS_URL: http://mlaas:8080
+      ANALYSE_WINDOW_SIZE: ${ANALYSE_WINDOW_SIZE}
 
   # Client apps
   mqtt-client:
