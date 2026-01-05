@@ -212,15 +212,16 @@ func (x *GetReadingRequest) GetId() uint32 {
 type GetReadingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Timestamp     int64                  `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	Temperature   float64                `protobuf:"fixed64,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
-	Humidity      float64                `protobuf:"fixed64,4,opt,name=humidity,proto3" json:"humidity,omitempty"`
-	Tvoc          uint32                 `protobuf:"varint,5,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
-	ECo2          uint32                 `protobuf:"varint,6,opt,name=e_co2,json=eCo2,proto3" json:"e_co2,omitempty"`
-	RawHw         uint32                 `protobuf:"varint,7,opt,name=raw_hw,json=rawHw,proto3" json:"raw_hw,omitempty"`
-	RawEthanol    uint32                 `protobuf:"varint,8,opt,name=raw_ethanol,json=rawEthanol,proto3" json:"raw_ethanol,omitempty"`
-	Pm_25         float64                `protobuf:"fixed64,9,opt,name=pm_25,json=pm25,proto3" json:"pm_25,omitempty"`
-	FireAlarm     uint32                 `protobuf:"varint,10,opt,name=fire_alarm,json=fireAlarm,proto3" json:"fire_alarm,omitempty"`
+	DeviceId      string                 `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	Timestamp     int64                  `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Temperature   float64                `protobuf:"fixed64,4,opt,name=temperature,proto3" json:"temperature,omitempty"`
+	Humidity      float64                `protobuf:"fixed64,5,opt,name=humidity,proto3" json:"humidity,omitempty"`
+	Tvoc          uint32                 `protobuf:"varint,6,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
+	ECo2          uint32                 `protobuf:"varint,7,opt,name=e_co2,json=eCo2,proto3" json:"e_co2,omitempty"`
+	RawHw         uint32                 `protobuf:"varint,8,opt,name=raw_hw,json=rawHw,proto3" json:"raw_hw,omitempty"`
+	RawEthanol    uint32                 `protobuf:"varint,9,opt,name=raw_ethanol,json=rawEthanol,proto3" json:"raw_ethanol,omitempty"`
+	Pm_25         float64                `protobuf:"fixed64,10,opt,name=pm_25,json=pm25,proto3" json:"pm_25,omitempty"`
+	FireAlarm     uint32                 `protobuf:"varint,11,opt,name=fire_alarm,json=fireAlarm,proto3" json:"fire_alarm,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -260,6 +261,13 @@ func (x *GetReadingResponse) GetId() uint32 {
 		return x.Id
 	}
 	return 0
+}
+
+func (x *GetReadingResponse) GetDeviceId() string {
+	if x != nil {
+		return x.DeviceId
+	}
+	return ""
 }
 
 func (x *GetReadingResponse) GetTimestamp() int64 {
@@ -498,14 +506,15 @@ func (x *GetStatisticsResponse) GetNoFireAlarmCount() uint32 {
 type CreateReadingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Timestamp     int64                  `protobuf:"varint,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	Temperature   float64                `protobuf:"fixed64,2,opt,name=temperature,proto3" json:"temperature,omitempty"`
-	Humidity      float64                `protobuf:"fixed64,3,opt,name=humidity,proto3" json:"humidity,omitempty"`
-	Tvoc          uint32                 `protobuf:"varint,4,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
-	ECo2          uint32                 `protobuf:"varint,5,opt,name=e_co2,json=eCo2,proto3" json:"e_co2,omitempty"`
-	RawHw         uint32                 `protobuf:"varint,6,opt,name=raw_hw,json=rawHw,proto3" json:"raw_hw,omitempty"`
-	RawEthanol    uint32                 `protobuf:"varint,7,opt,name=raw_ethanol,json=rawEthanol,proto3" json:"raw_ethanol,omitempty"`
-	Pm_25         float64                `protobuf:"fixed64,8,opt,name=pm_25,json=pm25,proto3" json:"pm_25,omitempty"`
-	FireAlarm     uint32                 `protobuf:"varint,9,opt,name=fire_alarm,json=fireAlarm,proto3" json:"fire_alarm,omitempty"`
+	DeviceId      *string                `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3,oneof" json:"device_id,omitempty"`
+	Temperature   float64                `protobuf:"fixed64,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
+	Humidity      float64                `protobuf:"fixed64,4,opt,name=humidity,proto3" json:"humidity,omitempty"`
+	Tvoc          uint32                 `protobuf:"varint,5,opt,name=tvoc,proto3" json:"tvoc,omitempty"`
+	ECo2          uint32                 `protobuf:"varint,6,opt,name=e_co2,json=eCo2,proto3" json:"e_co2,omitempty"`
+	RawHw         uint32                 `protobuf:"varint,7,opt,name=raw_hw,json=rawHw,proto3" json:"raw_hw,omitempty"`
+	RawEthanol    uint32                 `protobuf:"varint,8,opt,name=raw_ethanol,json=rawEthanol,proto3" json:"raw_ethanol,omitempty"`
+	Pm_25         float64                `protobuf:"fixed64,9,opt,name=pm_25,json=pm25,proto3" json:"pm_25,omitempty"`
+	FireAlarm     uint32                 `protobuf:"varint,10,opt,name=fire_alarm,json=fireAlarm,proto3" json:"fire_alarm,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -545,6 +554,13 @@ func (x *CreateReadingRequest) GetTimestamp() int64 {
 		return x.Timestamp
 	}
 	return 0
+}
+
+func (x *CreateReadingRequest) GetDeviceId() string {
+	if x != nil && x.DeviceId != nil {
+		return *x.DeviceId
+	}
+	return ""
 }
 
 func (x *CreateReadingRequest) GetTemperature() float64 {
@@ -904,21 +920,22 @@ const file_reading_proto_rawDesc = "" +
 	"\x14ListReadingsResponse\x12/\n" +
 	"\breadings\x18\x01 \x03(\v2\x13.GetReadingResponseR\breadings\"#\n" +
 	"\x11GetReadingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\x95\x02\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"\xb2\x02\n" +
 	"\x12GetReadingResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1c\n" +
-	"\ttimestamp\x18\x02 \x01(\x03R\ttimestamp\x12 \n" +
-	"\vtemperature\x18\x03 \x01(\x01R\vtemperature\x12\x1a\n" +
-	"\bhumidity\x18\x04 \x01(\x01R\bhumidity\x12\x12\n" +
-	"\x04tvoc\x18\x05 \x01(\rR\x04tvoc\x12\x13\n" +
-	"\x05e_co2\x18\x06 \x01(\rR\x04eCo2\x12\x15\n" +
-	"\x06raw_hw\x18\a \x01(\rR\x05rawHw\x12\x1f\n" +
-	"\vraw_ethanol\x18\b \x01(\rR\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1b\n" +
+	"\tdevice_id\x18\x02 \x01(\tR\bdeviceId\x12\x1c\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\x12 \n" +
+	"\vtemperature\x18\x04 \x01(\x01R\vtemperature\x12\x1a\n" +
+	"\bhumidity\x18\x05 \x01(\x01R\bhumidity\x12\x12\n" +
+	"\x04tvoc\x18\x06 \x01(\rR\x04tvoc\x12\x13\n" +
+	"\x05e_co2\x18\a \x01(\rR\x04eCo2\x12\x15\n" +
+	"\x06raw_hw\x18\b \x01(\rR\x05rawHw\x12\x1f\n" +
+	"\vraw_ethanol\x18\t \x01(\rR\n" +
 	"rawEthanol\x12\x13\n" +
-	"\x05pm_25\x18\t \x01(\x01R\x04pm25\x12\x1d\n" +
+	"\x05pm_25\x18\n" +
+	" \x01(\x01R\x04pm25\x12\x1d\n" +
 	"\n" +
-	"fire_alarm\x18\n" +
-	" \x01(\rR\tfireAlarm\"P\n" +
+	"fire_alarm\x18\v \x01(\rR\tfireAlarm\"P\n" +
 	"\x14GetStatisticsRequest\x12\x1d\n" +
 	"\n" +
 	"start_time\x18\x01 \x01(\x03R\tstartTime\x12\x19\n" +
@@ -934,19 +951,23 @@ const file_reading_proto_rawDesc = "" +
 	"\bsum_tvoc\x18\b \x01(\rR\asumTvoc\x12(\n" +
 	"\x10fire_alarm_count\x18\t \x01(\rR\x0efireAlarmCount\x12-\n" +
 	"\x13no_fire_alarm_count\x18\n" +
-	" \x01(\rR\x10noFireAlarmCount\"\x87\x02\n" +
+	" \x01(\rR\x10noFireAlarmCount\"\xb7\x02\n" +
 	"\x14CreateReadingRequest\x12\x1c\n" +
 	"\ttimestamp\x18\x01 \x01(\x03R\ttimestamp\x12 \n" +
-	"\vtemperature\x18\x02 \x01(\x01R\vtemperature\x12\x1a\n" +
-	"\bhumidity\x18\x03 \x01(\x01R\bhumidity\x12\x12\n" +
-	"\x04tvoc\x18\x04 \x01(\rR\x04tvoc\x12\x13\n" +
-	"\x05e_co2\x18\x05 \x01(\rR\x04eCo2\x12\x15\n" +
-	"\x06raw_hw\x18\x06 \x01(\rR\x05rawHw\x12\x1f\n" +
-	"\vraw_ethanol\x18\a \x01(\rR\n" +
+	"\tdevice_id\x18\x02 \x01(\tH\x00R\bdeviceId\x88\x01\x01\x12 \n" +
+	"\vtemperature\x18\x03 \x01(\x01R\vtemperature\x12\x1a\n" +
+	"\bhumidity\x18\x04 \x01(\x01R\bhumidity\x12\x12\n" +
+	"\x04tvoc\x18\x05 \x01(\rR\x04tvoc\x12\x13\n" +
+	"\x05e_co2\x18\x06 \x01(\rR\x04eCo2\x12\x15\n" +
+	"\x06raw_hw\x18\a \x01(\rR\x05rawHw\x12\x1f\n" +
+	"\vraw_ethanol\x18\b \x01(\rR\n" +
 	"rawEthanol\x12\x13\n" +
-	"\x05pm_25\x18\b \x01(\x01R\x04pm25\x12\x1d\n" +
+	"\x05pm_25\x18\t \x01(\x01R\x04pm25\x12\x1d\n" +
 	"\n" +
-	"fire_alarm\x18\t \x01(\rR\tfireAlarm\"'\n" +
+	"fire_alarm\x18\n" +
+	" \x01(\rR\tfireAlarmB\f\n" +
+	"\n" +
+	"_device_id\"'\n" +
 	"\x15CreateReadingResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\"^\n" +
 	"\x1aBatchCreateReadingsRequest\x12@\n" +
@@ -1038,6 +1059,7 @@ func file_reading_proto_init() {
 	if File_reading_proto != nil {
 		return
 	}
+	file_reading_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

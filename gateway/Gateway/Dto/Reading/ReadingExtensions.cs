@@ -19,6 +19,7 @@ public static class ReadingExtensions
         return new CreateReadingRequest
         {
             Timestamp = query.Timestamp,
+            DeviceId = query.DeviceId ?? "",
             Temperature = query.Temperature,
             Humidity = query.Humidity,
             Tvoc = (uint)query.Tvoc,

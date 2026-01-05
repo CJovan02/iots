@@ -4,6 +4,7 @@ namespace Gateway.Dto.Reading.Response;
 
 public sealed record ReadingResponse(
     uint Id,
+    string DeviceId,
     DateTime Timestamp,
     double Temperature,
     double Humidity,
@@ -20,6 +21,7 @@ public sealed record ReadingResponse(
         return new ReadingResponse
         (
             proto.Id,
+            proto.DeviceId,
             DateTimeOffset.FromUnixTimeSeconds(proto.Timestamp).UtcDateTime,
             proto.Temperature,
             proto.Humidity,

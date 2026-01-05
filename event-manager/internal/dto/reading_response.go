@@ -3,6 +3,7 @@ package dto
 // ReadingResponse message format received from topic "data-manager/raw-readings"
 type ReadingResponse struct {
 	Id          uint32  `json:"id"`
+	DeviceId    string  `json:"device_id"`   // DeviceId is the id of the device that recorded this reading
 	Timestamp   int64   `json:"timestamp"`   // Raw UTC timestamp
 	Temperature float64 `json:"temperature"` // Air temperature, fires raise temperature
 	Humidity    float64 `json:"humidity"`    // Air humidity, very high or low can indicate fire

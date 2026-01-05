@@ -107,8 +107,8 @@ func (r *Repository) GetStatistics(ctx context.Context, startTime int64, endTime
 func (r *Repository) Create(ctx context.Context, reading *sensor.Reading) (*uint32, error) {
 	const query = `
 		INSERT INTO sensor_readings 
-		(timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+		(device_id, timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 		RETURNING id
 	`
 
@@ -124,20 +124,20 @@ func (r *Repository) Create(ctx context.Context, reading *sensor.Reading) (*uint
 func (r *Repository) BatchCreate(ctx context.Context, readings []*sensor.Reading) ([]uint32, error) {
 	query := `	
 		INSERT INTO sensor_readings 
-		(timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
+		(device_id, timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
 		VALUES
 	`
 
-	args := make([]any, 0, len(readings)*9)
+	args := make([]any, 0, len(readings)*10)
 	values := make([]string, 0, len(readings))
 
 	i := 1
 	for _, reading := range readings {
 		values = append(values, fmt.Sprintf(
-			"($%d,$%d,$%d,$%d,$%d,$%d,$%d,$%d,$%d)", i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8),
+			"($%d,$%d,$%d,$%d,$%d,$%d,$%d,$%d,$%d,$%d)", i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9),
 		)
 		args = append(args, sensorReadingArgs(reading)...)
-		i += 9
+		i += 10
 	}
 	query += strings.Join(values, ",")
 	query += "RETURNING Id"

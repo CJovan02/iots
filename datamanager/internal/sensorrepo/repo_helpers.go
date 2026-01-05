@@ -10,6 +10,7 @@ func scanSensorReading(row pgx.Row) (*sensor.Reading, error) {
 
 	err := row.Scan(
 		&sr.Id,
+		&sr.DeviceId,
 		&sr.Timestamp,
 		&sr.Temperature,
 		&sr.Humidity,
@@ -36,6 +37,7 @@ func scanSensorReadingValue(row pgx.CollectableRow) (sensor.Reading, error) {
 
 func sensorReadingArgs(r *sensor.Reading) []any {
 	return []any{
+		r.DeviceId,
 		r.Timestamp,
 		r.Temperature,
 		r.Humidity,

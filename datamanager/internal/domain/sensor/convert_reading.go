@@ -7,6 +7,7 @@ import (
 func (r *Reading) ToProto() *sensorpg.GetReadingResponse {
 	return &sensorpg.GetReadingResponse{
 		Id:          r.Id,
+		DeviceId:    r.DeviceId,
 		Timestamp:   r.Timestamp,
 		Temperature: r.Temperature,
 		Humidity:    r.Humidity,
@@ -20,28 +21,32 @@ func (r *Reading) ToProto() *sensorpg.GetReadingResponse {
 }
 
 func ProtoCreateToReading(r *sensorpg.CreateReadingRequest) *Reading {
-	return &Reading{
-		Timestamp:   r.Timestamp,
-		Temperature: r.Temperature,
-		Humidity:    r.Humidity,
-		Tvoc:        r.Tvoc,
-		ECo2:        r.ECo2,
-		RawHw:       r.RawHw,
-		RawEthanol:  r.RawEthanol,
-		PM25:        r.Pm_25,
-		FireAlarm:   r.FireAlarm,
-	}
+	return NewReading(
+		0,
+		*r.DeviceId,
+		r.Timestamp,
+		r.Temperature,
+		r.Humidity,
+		r.Tvoc,
+		r.ECo2,
+		r.RawHw,
+		r.RawEthanol,
+		r.Pm_25,
+		r.FireAlarm)
 }
 
 func ProtoUpdateToReading(r *sensorpg.UpdateReadingRequest) *Reading {
-	return &Reading{
-		Temperature: r.Temperature,
-		Humidity:    r.Humidity,
-		Tvoc:        r.Tvoc,
-		ECo2:        r.ECo2,
-		RawHw:       r.RawHw,
-		RawEthanol:  r.RawEthanol,
-		PM25:        r.Pm_25,
-		FireAlarm:   r.FireAlarm,
-	}
+	return NewReading(
+		0,
+		"",
+		0,
+		r.Temperature,
+		r.Humidity,
+		r.Tvoc,
+		r.ECo2,
+		r.RawHw,
+		r.RawEthanol,
+		r.Pm_25,
+		r.FireAlarm)
+
 }

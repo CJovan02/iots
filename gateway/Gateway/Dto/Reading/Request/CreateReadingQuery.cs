@@ -1,6 +1,7 @@
 namespace Gateway.Dto.Reading.Request;
 
 public sealed record CreateReadingQuery(
+    string? DeviceId,
     long Timestamp,
     double Temperature,
     double Humidity,

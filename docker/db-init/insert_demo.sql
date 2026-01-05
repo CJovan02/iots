@@ -1,5 +1,6 @@
-INSERT INTO sensor_readings (timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
-VALUES ('1654733376',
+INSERT INTO sensor_readings (device_id, timestamp, temperature, humidity, tvoc, e_co2, raw_hw, raw_ethanol, pm_25, fire_alarm)
+VALUES ('device-1',
+        '1654733376',
         20.645,
         55.86,
         8,

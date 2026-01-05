@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Reading:
+    readingId: str
     timestamp: int
     temperature: float
     humidity: float
@@ -15,6 +16,7 @@ class Reading:
     @staticmethod
     def from_dict(data: dict) -> 'Reading':
         return Reading(
+            readingId=data["reading_id"],
             timestamp=int(data['UTC']),
             temperature=float(data["Temperature[C]"]),
             humidity=float(data["Humidity[%]"]),
@@ -28,6 +30,7 @@ class Reading:
 
     def to_dict(self) -> dict:
         return {
+            "reading_id": self.readingId,
             "timestamp": self.timestamp,
             "temperature": self.temperature,
             "humidity": self.humidity,

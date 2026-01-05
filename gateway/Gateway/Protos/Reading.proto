@@ -27,15 +27,16 @@ message GetReadingRequest {
 
 message GetReadingResponse {
   uint32 id = 1;
-  int64 timestamp = 2;
-  double temperature = 3;
-  double humidity = 4;
-  uint32 tvoc = 5;
-  uint32 e_co2 = 6;
-  uint32 raw_hw = 7;
-  uint32 raw_ethanol = 8;
-  double pm_25 = 9;
-  uint32 fire_alarm = 10;
+  string device_id = 2;
+  int64 timestamp = 3;
+  double temperature = 4;
+  double humidity = 5;
+  uint32 tvoc = 6;
+  uint32 e_co2 = 7;
+  uint32 raw_hw = 8;
+  uint32 raw_ethanol = 9;
+  double pm_25 = 10;
+  uint32 fire_alarm = 11;
 }
 
 // Statistics
@@ -60,14 +61,15 @@ message GetStatisticsResponse {
 // Create Reading
 message CreateReadingRequest {
   int64 timestamp = 1;
-  double temperature = 2;
-  double humidity = 3;
-  uint32 tvoc = 4;
-  uint32 e_co2 = 5;
-  uint32 raw_hw = 6;
-  uint32 raw_ethanol = 7;
-  double pm_25 = 8;
-  uint32 fire_alarm = 9;
+  optional string device_id = 2;
+  double temperature = 3;
+  double humidity = 4;
+  uint32 tvoc = 5;
+  uint32 e_co2 = 6;
+  uint32 raw_hw = 7;
+  uint32 raw_ethanol = 8;
+  double pm_25 = 9;
+  uint32 fire_alarm = 10;
 }
 
 message CreateReadingResponse {
