@@ -3,23 +3,19 @@ package main
 import (
 	"context"
 	"log"
-	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/CJovan02/iots/datamanager/internal/api"
 	"github.com/CJovan02/iots/datamanager/internal/config"
 	"github.com/CJovan02/iots/datamanager/internal/db"
 	"github.com/CJovan02/iots/datamanager/internal/domain/sensor"
 	"github.com/CJovan02/iots/datamanager/internal/grpchand"
 	"github.com/CJovan02/iots/datamanager/internal/interceptor"
+	mqtt "github.com/CJovan02/iots/datamanager/internal/mqtt"
 	"github.com/CJovan02/iots/datamanager/internal/sensorrepo"
 	"github.com/CJovan02/iots/datamanager/internal/sensorsvc"
-	"github.com/CJovan02/iots/datamanager/protogen/golang/sensorpg"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
-
-	mqtt "github.com/CJovan02/iots/datamanager/internal/mqtt"
 )
 
 func main() {
@@ -46,7 +42,7 @@ func main() {
 
 	// Create client and connect to MQTT broker
 	var publisher sensor.ReadingsPublisher
-	publisher, err = mqtt.NewReadingsClient(cfg.MqttBroker, cfg.MqttClientId)
+	publisher, err = mqtt.NewReadingsClient(ctx, cfg.MqttBroker, cfg.MqttClientId)
 	if err != nil {
 		log.Fatalf("❌ failed to connect to MQTT broker: %v", err)
 	}
@@ -58,42 +54,31 @@ func main() {
 	// Create gRPC handler
 	var sensorHandler = grpchand.NewSensorHandler(service)
 
-	// Start server
-	listener, err := net.Listen("tcp", ":8080")
+	// Create gRPC server
+	server, err := api.NewGrpcServer(
+		":8080",
+		sensorHandler,
+		interceptor.UnaryServerLoggingInterceptor,
+		interceptor.UnaryServerErrMappingInterceptor,
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Create gRPC server
-	server := grpc.NewServer(
-		grpc.ChainUnaryInterceptor(
-			interceptor.UnaryServerLoggingInterceptor,
-			interceptor.UnaryServerErrMappingInterceptor,
-		),
-	)
-	// Register service handler to server
-	sensorpg.RegisterReadingsServer(server, sensorHandler)
-	reflection.Register(server)
-
-	// Start listening to requests
-	// We put this in go routine in so that we don't block the main thread
-	// We block main thread with "<-ctx.Done()" so that we can have more control over
-	// closing open connections when program exits
+	// Start the server but don't block the main thread
 	go func() {
-		log.Printf("🚀 server listening at %v", listener.Addr())
-		if err := server.Serve(listener); err != nil {
-			if err != grpc.ErrServerStopped {
-				log.Printf("❌ gRPC server error: %v", err)
-				stop()
-			}
+		if err := server.Run(ctx); err != nil {
+			log.Printf("❌ gRPC server error: %v\n", err)
+			stop()
 		}
 	}()
 
 	<-ctx.Done() // channel waits for signal (os.Interrupt or syscall.SIGTERM)
 
+	// All abstraction layers know how to close their connections to external services
+	// when the context cancels
 	log.Println("shutting down...")
 
-	server.GracefulStop()
-	publisher.Disconnect()
+	// Main created the pool, main will close the pool
 	pool.Close()
 }

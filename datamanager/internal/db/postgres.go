@@ -24,7 +24,7 @@ func NewPostgresPool(connString string) (*pgxpool.Pool, error) {
 			return pool, nil
 		}
 
-		log.Printf("DB not ready, retrying...", err)
+		log.Printf("DB not ready, retrying... %v\n", err)
 		time.Sleep(time.Duration(i+1) * time.Second)
 	}
 
