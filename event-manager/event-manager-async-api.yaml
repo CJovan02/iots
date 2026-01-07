@@ -1,9 +1,9 @@
 # USER FRIENDLY FORMAT IS HERE:
-# https://studio.asyncapi.com/?share=29535030-af5c-4154-93de-8d061a0c85b0
+# https://studio.asyncapi.com/?share=9ccc3bf4-9678-4724-9b77-5d0707c85e8d
 
 asyncapi: 3.0.0
 info:
-  title: Smoke Detection Event Manager API
+  title: Smoke Detection Event Manager Service
   version: 1.0.0
   description: >-
     A microservice that checks whether sensor readings exceed   predefined
@@ -11,24 +11,31 @@ info:
   license:
     name: Jovan Cvetkovic
     url: https://www.github.com/cjovan02
+
 servers:
-  production:
-    host: test.mosquitto.org
+  mqtt:
     protocol: mqtt
-    description: Public Mosquitto MQTT broker
+    host: mosquitto:1883
+    description: Internal MQTT message broker (Docker compose service)
+
 channels:
   raw-readings:
+    servers:
+      - $ref: "#/servers/mqtt"
     address: data-manager/raw-readings
     description: The topic on which raw sensor readings may be produced or consumed.
     messages:
       reading:
         $ref: "#/components/messages/reading"
   threshold-readings:
+    servers:
+      - $ref: "#/servers/mqtt"
     address: event-manager/threshold-readings
     description: The topic on which smoke events may be produced of consumed.
     messages:
       smokeEvent:
         $ref: "#/components/messages/smokeEvent"
+
 operations:
   receiveReading:
     action: receive

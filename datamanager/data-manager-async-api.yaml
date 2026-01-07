@@ -1,9 +1,9 @@
 # USER FRIENDLY FORMAT IS HERE:
-# https://studio.asyncapi.com/?share=376c4c03-7b1c-4ddd-b4f0-ec17d12f27b7
+# https://studio.asyncapi.com/?share=1108b914-7669-4c68-b248-7f1930a206ac
 
 asyncapi: 3.0.0
 info:
-  title: Smoke Detection Data Manager API
+  title: Smoke Detection Data Manager service
   version: 1.0.0
   description: >-
     A microservice that manages smoke detection **sensor reading data**, writing it to database, and
@@ -11,18 +11,23 @@ info:
   license:
     name: Jovan Cvetkovic
     url: https://www.github.com/cjovan02
+
 servers:
-  production:
-    host: test.mosquitto.org
+  mqtt:
+    host: mosquitto:1883
     protocol: mqtt
-    description: Public Mosquitto MQTT broker
+    description: Internal MQTT message broker (Docker compose service)
+
 channels:
   raw-readings:
+    servers:
+      - $ref: "#/servers/mqtt"
     address: data-manager/raw-readings
     description: The topic on which raw sensor readings may be produced or consumed.
     messages:
       reading:
         $ref: "#/components/messages/reading"
+
 operations:
   sendReading:
     action: send
