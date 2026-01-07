@@ -7,17 +7,19 @@ import (
 
 	"github.com/cjovan02/iots/analytics/internal/analyser"
 	"github.com/cjovan02/iots/analytics/internal/domain"
+	"github.com/cjovan02/iots/analytics/internal/nats"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 type ReadingsClient struct {
-	client   mqtt.Client
-	analyser *analyser.Analyser
+	client            mqtt.Client
+	analyser          *analyser.Analyser
+	predictionsClient *nats.PredictionsClient
 }
 
 // NewReadingsClient creates readings client instance and connects to broker
 func NewReadingsClient(
-	ctx context.Context, broker string, clientId string, analyser *analyser.Analyser,
+	ctx context.Context, broker string, clientId string, analyser *analyser.Analyser, predClient *nats.PredictionsClient,
 ) (*ReadingsClient, error) {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(broker)
@@ -45,7 +47,7 @@ func NewReadingsClient(
 		}
 	}()
 
-	return &ReadingsClient{client: client, analyser: analyser}, nil
+	return &ReadingsClient{client: client, analyser: analyser, predictionsClient: predClient}, nil
 }
 
 func (c *ReadingsClient) Subscribe(topic string) error {

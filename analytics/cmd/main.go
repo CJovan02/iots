@@ -10,6 +10,7 @@ import (
 	"github.com/cjovan02/iots/analytics/internal/analyser"
 	"github.com/cjovan02/iots/analytics/internal/config"
 	"github.com/cjovan02/iots/analytics/internal/mqtt"
+	"github.com/cjovan02/iots/analytics/internal/nats"
 )
 
 func main() {
@@ -23,12 +24,19 @@ func main() {
 
 	an := analyser.NewAnalyser(cfg.MlaasUrl, cfg.WindowSize)
 
-	client, err := mqtt.NewReadingsClient(ctx, cfg.MqttBroker, cfg.MqttClientID, an)
+	// Create NATS client
+	natsCl, err := nats.NewPredictionsClient(ctx, cfg.NatsBroker, cfg.NatsPublishSubject)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = client.Subscribe(cfg.MqttSubscribeTopic)
+	// Create MQTT client
+	mqttCl, err := mqtt.NewReadingsClient(ctx, cfg.MqttBroker, cfg.MqttClientID, an, natsCl)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = mqttCl.Subscribe(cfg.MqttSubscribeTopic)
 	if err != nil {
 		log.Fatal(err)
 	}

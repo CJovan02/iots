@@ -12,6 +12,8 @@ type Config struct {
 	MqttSubscribeTopic string
 	MlaasUrl           string
 	WindowSize         uint
+	NatsBroker         string
+	NatsPublishSubject string
 }
 
 func LoadConfig() (*Config, error) {
@@ -20,6 +22,8 @@ func LoadConfig() (*Config, error) {
 		MqttClientID:       os.Getenv("MQTT_CLIENT_ID"),
 		MqttSubscribeTopic: os.Getenv("MQTT_SUBSCRIBE_TOPIC"),
 		MlaasUrl:           os.Getenv("MLAAS_URL"),
+		NatsBroker:         os.Getenv("NATS_BROKER"),
+		NatsPublishSubject: os.Getenv("NATS_PUBLISH_SUBJECT"),
 	}
 
 	size, err := getEnvUint("ANALYSE_WINDOW_SIZE")
@@ -41,6 +45,14 @@ func LoadConfig() (*Config, error) {
 
 	if cfg.MlaasUrl == "" {
 		return nil, fmt.Errorf("MLAAS_URL env variable not set")
+	}
+
+	if cfg.NatsBroker == "" {
+		return nil, fmt.Errorf("NATS_BROKER env variable not set")
+	}
+
+	if cfg.NatsPublishSubject == "" {
+		return nil, fmt.Errorf("NATS_PUBLISH_TOPIC env variable not set")
 	}
 
 	cfg.WindowSize = size

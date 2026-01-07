@@ -55,7 +55,7 @@ services:
     image: eclipse-mosquitto
     container_name: mosquitto
     ports:
-      - 1883:1883
+      - 1883:1883 # client connections
     volumes:
       - ./mosquitto/config:/mosquitto/config
 
@@ -63,8 +63,8 @@ services:
     image: nats
     container_name: nats
     ports:
-      - 4222:4222
-
+      - 4222:4222 # client connections
+      - 8222:8222 # monitoring (https)
   event-manager:
     build: ../event-manager/
     container_name: event-manager
@@ -92,12 +92,15 @@ services:
     container_name: analytics
     depends_on:
       - mosquitto
+      - nats
     environment:
       MQTT_BROKER: tcp://mosquitto:1883
       MQTT_CLIENT_ID: analytics
       MQTT_SUBSCRIBE_TOPIC: data-manager/raw-readings
       MLAAS_URL: http://mlaas:8080
       ANALYSE_WINDOW_SIZE: ${ANALYSE_WINDOW_SIZE}
+      NATS_BROKER: nats://nats:4222
+      NATS_PUBLISH_SUBJECT: analytics.predictions
 
   # Client apps
   mqtt-client:
