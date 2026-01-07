@@ -1,6 +1,7 @@
 package mqtt
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -16,7 +17,7 @@ type ReadingsClient struct {
 }
 
 // NewReadingsClient creates readings client instance and connects to broker
-func NewReadingsClient(broker string, clientId string, thresholds *domain.EventThresholds, publishTopic string) (*ReadingsClient, error) {
+func NewReadingsClient(ctx context.Context, broker string, clientId string, thresholds *domain.EventThresholds, publishTopic string) (*ReadingsClient, error) {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(broker)
 	opts.ClientID = clientId
@@ -33,6 +34,15 @@ func NewReadingsClient(broker string, clientId string, thresholds *domain.EventT
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		return nil, token.Error()
 	}
+
+	// Graceful stop
+	go func() {
+		<-ctx.Done()
+		if client.IsConnected() {
+			log.Println("Context canceled, disconnecting MQTT client")
+			client.Disconnect(255)
+		}
+	}()
 
 	return &ReadingsClient{client: client, thresholds: thresholds, publishTopic: publishTopic}, nil
 }

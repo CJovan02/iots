@@ -25,7 +25,7 @@ func main() {
 	}
 
 	// Create client and connect to broker
-	client, err := mqtt.NewReadingsClient(cfg.Broker, cfg.ClientId, cfg.Thresholds, cfg.PublishTopic)
+	client, err := mqtt.NewReadingsClient(ctx, cfg.Broker, cfg.ClientId, cfg.Thresholds, cfg.PublishTopic)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,5 +41,4 @@ func main() {
 	<-ctx.Done()
 
 	log.Println("shutting down...")
-	client.Disconnect()
 }
