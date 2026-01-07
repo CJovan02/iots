@@ -1,6 +1,7 @@
 package mqtt
 
 import (
+	"context"
 	json2 "encoding/json"
 	"log"
 
@@ -15,7 +16,9 @@ type ReadingsClient struct {
 }
 
 // NewReadingsClient creates readings client instance and connects to broker
-func NewReadingsClient(broker string, clientId string, analyser *analyser.Analyser) (*ReadingsClient, error) {
+func NewReadingsClient(
+	ctx context.Context, broker string, clientId string, analyser *analyser.Analyser,
+) (*ReadingsClient, error) {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(broker)
 	opts.ClientID = clientId
@@ -32,6 +35,15 @@ func NewReadingsClient(broker string, clientId string, analyser *analyser.Analys
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		return nil, token.Error()
 	}
+
+	// Graceful stop
+	go func() {
+		<-ctx.Done()
+		if client.IsConnected() {
+			log.Println("Context canceled, disconnecting MQTT client")
+			client.Disconnect(250)
+		}
+	}()
 
 	return &ReadingsClient{client: client, analyser: analyser}, nil
 }
