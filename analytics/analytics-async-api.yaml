@@ -1,0 +1,156 @@
+# USER FRIENDLY FORMAT IS HERE:
+# https://studio.asyncapi.com/?share=bfa23147-f2db-431b-ad2e-9fdb52c3dc3d
+
+asyncapi: 3.0.0
+info:
+  title: Smoke Detection Analytics Service
+  version: 1.0.0
+  description: >-
+    A microservice that subscribes to data-manager MQTT topic and collects sensor readings.
+     
+     When enougn readings are collected it sends them to MLAAS API to analyse the data, results are then published to NATS subject.
+  license:
+    name: Jovan Cvetkovic
+    url: https://www.github.com/cjovan02
+servers:
+  mqtt:
+    protocol: mqtt
+    host: mosquitto:1883
+    description: Internal MQTT message broker (Docker compose service)
+  nats:
+    protocol: nats
+    host: nats:4222
+    description: Internal NATS message broker (Docker compose service)
+
+channels:
+  raw-readings:
+    servers:
+      - $ref: "#/servers/mqtt"
+    address: data-manager/raw-readings
+    description: The topic on which raw sensor readings may be produced or consumed.
+    messages:
+      reading:
+        $ref: "#/components/messages/reading"
+  analytics-predictions:
+    servers:
+      - $ref: "#/servers/nats"
+    address: analytics.predictions
+    description: The subject on which fire predictions may be produced or consumed.
+    messages:
+      prediction:
+        $ref: "#/components/messages/prediction"
+operations:
+  receiveReading:
+    action: receive
+    channel:
+      $ref: "#/channels/raw-readings"
+  sendPrediction:
+    action: send
+    channel:
+      $ref: "#/channels/analytics-predictions"
+components:
+  messages:
+    reading:
+      name: reading
+      title: Raw Sensor Reading
+      summary: Raw Sensor Reading from iot device
+      payload:
+        $ref: "#/components/schemas/readingPayload"
+    prediction:
+      name: prediction
+      title: Fire Prediction
+      summary: Prediction of fire in the near future
+      payload:
+        $ref: "#/components/schemas/predictionPayload"
+  schemas:
+    readingPayload:
+      type: object
+      required:
+        - id
+        - timestamp
+        - temperature
+        - humidity
+        - tvoc
+        - e_co2
+        - raw_hw
+        - raw_ethanol
+        - pm_25
+        - fire_alarm
+      properties:
+        id:
+          type: string
+          description: Id of the object in database
+        device_id:
+          type: string
+          description: Id of the device that recorded this reading
+        timestamp:
+          type: integer
+          description: Raw UTC timestamp of the reading
+        temperature:
+          type: number
+          description: Air temperature, fires raise temperature
+        humidity:
+          type: number
+          description: Air humidity, very high or low can indicate fire
+        tvoc:
+          type: integer
+          description: Total Volatile Organic Compounds, high numbers indicate fire
+        e_co2:
+          type: integer
+          description: CO2 equivalent concentration, indirect signal for combustion
+        raw_hw:
+          type: integer
+          description: Raw molecular hydrogen, additional chemical signal
+        raw_ethanol:
+          type: integer
+          description: Raw ethanol gas, additional chemical signal
+        pm_25:
+          type: number
+          description: Particulate matter <2.5 µm, smoke increases concentrations
+        fire_alarm:
+          type: integer
+          description: Ground truth, 1 if fire is present
+      example:
+        id: 449
+        device_id: "device-1"
+        timestamp: 1654733345
+        temperature: 20.204
+        humidity: 51.17
+        tvoc: 0
+        e_co2: 403
+        raw_hw: 12468
+        raw_ethanol: 19338
+        pm_25: 2.96
+        fire_alarm: 0
+    predictionPayload:
+      type: object
+      required:
+        - prediction
+        - device_id
+        - readings_count
+        - reading_ids
+        - time_interval
+      properties:
+        prediction:
+          type: number
+          description: Float number between 0 and 1. The closer the number is to the 1, the greater the risk of fire in the near future
+        device_id:
+          type: string
+          description: Device ID that recorded the list of readings used for prediction
+        readings_count:
+          type: integer
+          description: Number of readings used for the prediction
+        reading_ids:
+          type: array
+          description: Ids of the readings in database used for prediction
+          items:
+            type: integer
+        time_interval:
+          type: integer
+          description: Time interval between last and first reading in seconds
+      example:
+        prediction: 0.3541
+        device_id: "device-1"
+        readings_count: 5
+        reading_ids: [51, 52, 53, 54, 55]
+        time_interval: 4

@@ -37,7 +37,7 @@ func NewAnalyser(mlaasUrl string, windowSize uint) *Analyser {
 // When enough readings get collected for one type of ReadingId, it will call MLAAS to analyse that data.
 // nil, false, nil is returned when you add the reading but there are not enough readings for that deviceId
 // response, true, nil is returned when there are enough readings and data is analysed
-func (a *Analyser) AddReading(reading domain.Reading) (*PredictionResponse, bool, error) {
+func (a *Analyser) AddReading(reading domain.Reading) (*PredictionResponse, []domain.Reading, bool, error) {
 	key := reading.DeviceId
 
 	// Initialize the array if it doesn't exist
@@ -53,7 +53,7 @@ func (a *Analyser) AddReading(reading domain.Reading) (*PredictionResponse, bool
 		a.windows[key] = window
 		log.Printf(
 			"successfully added reading to the group %s. Window now has %d readings\n", reading.DeviceId, winLen)
-		return nil, false, nil
+		return nil, nil, false, nil
 	}
 
 	log.Printf("group %s, has enough data to analyse\n", reading.DeviceId)
@@ -63,10 +63,10 @@ func (a *Analyser) AddReading(reading domain.Reading) (*PredictionResponse, bool
 	request := FromDomainReadings(window)
 	resp, err := a.predict(request)
 	if err != nil {
-		return nil, false, err
+		return nil, nil, false, err
 	}
 
-	return resp, true, nil
+	return resp, window, true, nil
 }
 
 func (a *Analyser) predict(request *PredictionRequest) (*PredictionResponse, error) {

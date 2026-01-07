@@ -79,12 +79,33 @@ func (c *ReadingsClient) handleMessage(_ mqtt.Client, message mqtt.Message) {
 	}
 
 	// Call MLAAS REST API to analyze the data
-	resp, analysed, err := c.analyser.AddReading(reading)
+	resp, window, analysed, err := c.analyser.AddReading(reading)
 	if err != nil {
 		log.Printf("error adding reading. error=%v\n", err)
 	}
 
+	// Send to NATS broker
 	if analysed {
-		log.Printf("prediction for device id: %s, is %f", reading.DeviceId, resp.Prediction)
+		winLen := len(window)
+		ids := make([]uint32, winLen)
+		for i, reading := range window {
+			ids[i] = reading.Id
+		}
+
+		start := window[0].Timestamp
+		end := window[winLen-1].Timestamp
+
+		mess := nats.PredictionMessage{
+			Prediction:    resp.Prediction,
+			DeviceId:      reading.DeviceId,
+			ReadingsCount: uint32(winLen),
+			ReadingIds:    ids,
+			TimeInterval:  int32(end - start),
+		}
+		
+		err := c.predictionsClient.PublishJson(mess)
+		if err != nil {
+			log.Printf("error publishing message to NATS: %v\n", err)
+		}
 	}
 }

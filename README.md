@@ -214,6 +214,8 @@ Go is fast and reliable for this use case.
 # Project III
 Todo :)
 
+https://studio.asyncapi.com/?share=bfa23147-f2db-431b-ad2e-9fdb52c3dc3d
+
 ---
 
 # Dataset
