@@ -59,6 +59,12 @@ services:
     volumes:
       - ./mosquitto/config:/mosquitto/config
 
+  nats:
+    image: nats
+    container_name: nats
+    ports:
+      - 4222:4222
+
   event-manager:
     build: ../event-manager/
     container_name: event-manager
