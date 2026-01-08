@@ -102,6 +102,8 @@ services:
       NATS_BROKER: nats://nats:4222
       NATS_PUBLISH_SUBJECT: analytics.predictions
 
+
+
   # Client apps
   mqtt-nats-client:
     build: ../mqtt-nats-client/
@@ -112,8 +114,9 @@ services:
     environment:
       MQTT_BROKER_ADDRESS: mosquitto
       MQTT_BROKER_PORT: 1883
+      MQTT_SUBSCRIBE_TOPIC: event-manager/threshold-readings
       NATS_BROKER: nats://nats:4222
-
+      NATS_SUBSCRIBE_SUBJECT: analytics.predictions
 
   sensor-generator:
     build: ../sensor-generator/

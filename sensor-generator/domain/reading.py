@@ -16,7 +16,7 @@ class Reading:
     @staticmethod
     def from_dict(data: dict) -> 'Reading':
         return Reading(
-            readingId=data["reading_id"],
+            readingId="", # We don't have that in dataset, we send empty string and server will generate generic one
             timestamp=int(data['UTC']),
             temperature=float(data["Temperature[C]"]),
             humidity=float(data["Humidity[%]"]),
