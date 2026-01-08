@@ -6,9 +6,9 @@ import logging
 def main():
     try:
         logger = configure_logging(False)
-        address, port = load_envs()
+        address, port, nats_broker = load_envs()
 
-        mqttc = configure_mqtt_client();
+        mqttc = configure_mqtt_client()
         mqttc.connect(address, port)
         mqttc.loop_forever()
     except KeyboardInterrupt:

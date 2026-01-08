@@ -103,8 +103,8 @@ services:
       NATS_PUBLISH_SUBJECT: analytics.predictions
 
   # Client apps
-  mqtt-client:
-    build: ../mqtt-client/
+  mqtt-nats-client:
+    build: ../mqtt-nats-client/
     profiles: ["clients"]
     container_name: mqtt-client
     stdin_open: true            # docker run -i
@@ -112,6 +112,8 @@ services:
     environment:
       MQTT_BROKER_ADDRESS: mosquitto
       MQTT_BROKER_PORT: 1883
+      NATS_BROKER: nats://nats:4222
+
 
   sensor-generator:
     build: ../sensor-generator/

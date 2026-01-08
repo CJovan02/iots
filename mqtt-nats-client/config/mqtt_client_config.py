@@ -44,6 +44,6 @@ def __on_connect(client, userdata, flags, reason_code, properties):
         logger.info(f"❌ Failed to connect: {reason_code}.")
         logger.debug("loop_forever() will retry connection")
     else:
-        logger.info("✅ Connected to message broker")
+        logger.info("✅ Connected to MQTT message broker")
         logger.debug(reason_code)
         client.subscribe("event-manager/threshold-readings")
