@@ -7,11 +7,39 @@ The goal of these projects is to simulate an IoT system by generating sensor dat
 
 # Table of Contents
 
+- [Internet of Things and Services (IoTS)](#internet-of-things-and-services-iots)
+- [Table of Contents](#table-of-contents)
 - [System Architecture](#system-architecture)
 - [How to Run](#how-to-run)
+  - [Prerequisites](#prerequisites)
+    - [Stap 1. Clone the project](#stap-1-clone-the-project)
+    - [Step 2. Navigate to Docker configuration folder](#step-2-navigate-to-docker-configuration-folder)
+    - [Step 3. Create a copy of the example environment file](#step-3-create-a-copy-of-the-example-environment-file)
+    - [Step 4. Run the server](#step-4-run-the-server)
+    - [5. Running the client tools](#5-running-the-client-tools)
+    - [6. Docker cleanup](#6-docker-cleanup)
 - [Project I - Data Management](#project-i---data-management)
+  - [Overview](#overview)
+  - [Services](#services)
+    - [Data Manager](#data-manager)
+    - [Gateway](#gateway)
+    - [Sensor Generator](#sensor-generator)
+  - [Design Decisions](#design-decisions)
+    - [Microservice Architecture](#microservice-architecture)
+    - [REST for External, gRPC for Internal communication](#rest-for-external-grpc-for-internal-communication)
+    - [Go for Data Management Service](#go-for-data-management-service)
 - [Project II - Event driven communication using MQTT](#project-ii---event-driven-communication-using-mqtt)
-- [Dataset](#dataset)
+  - [Overview](#overview-1)
+  - [Services](#services-1)
+    - [Mosquitto Message Broker](#mosquitto-message-broker)
+    - [Modified Data Manager](#modified-data-manager)
+    - [Event Manager](#event-manager)
+    - [MQTT Client](#mqtt-client)
+  - [Design Decisions](#design-decisions-1)
+    - [Data Manager publishing entire Reading object](#data-manager-publishing-entire-reading-object)
+    - [Go for Event Manager](#go-for-event-manager)
+- [Project III](#project-iii)
+- [Smoke Detection Dataset (Kaggle)](#smoke-detection-dataset-kaggle)
 
 ---
 
@@ -218,6 +246,8 @@ https://studio.asyncapi.com/?share=bfa23147-f2db-431b-ad2e-9fdb52c3dc3d
 
 ---
 
-# Dataset
-Smoke Detection (Kaggle):
-https://www.kaggle.com/datasets/deepcontractor/smoke-detection-dataset
+# Smoke Detection Dataset (Kaggle)
+
+Used for simulating sensor readings and training the ML model.
+
+🔗 https://www.kaggle.com/datasets/deepcontractor/smoke-detection-dataset
