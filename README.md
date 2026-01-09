@@ -24,7 +24,10 @@ graph LR
     GW -->|gRPC| DM[Data Manager]
     DM --> DB[(PostgreSQL)]
     DM -->|MQTT| EM[Event Manager]
-    EM -->|MQTT| MQT[MQTT Client]
+    EM -->|MQTT| MQT[MQTT NATS Client]
+    DM -->|MQTT| AN[Analytics]
+    AN -->|REST| MLAAS[ML as a service]
+    AN -->|NATS| MQT[MQTT NATS Client]
 ```
 
 ---
@@ -40,7 +43,7 @@ You only need to have ```docker``` and ```docker compose``` in order to test ent
 
 Make sure Docker is running before proceeding.
 
-### Stap 1. Clone the project 
+### Step 1. Clone the project 
 ```bash
 git clone https://github.com/cjovan02/iots.git
 cd iots
@@ -67,22 +70,24 @@ You can also tweak other environment variables if needed.
 docker compose up --build
 ```
 
-This will start all microservices, the database, message broker, and Adminer.
+This will start all microservices, the database, message brokers, and Adminer.
 
 Some ports of the server are exposed to the host:
-|    Service    |    Port    |    Description            |
-| ------------- | ---------- | ------------------------- |
-| Swagger UI    |    7002    | REST API Documentation    |
-| Adminer       |    7000    | Database Management UI    |
+|    Service    |               URL             |    Port   |    Description            |
+| ------------- | ------------------------------| --------- | ------------------------- |
+| Swagger UI    | http://localhost:7002/swagger |   7002    | REST API Documentation    |
+| Adminer       | http://localhost:7000         |   7000    | Database Management UI    |
+| MLAAS         | http://localhost:7003/docs    |   7003    | MLAAS REST API Docs       |
+| NATS          | http://localhost:8222         |   8222    | NATS Broker Monitoring    |
 
 This means you can visit ```http://localhost:7002/swagger``` to explore the API.
 Or you can visit the adminer at ```http://localhost:7000``` to see database data.
 
 ### 5. Running the client tools
 The project includes simple CLI Python clients for testing:
-1. **mqtt-client** - prints events from the server:
+1. **mqtt-nats-client** - prints events from the server:
 ```bash
-docker compose run --rm mqtt-client
+docker compose run --rm mqtt-nats-client
 ```
 
 2. **sensor-generator** - simulates sensor readings from a CSV file:
@@ -90,7 +95,7 @@ docker compose run --rm mqtt-client
 docker compose run --rm sensor-generator
 ```
 
-> I suggest starting the _mqtt-client_ before _sensor-generator_ because _mqtt-client_ will print events caused by _sensor-generator_.
+> I suggest starting the _mqtt-nats-client_ before _sensor-generator_ because _mqtt-client_ will print events caused by _sensor-generator_.
 
 ### 6. Docker cleanup
 ```bash
@@ -154,7 +159,7 @@ The Data Manager is implemented in Go due to its:
 - Low memory usage
 - Efficient database drivers (pgx)
 An ORM was intentionally avoided in favor of direct SQL queries using _pgx_.
-While this reduces convenience, it improves performance and keeps the implementation simple. With single data model and small amout of queries this was not a big problem.
+While this reduces convenience, it improves performance and keeps the implementation simple. With single data model and small amount of queries this was not a big problem.
 
 ---
 
@@ -180,7 +185,7 @@ Upon creating new sensor reading, either from ```Create``` or ```BatchCreate``` 
 
 Async api specification is at ```/data-manager/data-manager-async-api.yaml```, or:
 
-[View AsyncAPI in AsyncApi Studio](https://studio.asyncapi.com/?share=1108b914-7669-4c68-b248-7f1930a206ac)
+[View AsyncAPI in AsyncAPI Studio](https://studio.asyncapi.com/?share=1108b914-7669-4c68-b248-7f1930a206ac)
 
 ### Event Manager
 - **Language**: Go
@@ -211,10 +216,60 @@ Go is fast and reliable for this use case.
 
 ---
 
-# Project III
-Todo :)
+# Project III - Machine Learning as a Service
 
-https://studio.asyncapi.com/?share=bfa23147-f2db-431b-ad2e-9fdb52c3dc3d
+## Overview
+This phase focuses on analysing the input sensor readings using the trained deep learning model.
+
+Model was trained using neural network with LSTM as a middle layer. Model is then loaded in the service and is offered as REST API endpoint to predict the fire in the near future.
+
+Another service was built to use this REST API to analyse the input sensor readings and send the result to NATS broker.
+
+Previously built ```mqtt-client``` was modified to print the messages from NATS broker.
+
+Due to the limited number of fire events in the dataset, the model is not intended for production use, but rather as a proof of concept for early fire detection.
+
+---
+
+## Services
+
+### MLAAS
+- **Language**: Python
+- **Web Framework**: Fast API
+- **ML Training Library**: Keras
+- **Responsibility**:
+Train the model and offer it as a service through REST API. Result of the training is inside _MLAAS_ folder.
+
+### Analytics
+- **Language**: Go
+- **Protocols**: MQTT and NATS
+- **Responsibility**
+Subscribe to ```data-manager/raw-readings``` MQTT topic to collect the data for analysing. Once enough data is collected, send it to ```MLAAS``` to predict the fire, then publish that result to ```analytics.predictions``` NATS subject.
+
+[View AsyncApi in AsyncAPi Studio](https://studio.asyncapi.com/?share=bfa23147-f2db-431b-ad2e-9fdb52c3dc3d)
+
+
+### Modified MQTT Client
+- **New Name**: mqtt-nats-client
+- **New Responsibility**:
+Print messages to console from ```analytics.predictions``` NATS subject.
+
+---
+
+## Design Decisions
+
+### Deep learning for this dataset
+Neural network using LSTM as a middle layer was used to train the model with sliding window of 40 with regression.
+
+Since dataset only has classification of 0 _(no fire)_ and 1 _(fire)_, I decided its better to use regression between 0 and 1. 
+0 means there is no fire in the future, 1 means that the fire is currently going, and 0.8, for example, means that there is a high chance for fire in the near future.
+
+I modified dataset a bit: 
+around 500 readings before the fire starts, linarly increase the _Y_ value. This results in linear increase of chance of fire in the near future. This way to model can train on this event, before the fire starts. This is the most important situation that model should be able to predict, to detect the early warning signs before the fire starts.
+
+Since the dataset only has 2 fire events, which is not enough to create a good model, we can't effectively train the model for this situation. One event before the fire starts was used for training, and the other one was used for testing.
+
+The results of the testing can be found in ```MLAAS``` folder.
 
 ---
 
