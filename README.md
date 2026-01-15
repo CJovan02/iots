@@ -53,16 +53,37 @@ The goal of these projects is to simulate an IoT system by generating sensor dat
 # System Architecture
 
 ```mermaid
-graph LR
-    CSV[CSV Dataset] --> SG[Sensor Generator]
-    SG -->|REST| GW[Gateway]
-    GW -->|gRPC| DM[Data Manager]
-    DM --> DB[(PostgreSQL)]
-    DM -->|MQTT| EM[Event Manager]
-    EM -->|MQTT| MQT[MQTT NATS Client]
-    DM -->|MQTT| AN[Analytics]
-    AN -->|REST| MLAAS[ML as a service]
-    AN -->|NATS| MQT[MQTT NATS Client]
+graph TB
+
+    subgraph SERVER[Server]
+      direction TB
+
+      GW[Gateway]
+      DM[Data Manager]
+      DB[(PostgreSQL)]
+      MQTTBR([Mosquitto Broker - MQTT])
+      EM[Event Manager]
+      AN[Analytics]
+      MLAAS[ML as a Service]
+      NATSBR([NATS Broker])
+
+      GW -->|gRPC| DM
+      DM --> DB
+      DM --> MQTTBR
+      MQTTBR <--> EM
+      MQTTBR --> AN
+      AN -->|REST| MLAAS
+      AN --> NATSBR
+    end
+
+    CLIENT[MQTT NATS Client]
+    SG[Sensor Generator]
+    CSV[CSV Dataset]
+
+    MQTTBR -->|MQTT| CLIENT
+    SG -->|REST| GW
+    CSV --> SG
+    NATSBR --> |NATS| CLIENT
 ```
 
 ---
