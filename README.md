@@ -81,7 +81,7 @@ graph TB
     SG[Sensor Generator]
     CSV[CSV Dataset]
 
-    MQTTBR -->|Raw| CLIENT
+    MQTTBR -->|Threshold| CLIENT
     SG -->|REST| GW
     CSV --> SG
     NATSBR --> |Predictions| CLIENT
