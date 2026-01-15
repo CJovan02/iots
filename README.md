@@ -69,22 +69,25 @@ graph TB
 
       GW -->|gRPC| DM
       DM --> DB
-      DM --> MQTTBR
-      MQTTBR <--> EM
-      MQTTBR --> AN
+      DM -->|Raw| MQTTBR
+      MQTTBR -->|Raw| EM
+      EM --> |Threshold| MQTTBR
+      MQTTBR -->|Raw| AN
       AN -->|REST| MLAAS
-      AN --> NATSBR
+      AN -->|Predictions| NATSBR
     end
 
     CLIENT[MQTT NATS Client]
     SG[Sensor Generator]
     CSV[CSV Dataset]
 
-    MQTTBR -->|MQTT| CLIENT
+    MQTTBR -->|Raw| CLIENT
     SG -->|REST| GW
     CSV --> SG
-    NATSBR --> |NATS| CLIENT
+    NATSBR --> |Predictions| CLIENT
 ```
+
+> `Raw` and `Threshold` from the graph represent shortened topics on the MQTT broker. If I put full name of the topics it won't look good on the graph.
 
 ---
 
