@@ -87,7 +87,7 @@ graph TB
     NATSBR --> |Predictions| CLIENT
 ```
 > [!IMPORTANT]
-> `Raw` and `Threshold` from the graph represent shortened topics on the MQTT broker. If I put full name of the topics it won't look good on the graph.
+> `Raw` and `Threshold` from the graph represent shortened topic names on the MQTT broker. If I put full name of the topics it won't look good on the graph.
 
 ---
 
