@@ -86,7 +86,7 @@ graph TB
     CSV --> SG
     NATSBR --> |Predictions| CLIENT
 ```
-
+> [!IMPORTANT]
 > `Raw` and `Threshold` from the graph represent shortened topics on the MQTT broker. If I put full name of the topics it won't look good on the graph.
 
 ---
@@ -119,10 +119,10 @@ This folder contains **docker configuration** to run the services.
 ```bash
 cp .env.example .env
 ```
-
-It's recommended to change ```POSTGRES_USER``` and ```POSTGRES_PASSWORD``` for security,
-but for testing purposes, the defaults will work.
-You can also tweak other environment variables if needed.
+> [!TIP]
+> It's recommended to change ```POSTGRES_USER``` and ```POSTGRES_PASSWORD``` for security,
+> but for testing purposes, the defaults will work.
+> You can also tweak other environment variables if needed.
 
 ### Step 4. Run the server
 ```bash
@@ -154,6 +154,7 @@ docker compose run --rm mqtt-nats-client
 docker compose run --rm sensor-generator
 ```
 
+> [!TIP]
 > I suggest starting the _mqtt-nats-client_ before _sensor-generator_ because _mqtt-client_ will print events caused by _sensor-generator_.
 
 ### 6. Docker cleanup
@@ -189,6 +190,9 @@ Sensor data is read from a _CSV_ dataset, sent through a **REST gateway**, forwa
 - **Language**: .NET
 - **Protocol**: REST (client-facing), gRPC (internal)
 Acts as an API gateway and translates REST requests into gRPC calls.
+
+> [!NOTE]
+> OpenAPI specification is located at `localhost:7002/swagger/v1/swagger.json` when you run the server
 
 ### Sensor Generator
 - **Language**: Python
