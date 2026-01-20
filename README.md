@@ -12,6 +12,8 @@ The goal of these projects is to simulate an IoT system by generating sensor dat
 - [System Architecture](#system-architecture)
 - [How to Run](#how-to-run)
   - [Prerequisites](#prerequisites)
+  - [Quick Start command](#quick-start-command)
+  - [Detailed guide to running the project](#detailed-guide-to-running-the-project)
     - [Step 1. Clone the project](#step-1-clone-the-project)
     - [Step 2. Navigate to Docker configuration folder](#step-2-navigate-to-docker-configuration-folder)
     - [Step 3. Create a copy of the example environment file](#step-3-create-a-copy-of-the-example-environment-file)
@@ -101,6 +103,26 @@ You only need to have ```docker``` and ```docker compose``` in order to test ent
 - Docker Compose – [Install guide](https://docs.docker.com/compose/install)
 
 Make sure Docker is running before proceeding.
+
+> [!IMPORTANT]
+> On linux system you might need to run all docker commands with `sudo`.
+
+---
+
+## Quick Start command
+```bash
+git clone https://github.com/cjovan02/iots.git
+cd iots/docker
+cp .env.example .env
+docker compose up --build
+```
+
+> [!NOTE]
+This will run the server. To run client apps, see section [5. Running the client tools](#5-running-the-client-tools)
+
+---
+
+## Detailed guide to running the project
 
 ### Step 1. Clone the project 
 ```bash
