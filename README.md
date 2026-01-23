@@ -96,6 +96,10 @@ graph TB
 # How to Run
 You only need to have ```docker``` and ```docker compose``` in order to test entire application.
 
+> [!NOTE]
+> Running `docker compos up` for the first time will take some time, depenting on your internet connection.
+> That is because of the large number of services and packages for each one of them. All of those packages must be downloaded the first time `docker compose up` is run.
+
 ---
 
 ## Prerequisites
